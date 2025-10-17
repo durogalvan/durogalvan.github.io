@@ -1,20 +1,30 @@
-// Stock data from the provided table
-const stock = {
+// Stock data - se actualizará automáticamente desde Google Sheets
+let stock = {
     white: {
-        S: 5,
-        M: 30,
-        L: 41,
-        XL: 21,
-        XXL: 3
+        S: 0, M: 0, L: 0, XL: 0, XXL: 0
     },
     black: {
-        S: 5,
-        M: 30,
-        L: 41,
-        XL: 21,
-        XXL: 3
+        S: 0, M: 0, L: 0, XL: 0, XXL: 0
     }
 };
+
+// Función para obtener stock actualizado desde Google Sheets
+async function updateStockFromSheets() {
+    try {
+        const scriptUrl = 'https://script.google.com/macros/s/AKfycbySuEqwHvIVTAM4TcGJ0EgQdJ6X0Z0MVeCe9EFd8-yqnM_8NBgmVwss_l0oXs7LTCKU/exec';
+        const response = await fetch(`${scriptUrl}?action=getStock`);
+        const data = await response.json();
+        
+        if (data.success) {
+            // Convertir los nombres de productos a los que usa nuestra página
+            stock.white = data.stock['Camiseta Blanca'];
+            stock.black = data.stock['Camiseta Negra'];
+            initializeStock();
+        }
+    } catch (error) {
+        console.error('Error actualizando stock:', error);
+    }
+}
 
 // Initialize stock display
 function initializeStock() {
@@ -59,6 +69,10 @@ function markSoldOutSizes(product) {
         if (stock[product][size] <= 0) {
             sizeElement.classList.add('sold-out');
             sizeElement.textContent = `${size} (Agotado)`;
+        } else {
+            // Asegurarse de quitar la clase sold-out si ahora hay stock
+            sizeElement.classList.remove('sold-out');
+            sizeElement.textContent = size;
         }
     });
 }
@@ -219,7 +233,7 @@ function handleReservationFormSubmit(form, defaultProduct) {
         if (data.success) {
             alert('¡Reserva realizada con éxito! Te hemos enviado un email de confirmación. ID de reserva: ' + data.reservationId);
             
-            // Actualizar stock localmente
+            // Actualizar stock localmente restando 1
             stock[product][size]--;
             initializeStock();
             
@@ -411,13 +425,16 @@ function setupNavigation() {
 
 // Initialize the page
 document.addEventListener('DOMContentLoaded', function() {
-    initializeStock();
-    setupSizeSelection();
-    setupPaymentSelection();
-    setupFormSubmission();
-    setupNavigation();
-    
-    // Show appropriate section based on initial hash
-    const initialSection = window.location.hash.substring(1) || 'inicio';
-    showSection(initialSection);
+    // Primero inicializamos el stock desde Google Sheets
+    updateStockFromSheets().then(() => {
+        // Luego inicializamos todo lo demás
+        setupSizeSelection();
+        setupPaymentSelection();
+        setupFormSubmission();
+        setupNavigation();
+        
+        // Show appropriate section based on initial hash
+        const initialSection = window.location.hash.substring(1) || 'inicio';
+        showSection(initialSection);
+    });
 });
