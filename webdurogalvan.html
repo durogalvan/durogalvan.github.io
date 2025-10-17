@@ -134,6 +134,17 @@
             background-color: #600018;
         }
         
+        .btn-secondary {
+            background-color: transparent;
+            border: 2px solid var(--dark-red);
+            color: var(--dark-red);
+        }
+        
+        .btn-secondary:hover {
+            background-color: var(--dark-red);
+            color: var(--white);
+        }
+        
         /* Sections */
         section {
             padding: 5rem 0;
@@ -219,6 +230,15 @@
         
         .product {
             text-align: center;
+            background-color: var(--white);
+            padding: 2rem;
+            border-radius: 5px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .product:hover {
+            transform: translateY(-5px);
         }
         
         .product-image {
@@ -382,6 +402,101 @@
             padding: 2rem 0;
         }
         
+        /* Páginas de producto */
+        .product-page {
+            padding: 5rem 0;
+            background-color: var(--white);
+        }
+        
+        .product-detail {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            margin-top: 2rem;
+        }
+        
+        /* Carrusel de imágenes */
+        .carousel-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 5px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .carousel {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+        
+        .carousel-slide {
+            min-width: 100%;
+        }
+        
+        .carousel-slide img {
+            width: 100%;
+            display: block;
+        }
+        
+        .carousel-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s;
+        }
+        
+        .carousel-btn:hover {
+            background-color: rgba(0,0,0,0.8);
+        }
+        
+        .carousel-prev {
+            left: 15px;
+        }
+        
+        .carousel-next {
+            right: 15px;
+        }
+        
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            margin-top: 1rem;
+            gap: 10px;
+        }
+        
+        .carousel-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #ddd;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        .carousel-dot.active {
+            background-color: var(--dark-red);
+        }
+        
+        .back-link {
+            display: inline-block;
+            margin-bottom: 2rem;
+            color: var(--dark-red);
+            text-decoration: none;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.2rem;
+        }
+        
         /* Responsive */
         @media (max-width: 768px) {
             .header-container {
@@ -397,12 +512,19 @@
             }
             
             .music-container,
-            .products {
+            .products,
+            .product-detail {
                 grid-template-columns: 1fr;
             }
             
             .payment-method {
                 flex-direction: column;
+            }
+            
+            .carousel-btn {
+                width: 35px;
+                height: 35px;
+                font-size: 1rem;
             }
         }
     </style>
@@ -494,6 +616,7 @@
                     <div class="stock-info" id="white-stock">
                         <!-- Stock information will be displayed here -->
                     </div>
+                    <a href="#camiseta-blanca" class="btn" style="margin-top: 1rem;">Ver detalles y reservar</a>
                 </div>
                 
                 <div class="product">
@@ -509,59 +632,207 @@
                     <div class="stock-info" id="black-stock">
                         <!-- Stock information will be displayed here -->
                     </div>
+                    <a href="#camiseta-negra" class="btn" style="margin-top: 1rem;">Ver detalles y reservar</a>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <!-- Página de Camiseta Blanca -->
+    <section id="camiseta-blanca" class="product-page" style="display: none;">
+        <div class="container">
+            <a href="#tienda" class="back-link">← Volver a la tienda</a>
             
-            <h3 style="text-align: center; margin-bottom: 2rem;">Formulario de Reserva</h3>
-            <form class="reservation-form" id="reservation-form">
-                <div class="form-group">
-                    <label for="name">Nombre completo</label>
-                    <input type="text" id="name" name="name" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="phone">Teléfono</label>
-                    <input type="tel" id="phone" name="phone" required>
-                </div>
-                
-                <div class="form-group">
-                    <label>Producto seleccionado</label>
-                    <div id="selected-product">Por favor, selecciona una talla de camiseta</div>
-                </div>
-                
-                <div class="form-group">
-                    <label>Método de pago</label>
-                    <div class="payment-method">
-                        <div class="payment-option" data-payment="transfer">
-                            <div>Transferencia</div>
-                            <small>(15€ ahora)</small>
+            <div class="product-detail">
+                <div class="product-gallery">
+                    <div class="carousel-container">
+                        <div class="carousel" id="carousel-white">
+                            <div class="carousel-slide">
+                                <img src="https://via.placeholder.com/600x600/FFFFFF/000000?text=Camiseta+Blanca+1" alt="Camiseta Blanca - Vista frontal">
+                            </div>
+                            <div class="carousel-slide">
+                                <img src="https://via.placeholder.com/600x600/FFFFFF/000000?text=Camiseta+Blanca+2" alt="Camiseta Blanca - Vista trasera">
+                            </div>
+                            <div class="carousel-slide">
+                                <img src="https://via.placeholder.com/600x600/FFFFFF/000000?text=Camiseta+Blanca+3" alt="Camiseta Blanca - Detalle del logo">
+                            </div>
                         </div>
-                        <div class="payment-option" data-payment="cash">
-                            <div>En mano</div>
-                            <small>(al recoger)</small>
+                        <button class="carousel-btn carousel-prev" data-carousel="white">&#10094;</button>
+                        <button class="carousel-btn carousel-next" data-carousel="white">&#10095;</button>
+                    </div>
+                    <div class="carousel-dots" id="carousel-dots-white">
+                        <!-- Los puntos se generarán automáticamente con JavaScript -->
+                    </div>
+                </div>
+                
+                <div class="product-info">
+                    <h2>Camiseta Blanca</h2>
+                    <p>Precio: 15€</p>
+                    <p>Camiseta de algodón 100% con el logo de Duro Galván impreso en serigrafía de alta calidad. Disponible en varias tallas.</p>
+                    
+                    <div class="form-group">
+                        <label>Talla:</label>
+                        <div class="sizes">
+                            <div class="size" data-size="S" data-product="white">S</div>
+                            <div class="size" data-size="M" data-product="white">M</div>
+                            <div class="size" data-size="L" data-product="white">L</div>
+                            <div class="size" data-size="XL" data-product="white">XL</div>
+                        </div>
+                        <div class="stock-info" id="white-stock-detail">
+                            <!-- Stock information will be displayed here -->
                         </div>
                     </div>
                     
-                    <div class="iban-info" id="iban-info">
-                        <p>Realiza una transferencia de 15€ al siguiente IBAN:</p>
-                        <p><strong>ES91 1583 0001 1290 2592 8758</strong></p>
-                        <p>A nombre de: Antonio Fernández Batanero</p>
-                        <p>Una vez realizada, envíanos el comprobante a durogalvanband@gmail.com</p>
+                    <form class="reservation-form" id="reservation-form-white">
+                        <div class="form-group">
+                            <label for="name-white">Nombre completo</label>
+                            <input type="text" id="name-white" name="name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email-white">Email</label>
+                            <input type="email" id="email-white" name="email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone-white">Teléfono</label>
+                            <input type="tel" id="phone-white" name="phone" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Producto seleccionado</label>
+                            <div id="selected-product-white">Camiseta Blanca - Por favor, selecciona una talla</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Método de pago</label>
+                            <div class="payment-method">
+                                <div class="payment-option" data-payment="transfer">
+                                    <div>Transferencia</div>
+                                    <small>(15€ ahora)</small>
+                                </div>
+                                <div class="payment-option" data-payment="cash">
+                                    <div>En mano</div>
+                                    <small>(al recoger)</small>
+                                </div>
+                            </div>
+                            
+                            <div class="iban-info" id="iban-info-white">
+                                <p>Realiza una transferencia de 15€ al siguiente IBAN:</p>
+                                <p><strong>ES91 1583 0001 1290 2592 8758</strong></p>
+                                <p>A nombre de: Antonio Fernández Batanero</p>
+                                <p>Una vez realizada, envíanos el comprobante a durogalvanband@gmail.com</p>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="notes-white">Observaciones (opcional)</label>
+                            <textarea id="notes-white" name="notes" rows="3"></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn" style="width: 100%;">Reservar ahora</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Página de Camiseta Negra -->
+    <section id="camiseta-negra" class="product-page" style="display: none;">
+        <div class="container">
+            <a href="#tienda" class="back-link">← Volver a la tienda</a>
+            
+            <div class="product-detail">
+                <div class="product-gallery">
+                    <div class="carousel-container">
+                        <div class="carousel" id="carousel-black">
+                            <div class="carousel-slide">
+                                <img src="https://via.placeholder.com/600x600/000000/FFFFFF?text=Camiseta+Negra+1" alt="Camiseta Negra - Vista frontal">
+                            </div>
+                            <div class="carousel-slide">
+                                <img src="https://via.placeholder.com/600x600/000000/FFFFFF?text=Camiseta+Negra+2" alt="Camiseta Negra - Vista trasera">
+                            </div>
+                            <div class="carousel-slide">
+                                <img src="https://via.placeholder.com/600x600/000000/FFFFFF?text=Camiseta+Negra+3" alt="Camiseta Negra - Detalle del logo">
+                            </div>
+                        </div>
+                        <button class="carousel-btn carousel-prev" data-carousel="black">&#10094;</button>
+                        <button class="carousel-btn carousel-next" data-carousel="black">&#10095;</button>
+                    </div>
+                    <div class="carousel-dots" id="carousel-dots-black">
+                        <!-- Los puntos se generarán automáticamente con JavaScript -->
                     </div>
                 </div>
                 
-                <div class="form-group">
-                    <label for="notes">Observaciones (opcional)</label>
-                    <textarea id="notes" name="notes" rows="3"></textarea>
+                <div class="product-info">
+                    <h2>Camiseta Negra</h2>
+                    <p>Precio: 15€</p>
+                    <p>Camiseta de algodón 100% con el logo de Duro Galván impreso en serigrafía de alta calidad. Disponible en varias tallas.</p>
+                    
+                    <div class="form-group">
+                        <label>Talla:</label>
+                        <div class="sizes">
+                            <div class="size" data-size="S" data-product="black">S</div>
+                            <div class="size" data-size="M" data-product="black">M</div>
+                            <div class="size" data-size="L" data-product="black">L</div>
+                            <div class="size" data-size="XL" data-product="black">XL</div>
+                        </div>
+                        <div class="stock-info" id="black-stock-detail">
+                            <!-- Stock information will be displayed here -->
+                        </div>
+                    </div>
+                    
+                    <form class="reservation-form" id="reservation-form-black">
+                        <div class="form-group">
+                            <label for="name-black">Nombre completo</label>
+                            <input type="text" id="name-black" name="name" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email-black">Email</label>
+                            <input type="email" id="email-black" name="email" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone-black">Teléfono</label>
+                            <input type="tel" id="phone-black" name="phone" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Producto seleccionado</label>
+                            <div id="selected-product-black">Camiseta Negra - Por favor, selecciona una talla</div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Método de pago</label>
+                            <div class="payment-method">
+                                <div class="payment-option" data-payment="transfer">
+                                    <div>Transferencia</div>
+                                    <small>(15€ ahora)</small>
+                                </div>
+                                <div class="payment-option" data-payment="cash">
+                                    <div>En mano</div>
+                                    <small>(al recoger)</small>
+                                </div>
+                            </div>
+                            
+                            <div class="iban-info" id="iban-info-black">
+                                <p>Realiza una transferencia de 15€ al siguiente IBAN:</p>
+                                <p><strong>ES91 1583 0001 1290 2592 8758</strong></p>
+                                <p>A nombre de: Antonio Fernández Batanero</p>
+                                <p>Una vez realizada, envíanos el comprobante a durogalvanband@gmail.com</p>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="notes-black">Observaciones (opcional)</label>
+                            <textarea id="notes-black" name="notes" rows="3"></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn" style="width: 100%;">Reservar ahora</button>
+                    </form>
                 </div>
-                
-                <button type="submit" class="btn" style="width: 100%;">Reservar ahora</button>
-            </form>
+            </div>
         </div>
     </section>
 
@@ -605,7 +876,7 @@
 
         // Initialize stock display
         function initializeStock() {
-            // Update white shirt stock info
+            // Update white shirt stock info in main page
             const whiteStockElement = document.getElementById('white-stock');
             let whiteStockText = 'Disponible: ';
             for (const size in stock.white) {
@@ -613,13 +884,25 @@
             }
             whiteStockElement.textContent = whiteStockText.slice(0, -3);
 
-            // Update black shirt stock info
+            // Update black shirt stock info in main page
             const blackStockElement = document.getElementById('black-stock');
             let blackStockText = 'Disponible: ';
             for (const size in stock.black) {
                 blackStockText += `${size}: ${stock.black[size]} | `;
             }
             blackStockElement.textContent = blackStockText.slice(0, -3);
+
+            // Update white shirt stock info in detail page
+            const whiteStockDetailElement = document.getElementById('white-stock-detail');
+            if (whiteStockDetailElement) {
+                whiteStockDetailElement.textContent = whiteStockText.slice(0, -3);
+            }
+
+            // Update black shirt stock info in detail page
+            const blackStockDetailElement = document.getElementById('black-stock-detail');
+            if (blackStockDetailElement) {
+                blackStockDetailElement.textContent = blackStockText.slice(0, -3);
+            }
 
             // Mark sold out sizes
             markSoldOutSizes('white');
@@ -655,7 +938,24 @@
                 // Update selected product display
                 const size = this.getAttribute('data-size');
                 const productName = product === 'white' ? 'Camiseta Blanca' : 'Camiseta Negra';
-                document.getElementById('selected-product').textContent = `${productName} - Talla ${size}`;
+                
+                // Update in main form
+                const selectedProductElement = document.getElementById('selected-product');
+                if (selectedProductElement) {
+                    selectedProductElement.textContent = `${productName} - Talla ${size}`;
+                }
+                
+                // Update in white product page
+                const selectedProductWhiteElement = document.getElementById('selected-product-white');
+                if (selectedProductWhiteElement) {
+                    selectedProductWhiteElement.textContent = `${productName} - Talla ${size}`;
+                }
+                
+                // Update in black product page
+                const selectedProductBlackElement = document.getElementById('selected-product-black');
+                if (selectedProductBlackElement) {
+                    selectedProductBlackElement.textContent = `${productName} - Talla ${size}`;
+                }
             });
         });
 
@@ -672,7 +972,8 @@
                 
                 // Show/hide IBAN info based on selection
                 const paymentMethod = this.getAttribute('data-payment');
-                const ibanInfo = document.getElementById('iban-info');
+                const form = this.closest('form');
+                const ibanInfo = form ? form.querySelector('.iban-info') : document.getElementById('iban-info');
                 if (paymentMethod === 'transfer') {
                     ibanInfo.classList.add('show');
                 } else {
@@ -681,18 +982,34 @@
             });
         });
 
-        // Handle form submission
-        document.getElementById('reservation-form').addEventListener('submit', function(e) {
+        // Handle form submission for main form
+        document.getElementById('reservation-form')?.addEventListener('submit', function(e) {
             e.preventDefault();
-            
+            handleReservationFormSubmit(this, 'white');
+        });
+
+        // Handle form submission for white product page
+        document.getElementById('reservation-form-white')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            handleReservationFormSubmit(this, 'white');
+        });
+
+        // Handle form submission for black product page
+        document.getElementById('reservation-form-black')?.addEventListener('submit', function(e) {
+            e.preventDefault();
+            handleReservationFormSubmit(this, 'black');
+        });
+
+        // Generic function to handle form submission
+        function handleReservationFormSubmit(form, defaultProduct) {
             // Get selected product and size
-            const selectedSize = document.querySelector('.size.selected');
+            const selectedSize = form.querySelector('.size.selected');
             if (!selectedSize) {
                 alert('Por favor, selecciona una talla de camiseta');
                 return;
             }
             
-            const product = selectedSize.getAttribute('data-product');
+            const product = selectedSize.getAttribute('data-product') || defaultProduct;
             const size = selectedSize.getAttribute('data-size');
             
             // Check if selected size is available
@@ -702,7 +1019,7 @@
             }
             
             // Get payment method
-            const selectedPayment = document.querySelector('.payment-option.selected');
+            const selectedPayment = form.querySelector('.payment-option.selected');
             if (!selectedPayment) {
                 alert('Por favor, selecciona un método de pago');
                 return;
@@ -711,14 +1028,19 @@
             const paymentMethod = selectedPayment.getAttribute('data-payment');
             
             // Get form data
+            const nameInput = form.querySelector('input[type="text"]');
+            const emailInput = form.querySelector('input[type="email"]');
+            const phoneInput = form.querySelector('input[type="tel"]');
+            const notesInput = form.querySelector('textarea');
+            
             const formData = {
-                name: document.getElementById('name').value,
-                email: document.getElementById('email').value,
-                phone: document.getElementById('phone').value,
+                name: nameInput.value,
+                email: emailInput.value,
+                phone: phoneInput.value,
                 product: product === 'white' ? 'Camiseta Blanca' : 'Camiseta Negra',
                 size: size,
                 payment: paymentMethod === 'transfer' ? 'Transferencia' : 'En mano',
-                notes: document.getElementById('notes').value,
+                notes: notesInput ? notesInput.value : '',
                 timestamp: new Date().toISOString()
             };
             
@@ -726,7 +1048,7 @@
             const scriptUrl = 'https://script.google.com/macros/s/AKfycbySuEqwHvIVTAM4TcGJ0EgQdJ6X0Z0MVeCe9EFd8-yqnM_8NBgmVwss_l0oXs7LTCKU/exec';
             
             // Mostrar indicador de carga
-            const submitButton = this.querySelector('button[type="submit"]');
+            const submitButton = form.querySelector('button[type="submit"]');
             const originalText = submitButton.textContent;
             submitButton.textContent = 'Procesando reserva...';
             submitButton.disabled = true;
@@ -754,15 +1076,32 @@
                     initializeStock();
                     
                     // Reset form
-                    this.reset();
-                    document.querySelectorAll('.size.selected').forEach(el => {
+                    form.reset();
+                    form.querySelectorAll('.size.selected').forEach(el => {
                         el.classList.remove('selected');
                     });
-                    document.querySelectorAll('.payment-option.selected').forEach(el => {
+                    form.querySelectorAll('.payment-option.selected').forEach(el => {
                         el.classList.remove('selected');
                     });
-                    document.getElementById('iban-info').classList.remove('show');
-                    document.getElementById('selected-product').textContent = 'Por favor, selecciona una talla de camiseta';
+                    const ibanInfo = form.querySelector('.iban-info');
+                    if (ibanInfo) {
+                        ibanInfo.classList.remove('show');
+                    }
+                    
+                    // Reset selected product display
+                    const selectedProductElement = form.querySelector('#selected-product, #selected-product-white, #selected-product-black');
+                    if (selectedProductElement) {
+                        const productName = product === 'white' ? 'Camiseta Blanca' : 'Camiseta Negra';
+                        selectedProductElement.textContent = `${productName} - Por favor, selecciona una talla`;
+                    }
+                    
+                    // If we're on a product page, redirect to main shop after successful reservation
+                    if (form.id.includes('white') || form.id.includes('black')) {
+                        setTimeout(() => {
+                            window.location.href = '#tienda';
+                            showSection('tienda');
+                        }, 2000);
+                    }
                 } else {
                     alert('Error al procesar la reserva: ' + data.error);
                 }
@@ -776,11 +1115,130 @@
                 submitButton.textContent = originalText;
                 submitButton.disabled = false;
             });
-        });
+        }
 
+        // Carrusel functionality
+        function initializeCarousel(carouselId, dotsContainerId) {
+            const carousel = document.getElementById(carouselId);
+            const slides = carousel.querySelectorAll('.carousel-slide');
+            const dotsContainer = document.getElementById(dotsContainerId);
+            const productType = carouselId.split('-')[1]; // 'white' or 'black'
+            
+            let currentSlide = 0;
+            
+            // Create dots
+            slides.forEach((_, index) => {
+                const dot = document.createElement('button');
+                dot.classList.add('carousel-dot');
+                if (index === 0) dot.classList.add('active');
+                dot.addEventListener('click', () => {
+                    goToSlide(index);
+                });
+                dotsContainer.appendChild(dot);
+            });
+            
+            // Function to go to specific slide
+            function goToSlide(slideIndex) {
+                currentSlide = slideIndex;
+                carousel.style.transform = `translateX(-${currentSlide * 100}%)`;
+                
+                // Update dots
+                dotsContainer.querySelectorAll('.carousel-dot').forEach((dot, index) => {
+                    dot.classList.toggle('active', index === currentSlide);
+                });
+            }
+            
+            // Auto-advance slides every 5 seconds
+            let slideInterval = setInterval(() => {
+                nextSlide();
+            }, 5000);
+            
+            // Next slide function
+            function nextSlide() {
+                currentSlide = (currentSlide + 1) % slides.length;
+                goToSlide(currentSlide);
+            }
+            
+            // Previous slide function
+            function prevSlide() {
+                currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+                goToSlide(currentSlide);
+            }
+            
+            // Add event listeners for carousel buttons
+            document.querySelectorAll(`[data-carousel="${productType}"]`).forEach(button => {
+                button.addEventListener('click', () => {
+                    if (button.classList.contains('carousel-next')) {
+                        nextSlide();
+                    } else {
+                        prevSlide();
+                    }
+                    
+                    // Reset auto-advance timer
+                    clearInterval(slideInterval);
+                    slideInterval = setInterval(() => {
+                        nextSlide();
+                    }, 5000);
+                });
+            });
+            
+            // Pause auto-advance on hover
+            carousel.parentElement.addEventListener('mouseenter', () => {
+                clearInterval(slideInterval);
+            });
+            
+            carousel.parentElement.addEventListener('mouseleave', () => {
+                clearInterval(slideInterval);
+                slideInterval = setInterval(() => {
+                    nextSlide();
+                }, 5000);
+            });
+        }
+        
+        // Navigation between sections
+        function showSection(sectionId) {
+            // Hide all product pages and show main sections
+            document.querySelectorAll('.product-page').forEach(page => {
+                page.style.display = 'none';
+            });
+            
+            document.querySelectorAll('section:not(.product-page)').forEach(section => {
+                section.style.display = 'block';
+            });
+            
+            // If a product page is requested, show it and hide main sections
+            if (sectionId === 'camiseta-blanca' || sectionId === 'camiseta-negra') {
+                document.querySelectorAll('section:not(.product-page)').forEach(section => {
+                    section.style.display = 'none';
+                });
+                
+                document.getElementById(sectionId).style.display = 'block';
+                
+                // Initialize carousel for the product page
+                if (sectionId === 'camiseta-blanca') {
+                    initializeCarousel('carousel-white', 'carousel-dots-white');
+                } else {
+                    initializeCarousel('carousel-black', 'carousel-dots-black');
+                }
+            }
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+        
+        // Handle hash changes for navigation
+        window.addEventListener('hashchange', function() {
+            const sectionId = window.location.hash.substring(1);
+            showSection(sectionId);
+        });
+        
         // Initialize the page
         document.addEventListener('DOMContentLoaded', function() {
             initializeStock();
+            
+            // Show appropriate section based on initial hash
+            const initialSection = window.location.hash.substring(1) || 'inicio';
+            showSection(initialSection);
         });
     </script>
 </body>
