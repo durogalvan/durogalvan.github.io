@@ -1,0 +1,21 @@
+:root {
+    --white: #ffffff;
+    --black: #000000;
+    --dark-red: #800020;
+    --light-gray: #f5f5f5;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Grand Paradiso', serif;
+    color: var(--black);
+    background-color: var(--white);
+    line-height: 1.6;
+}
+
+/* ... (todo el CSS que estaba en el HTML) ... */
