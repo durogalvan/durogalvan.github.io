@@ -411,7 +411,7 @@ footer {
 }
 
 /* Carrusel de imágenes - MEJORADO */
-.carousel-container {
+/* .carousel-container {
     position: relative;
     overflow: hidden;
     border-radius: 5px;
@@ -444,7 +444,7 @@ footer {
     cursor: zoom-in;
     transition: transform 0.3s ease;
     display: block;
-}
+} */
 
 /* Asegurar que no hay espacios entre slides */
 .carousel-container {
@@ -480,6 +480,30 @@ footer {
     max-height: 500px;
     object-fit: contain;
     display: block;
+}
+
+.carousel-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0,0,0,0.5);
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.carousel-btn.prev {
+    left: 10px;
+}
+
+.carousel-btn.next {
+    right: 10px;
+}
+
+.carousel-btn:hover {
+    background-color: rgba(0,0,0,0.8);
 }
 
 /* Modal para zoom - MEJORADO */
