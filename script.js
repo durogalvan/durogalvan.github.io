@@ -279,7 +279,7 @@ function handleReservationFormSubmit(form, defaultProduct) {
     });
 }
 
-// Carrusel functionality
+// Carrusel DINÁMICO que se adapta a cada imagen
 function initializeCarousel(carouselId, dotsContainerId) {
     const carousel = document.getElementById(carouselId);
     const slides = carousel.querySelectorAll('.carousel-slide');
@@ -288,7 +288,60 @@ function initializeCarousel(carouselId, dotsContainerId) {
     
     let currentSlide = 0;
     
+    // Analizar cada imagen y aplicar clase según orientación
+    slides.forEach((slide, index) => {
+        const img = slide.querySelector('img');
+        const tempImg = new Image();
+        
+        tempImg.onload = function() {
+            const aspectRatio = this.width / this.height;
+            
+            // Determinar orientación y aplicar clase correspondiente
+            if (aspectRatio > 1) {
+                // Imagen horizontal
+                slide.classList.add('landscape');
+            } else {
+                // Imagen vertical
+                slide.classList.add('portrait');
+            }
+            
+            // Si es la primera imagen, inicializar
+            if (index === 0) {
+                updateCarouselHeight();
+            }
+        };
+        
+        tempImg.src = img.src;
+    });
+    
+    // Función para actualizar la altura del carrusel según la imagen actual
+    function updateCarouselHeight() {
+        const currentSlideElement = slides[currentSlide];
+        const img = currentSlideElement.querySelector('img');
+        
+        if (img && img.naturalHeight) {
+            const aspectRatio = img.naturalWidth / img.naturalHeight;
+            const container = carousel.parentElement;
+            
+            // Ajustar altura según orientación
+            if (aspectRatio > 1.5) {
+                // Muy horizontal - altura menor
+                container.style.height = '400px';
+            } else if (aspectRatio > 1) {
+                // Horizontal estándar
+                container.style.height = '450px';
+            } else if (aspectRatio > 0.7) {
+                // Cuadrada o casi
+                container.style.height = '500px';
+            } else {
+                // Vertical
+                container.style.height = '550px';
+            }
+        }
+    }
+    
     // Create dots
+    dotsContainer.innerHTML = ''; // Limpiar dots existentes
     slides.forEach((_, index) => {
         const dot = document.createElement('button');
         dot.classList.add('carousel-dot');
@@ -303,6 +356,9 @@ function initializeCarousel(carouselId, dotsContainerId) {
     function goToSlide(slideIndex) {
         currentSlide = slideIndex;
         carousel.style.transform = `translateX(-${currentSlide * 100}%)`;
+        
+        // Actualizar altura del carrusel
+        updateCarouselHeight();
         
         // Update dots
         dotsContainer.querySelectorAll('.carousel-dot').forEach((dot, index) => {
@@ -326,6 +382,39 @@ function initializeCarousel(carouselId, dotsContainerId) {
         currentSlide = (currentSlide - 1 + slides.length) % slides.length;
         goToSlide(currentSlide);
     }
+    
+    // Add event listeners for carousel buttons
+    document.querySelectorAll(`[data-carousel="${productType}"]`).forEach(button => {
+        button.addEventListener('click', () => {
+            if (button.classList.contains('carousel-next')) {
+                nextSlide();
+            } else {
+                prevSlide();
+            }
+            
+            // Reset auto-advance timer
+            clearInterval(slideInterval);
+            slideInterval = setInterval(() => {
+                nextSlide();
+            }, 5000);
+        });
+    });
+    
+    // Pause auto-advance on hover
+    carousel.parentElement.addEventListener('mouseenter', () => {
+        clearInterval(slideInterval);
+    });
+    
+    carousel.parentElement.addEventListener('mouseleave', () => {
+        clearInterval(slideInterval);
+        slideInterval = setInterval(() => {
+            nextSlide();
+        }, 5000);
+    });
+    
+    // Ajustar altura al redimensionar ventana
+    window.addEventListener('resize', updateCarouselHeight);
+}
     
     // Add event listeners for carousel buttons
     document.querySelectorAll(`[data-carousel="${productType}"]`).forEach(button => {
