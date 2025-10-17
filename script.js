@@ -422,7 +422,7 @@ function setupNavigation() {
         });
     });
 }
-// Funcionalidad de Zoom para las imágenes del carrusel
+// Funcionalidad de Zoom MEJORADA para las imágenes del carrusel
 function setupImageZoom() {
     const modal = document.getElementById('modalZoom');
     const zoomedImage = document.getElementById('zoomedImage');
@@ -430,49 +430,99 @@ function setupImageZoom() {
     const zoomInBtn = document.getElementById('zoomIn');
     const zoomOutBtn = document.getElementById('zoomOut');
     const resetZoomBtn = document.getElementById('resetZoom');
+    const zoomIndicator = document.getElementById('zoomIndicator');
     
     let currentScale = 1;
+    let minScale = 0.5;
+    let maxScale = 3;
     let isDragging = false;
-    let startX, startY, scrollLeft, scrollTop;
+    let startX, startY, translateX = 0, translateY = 0;
+    let currentImageAspectRatio = 1;
 
     // Abrir modal al hacer click en cualquier imagen del carrusel
     document.querySelectorAll('.carousel-slide img').forEach(img => {
         img.addEventListener('click', function() {
-            modal.classList.add('active');
-            zoomedImage.src = this.src;
-            zoomedImage.alt = this.alt;
-            currentScale = 1;
-            zoomedImage.style.transform = `scale(${currentScale})`;
+            const imgSrc = this.src;
+            const img = new Image();
+            img.onload = function() {
+                currentImageAspectRatio = this.width / this.height;
+                openZoomModal(imgSrc, this.alt);
+            };
+            img.src = imgSrc;
         });
     });
 
+    function openZoomModal(src, alt) {
+        modal.classList.add('active');
+        zoomedImage.src = src;
+        zoomedImage.alt = alt;
+        
+        // Resetear transformaciones
+        currentScale = 1;
+        translateX = 0;
+        translateY = 0;
+        updateZoomTransform();
+        updateZoomIndicator();
+        
+        // Centrar la imagen
+        setTimeout(centerImage, 100);
+    }
+
+    function centerImage() {
+        translateX = 0;
+        translateY = 0;
+        updateZoomTransform();
+    }
+
+    function updateZoomTransform() {
+        zoomedImage.style.transform = `scale(${currentScale}) translate(${translateX}px, ${translateY}px)`;
+    }
+
+    function updateZoomIndicator() {
+        zoomIndicator.textContent = Math.round(currentScale * 100) + '%';
+    }
+
     // Cerrar modal
-    closeZoom.addEventListener('click', function() {
+    closeZoom.addEventListener('click', closeZoomModal);
+
+    function closeZoomModal() {
         modal.classList.remove('active');
         currentScale = 1;
-    });
+        translateX = 0;
+        translateY = 0;
+    }
 
     // Cerrar modal al hacer click fuera de la imagen
     modal.addEventListener('click', function(e) {
         if (e.target === modal) {
-            modal.classList.remove('active');
-            currentScale = 1;
+            closeZoomModal();
         }
     });
 
     // Zoom in
     zoomInBtn.addEventListener('click', function(e) {
         e.stopPropagation();
-        currentScale += 0.2;
-        zoomedImage.style.transform = `scale(${currentScale})`;
+        if (currentScale < maxScale) {
+            currentScale += 0.25;
+            updateZoomTransform();
+            updateZoomIndicator();
+        }
     });
 
     // Zoom out
     zoomOutBtn.addEventListener('click', function(e) {
         e.stopPropagation();
-        if (currentScale > 0.4) {
-            currentScale -= 0.2;
-            zoomedImage.style.transform = `scale(${currentScale})`;
+        if (currentScale > minScale) {
+            currentScale -= 0.25;
+            
+            // Si el zoom es muy pequeño, centrar la imagen
+            if (currentScale <= 1) {
+                translateX = 0;
+                translateY = 0;
+            }
+            
+            updateZoomTransform();
+            updateZoomIndicator();
         }
     });
 
@@ -480,7 +530,10 @@ function setupImageZoom() {
     resetZoomBtn.addEventListener('click', function(e) {
         e.stopPropagation();
         currentScale = 1;
-        zoomedImage.style.transform = `scale(${currentScale})`;
+        translateX = 0;
+        translateY = 0;
+        updateZoomTransform();
+        updateZoomIndicator();
     });
 
     // Arrastrar imagen cuando está zoomada
@@ -491,45 +544,73 @@ function setupImageZoom() {
         if (currentScale <= 1) return;
         
         isDragging = true;
+        zoomedImage.classList.add('dragging');
+        
         const event = e.type === 'touchstart' ? e.touches[0] : e;
-        startX = event.pageX - zoomedImage.offsetLeft;
-        startY = event.pageY - zoomedImage.offsetTop;
-        scrollLeft = zoomedImage.scrollLeft;
-        scrollTop = zoomedImage.scrollTop;
+        startX = event.clientX - translateX;
+        startY = event.clientY - translateY;
         
         e.preventDefault();
     }
 
-    document.addEventListener('mousemove', drag);
-    document.addEventListener('touchmove', drag);
-    
     function drag(e) {
         if (!isDragging) return;
         
         const event = e.type === 'touchmove' ? e.touches[0] : e;
-        const x = event.pageX - zoomedImage.offsetLeft;
-        const y = event.pageY - zoomedImage.offsetTop;
-        const walkX = (x - startX) * 2;
-        const walkY = (y - startY) * 2;
+        const newTranslateX = event.clientX - startX;
+        const newTranslateY = event.clientY - startY;
         
-        zoomedImage.scrollLeft = scrollLeft - walkX;
-        zoomedImage.scrollTop = scrollTop - walkY;
+        // Limitar el desplazamiento para que no se salga demasiado
+        const maxTranslate = 100 * currentScale;
+        translateX = Math.max(Math.min(newTranslateX, maxTranslate), -maxTranslate);
+        translateY = Math.max(Math.min(newTranslateY, maxTranslate), -maxTranslate);
+        
+        updateZoomTransform();
     }
 
-    document.addEventListener('mouseup', stopDrag);
-    document.addEventListener('touchend', stopDrag);
-    
     function stopDrag() {
         isDragging = false;
+        zoomedImage.classList.remove('dragging');
     }
+
+    // Event listeners mejorados
+    document.addEventListener('mousemove', drag);
+    document.addEventListener('touchmove', drag);
+    document.addEventListener('mouseup', stopDrag);
+    document.addEventListener('touchend', stopDrag);
 
     // Cerrar con tecla ESC
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' && modal.classList.contains('active')) {
-            modal.classList.remove('active');
-            currentScale = 1;
+            closeZoomModal();
         }
     });
+
+    // Zoom con rueda del ratón
+    modal.addEventListener('wheel', function(e) {
+        e.preventDefault();
+        
+        if (e.deltaY < 0) {
+            // Zoom in
+            if (currentScale < maxScale) {
+                currentScale += 0.1;
+            }
+        } else {
+            // Zoom out
+            if (currentScale > minScale) {
+                currentScale -= 0.1;
+                
+                // Si el zoom es muy pequeño, centrar la imagen
+                if (currentScale <= 1) {
+                    translateX = 0;
+                    translateY = 0;
+                }
+            }
+        }
+        
+        updateZoomTransform();
+        updateZoomIndicator();
+    }, { passive: false });
 }
 
 // Modificar la función de inicialización del carrusel para usar contenedores flexibles
