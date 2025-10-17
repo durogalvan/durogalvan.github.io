@@ -1,30 +1,20 @@
-// Stock data - se actualizará automáticamente desde Google Sheets
-let stock = {
+// Stock data from the provided table
+const stock = {
     white: {
-        S: 0, M: 0, L: 0, XL: 0, XXL: 0
+        S: 5,
+        M: 30,
+        L: 41,
+        XL: 21,
+        XXL: 10
     },
     black: {
-        S: 0, M: 0, L: 0, XL: 0, XXL: 0
+        S: 5,
+        M: 30,
+        L: 41,
+        XL: 21,
+        XXL: 10
     }
 };
-
-// Función para obtener stock actualizado desde Google Sheets
-async function updateStockFromSheets() {
-    try {
-        const scriptUrl = 'https://script.google.com/macros/s/AKfycbySuEqwHvIVTAM4TcGJ0EgQdJ6X0Z0MVeCe9EFd8-yqnM_8NBgmVwss_l0oXs7LTCKU/exec';
-        const response = await fetch(`${scriptUrl}?action=getStock`);
-        const data = await response.json();
-        
-        if (data.success) {
-            // Convertir los nombres de productos a los que usa nuestra página
-            stock.white = data.stock['Camiseta Blanca'];
-            stock.black = data.stock['Camiseta Negra'];
-            initializeStock();
-        }
-    } catch (error) {
-        console.error('Error actualizando stock:', error);
-    }
-}
 
 // Initialize stock display
 function initializeStock() {
@@ -69,10 +59,6 @@ function markSoldOutSizes(product) {
         if (stock[product][size] <= 0) {
             sizeElement.classList.add('sold-out');
             sizeElement.textContent = `${size} (Agotado)`;
-        } else {
-            // Asegurarse de quitar la clase sold-out si ahora hay stock
-            sizeElement.classList.remove('sold-out');
-            sizeElement.textContent = size;
         }
     });
 }
@@ -233,7 +219,7 @@ function handleReservationFormSubmit(form, defaultProduct) {
         if (data.success) {
             alert('¡Reserva realizada con éxito! Te hemos enviado un email de confirmación. ID de reserva: ' + data.reservationId);
             
-            // Actualizar stock localmente restando 1
+            // Actualizar stock localmente
             stock[product][size]--;
             initializeStock();
             
@@ -415,104 +401,7 @@ function initializeCarousel(carouselId, dotsContainerId) {
     // Ajustar altura al redimensionar ventana
     window.addEventListener('resize', updateCarouselHeight);
 }
-    
-    // Add event listeners for carousel buttons
-    document.querySelectorAll(`[data-carousel="${productType}"]`).forEach(button => {
-        button.addEventListener('click', () => {
-            if (button.classList.contains('carousel-next')) {
-                nextSlide();
-            } else {
-                prevSlide();
-            }
-            
-            // Reset auto-advance timer
-            clearInterval(slideInterval);
-            slideInterval = setInterval(() => {
-                nextSlide();
-            }, 5000);
-        });
-    });
-    
-    // Pause auto-advance on hover
-    carousel.parentElement.addEventListener('mouseenter', () => {
-        clearInterval(slideInterval);
-    });
-    
-    carousel.parentElement.addEventListener('mouseleave', () => {
-        clearInterval(slideInterval);
-        slideInterval = setInterval(() => {
-            nextSlide();
-        }, 5000);
-    });
-}
 
-// Navigation between sections
-function showSection(sectionId) {
-    // Hide all product pages and show main sections
-    document.querySelectorAll('.product-page').forEach(page => {
-        page.style.display = 'none';
-    });
-    
-    document.querySelectorAll('section:not(.product-page)').forEach(section => {
-        section.style.display = 'block';
-    });
-    
-    // If a product page is requested, show it and hide main sections
-    if (sectionId === 'camiseta-blanca' || sectionId === 'camiseta-negra') {
-        document.querySelectorAll('section:not(.product-page)').forEach(section => {
-            section.style.display = 'none';
-        });
-        
-        const productSection = document.getElementById(sectionId);
-        if (productSection) {
-            productSection.style.display = 'block';
-            
-            // Pequeño delay para asegurar que el DOM esté listo
-            setTimeout(() => {
-                if (sectionId === 'camiseta-blanca') {
-                    initializeCarousel('carousel-white', 'carousel-dots-white');
-                } else {
-                    initializeCarousel('carousel-black', 'carousel-dots-black');
-                }
-            }, 100);
-            
-            // Re-initialize event listeners for the product page
-            setupSizeSelection();
-            setupPaymentSelection();
-        }
-    }
-    
-    // Scroll to top
-    window.scrollTo(0, 0);
-}
-
-// Setup navigation links
-function setupNavigation() {
-    // Handle hash changes for navigation
-    window.addEventListener('hashchange', function() {
-        const sectionId = window.location.hash.substring(1);
-        showSection(sectionId);
-    });
-    
-    // Handle direct clicks on product links
-    document.querySelectorAll('a[href="#camiseta-blanca"], a[href="#camiseta-negra"]').forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const sectionId = this.getAttribute('href').substring(1);
-            window.location.hash = sectionId;
-            showSection(sectionId);
-        });
-    });
-    
-    // Handle back links
-    document.querySelectorAll('.back-link').forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            window.location.hash = 'tienda';
-            showSection('tienda');
-        });
-    });
-}
 // Funcionalidad de Zoom MEJORADA para las imágenes del carrusel
 function setupImageZoom() {
     const modal = document.getElementById('modalZoom');
@@ -704,98 +593,84 @@ function setupImageZoom() {
     }, { passive: false });
 }
 
-// Modificar la función de inicialización del carrusel para usar contenedores flexibles
-function initializeCarousel(carouselId, dotsContainerId) {
-    const carousel = document.getElementById(carouselId);
-    const slides = carousel.querySelectorAll('.carousel-slide');
-    const dotsContainer = document.getElementById(dotsContainerId);
-    const productType = carouselId.split('-')[1]; // 'white' or 'black'
-    
-    let currentSlide = 0;
-    
-    // Create dots
-    dotsContainer.innerHTML = ''; // Limpiar dots existentes
-    slides.forEach((_, index) => {
-        const dot = document.createElement('button');
-        dot.classList.add('carousel-dot');
-        if (index === 0) dot.classList.add('active');
-        dot.addEventListener('click', () => {
-            goToSlide(index);
-        });
-        dotsContainer.appendChild(dot);
+// Navigation between sections
+function showSection(sectionId) {
+    // Hide all product pages and show main sections
+    document.querySelectorAll('.product-page').forEach(page => {
+        page.style.display = 'none';
     });
     
-    // Function to go to specific slide
-    function goToSlide(slideIndex) {
-        currentSlide = slideIndex;
-        carousel.style.transform = `translateX(-${currentSlide * 100}%)`;
+    document.querySelectorAll('section:not(.product-page)').forEach(section => {
+        section.style.display = 'block';
+    });
+    
+    // If a product page is requested, show it and hide main sections
+    if (sectionId === 'camiseta-blanca' || sectionId === 'camiseta-negra') {
+        document.querySelectorAll('section:not(.product-page)').forEach(section => {
+            section.style.display = 'none';
+        });
         
-        // Update dots
-        dotsContainer.querySelectorAll('.carousel-dot').forEach((dot, index) => {
-            dot.classList.toggle('active', index === currentSlide);
-        });
-    }
-    
-    // Auto-advance slides every 5 seconds
-    let slideInterval = setInterval(() => {
-        nextSlide();
-    }, 5000);
-    
-    // Next slide function
-    function nextSlide() {
-        currentSlide = (currentSlide + 1) % slides.length;
-        goToSlide(currentSlide);
-    }
-    
-    // Previous slide function
-    function prevSlide() {
-        currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-        goToSlide(currentSlide);
-    }
-    
-    // Add event listeners for carousel buttons
-    document.querySelectorAll(`[data-carousel="${productType}"]`).forEach(button => {
-        button.addEventListener('click', () => {
-            if (button.classList.contains('carousel-next')) {
-                nextSlide();
-            } else {
-                prevSlide();
-            }
+        const productSection = document.getElementById(sectionId);
+        if (productSection) {
+            productSection.style.display = 'block';
             
-            // Reset auto-advance timer
-            clearInterval(slideInterval);
-            slideInterval = setInterval(() => {
-                nextSlide();
-            }, 5000);
+            // Pequeño delay para asegurar que el DOM esté listo
+            setTimeout(() => {
+                if (sectionId === 'camiseta-blanca') {
+                    initializeCarousel('carousel-white', 'carousel-dots-white');
+                } else {
+                    initializeCarousel('carousel-black', 'carousel-dots-black');
+                }
+            }, 100);
+            
+            // Re-initialize event listeners for the product page
+            setupSizeSelection();
+            setupPaymentSelection();
+        }
+    }
+    
+    // Scroll to top
+    window.scrollTo(0, 0);
+}
+
+// Setup navigation links
+function setupNavigation() {
+    // Handle hash changes for navigation
+    window.addEventListener('hashchange', function() {
+        const sectionId = window.location.hash.substring(1);
+        showSection(sectionId);
+    });
+    
+    // Handle direct clicks on product links
+    document.querySelectorAll('a[href="#camiseta-blanca"], a[href="#camiseta-negra"]').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const sectionId = this.getAttribute('href').substring(1);
+            window.location.hash = sectionId;
+            showSection(sectionId);
         });
     });
     
-    // Pause auto-advance on hover
-    carousel.parentElement.addEventListener('mouseenter', () => {
-        clearInterval(slideInterval);
-    });
-    
-    carousel.parentElement.addEventListener('mouseleave', () => {
-        clearInterval(slideInterval);
-        slideInterval = setInterval(() => {
-            nextSlide();
-        }, 5000);
+    // Handle back links
+    document.querySelectorAll('.back-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.location.hash = 'tienda';
+            showSection('tienda');
+        });
     });
 }
 
 // Initialize the page
 document.addEventListener('DOMContentLoaded', function() {
-    // Primero inicializamos el stock desde Google Sheets
-    updateStockFromSheets().then(() => {
-        // Luego inicializamos todo lo demás
-        setupSizeSelection();
-        setupPaymentSelection();
-        setupFormSubmission();
-        setupNavigation();
-        setupImageZoom(); // <-- AÑADE ESTA LÍNEA
-        
-        // Show appropriate section based on initial hash
-        const initialSection = window.location.hash.substring(1) || 'inicio';
-        showSection(initialSection);
-    });
+    initializeStock();
+    setupSizeSelection();
+    setupPaymentSelection();
+    setupFormSubmission();
+    setupNavigation();
+    setupImageZoom();
+    
+    // Show appropriate section based on initial hash
+    const initialSection = window.location.hash.substring(1) || 'inicio';
+    showSection(initialSection);
 });
