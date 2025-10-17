@@ -411,7 +411,7 @@ footer {
     margin-top: 2rem;
 }
 
-/* Carrusel de imágenes - DINÁMICO */
+/* Carrusel de imágenes - MEJORADO */
 .carousel-container {
     position: relative;
     overflow: hidden;
@@ -420,10 +420,10 @@ footer {
     width: 100%;
     margin: 0 auto;
     background-color: var(--light-gray);
-    min-height: 400px; /* Altura mínima */
-    max-height: 600px; /* Altura máxima */
+    min-height: 500px;
     display: flex;
     align-items: center;
+    justify-content: center;
 }
 
 .carousel {
@@ -453,18 +453,6 @@ footer {
     cursor: zoom-in;
     transition: transform 0.3s ease;
     display: block;
-    border-radius: 3px;
-}
-
-/* Ajustes para diferentes orientaciones de imagen */
-.carousel-slide.portrait img {
-    max-height: 550px;
-    max-width: 90%;
-}
-
-.carousel-slide.landscape img {
-    max-width: 90%;
-    max-height: 500px;
 }
 
 .carousel-btn {
@@ -635,16 +623,7 @@ footer {
 /* Ajustes responsive para carrusel */
 @media (max-width: 768px) {
     .carousel-container {
-        min-height: 300px;
-        max-height: 400px;
-    }
-    
-    .carousel-slide.portrait img {
-        max-height: 350px;
-    }
-    
-    .carousel-slide.landscape img {
-        max-height: 300px;
+        min-height: 400px;
     }
     
     .carousel-slide {
@@ -659,16 +638,7 @@ footer {
 
 @media (max-width: 480px) {
     .carousel-container {
-        min-height: 250px;
-        max-height: 350px;
-    }
-    
-    .carousel-slide.portrait img {
-        max-height: 300px;
-    }
-    
-    .carousel-slide.landscape img {
-        max-height: 250px;
+        min-height: 350px;
     }
 }
 
