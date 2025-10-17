@@ -347,14 +347,17 @@
     </footer>
 
     <script src="script.js"></script>
-    <!-- Modal para Zoom -->
+<!-- Modal para Zoom - MEJORADO -->
     <div id="modalZoom" class="modal-zoom">
         <span class="close-zoom">&times;</span>
-        <img class="modal-zoom-content" id="zoomedImage">
+        <div class="zoom-indicator" id="zoomIndicator">100%</div>
+        <div class="modal-zoom-container">
+            <img class="modal-zoom-content" id="zoomedImage">
+        </div>
         <div class="zoom-controls">
-            <button class="zoom-btn" id="zoomIn">+</button>
             <button class="zoom-btn" id="zoomOut">-</button>
-            <button class="zoom-btn" id="resetZoom">100%</button>
+            <button class="zoom-btn" id="resetZoom">1:1</button>
+            <button class="zoom-btn" id="zoomIn">+</button>
         </div>
     </div>
 </body>
