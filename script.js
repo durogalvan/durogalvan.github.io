@@ -467,12 +467,14 @@ function showSection(sectionId) {
         if (productSection) {
             productSection.style.display = 'block';
             
-            // Initialize carousel for the product page
-            if (sectionId === 'camiseta-blanca') {
-                initializeCarousel('carousel-white', 'carousel-dots-white');
-            } else {
-                initializeCarousel('carousel-black', 'carousel-dots-black');
-            }
+            // Pequeño delay para asegurar que el DOM esté listo
+            setTimeout(() => {
+                if (sectionId === 'camiseta-blanca') {
+                    initializeCarousel('carousel-white', 'carousel-dots-white');
+                } else {
+                    initializeCarousel('carousel-black', 'carousel-dots-black');
+                }
+            }, 100);
             
             // Re-initialize event listeners for the product page
             setupSizeSelection();
