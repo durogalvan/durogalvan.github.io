@@ -5,14 +5,14 @@ const stock = {
         M: 30,
         L: 41,
         XL: 21,
-        XXL: 3
+        XXL: 10
     },
     black: {
         S: 5,
         M: 30,
         L: 41,
         XL: 21,
-        XXL: 3
+        XXL: 10
     }
 };
 
@@ -64,100 +64,60 @@ function markSoldOutSizes(product) {
 }
 
 // Handle size selection
-function setupSizeSelection() {
-    document.querySelectorAll('.size').forEach(sizeElement => {
-        sizeElement.addEventListener('click', function() {
-            if (this.classList.contains('sold-out')) return;
-            
-            // Remove selected class from all sizes of the same product
-            const product = this.getAttribute('data-product');
-            document.querySelectorAll(`.size[data-product="${product}"]`).forEach(el => {
-                el.classList.remove('selected');
-            });
-            
-            // Add selected class to clicked size
-            this.classList.add('selected');
-            
-            // Update selected product display
-            const size = this.getAttribute('data-size');
-            const productName = product === 'white' ? 'Camiseta Blanca' : 'Camiseta Negra';
-            
-            // Update in main form
-            const selectedProductElement = document.getElementById('selected-product');
-            if (selectedProductElement) {
-                selectedProductElement.textContent = `${productName} - Talla ${size}`;
-            }
-            
-            // Update in white product page
-            const selectedProductWhiteElement = document.getElementById('selected-product-white');
-            if (selectedProductWhiteElement) {
-                selectedProductWhiteElement.textContent = `${productName} - Talla ${size}`;
-            }
-            
-            // Update in black product page
-            const selectedProductBlackElement = document.getElementById('selected-product-black');
-            if (selectedProductBlackElement) {
-                selectedProductBlackElement.textContent = `${productName} - Talla ${size}`;
-            }
+document.querySelectorAll('.size').forEach(sizeElement => {
+    sizeElement.addEventListener('click', function() {
+        if (this.classList.contains('sold-out')) return;
+        
+        // Remove selected class from all sizes of the same product
+        const product = this.getAttribute('data-product');
+        document.querySelectorAll(`.size[data-product="${product}"]`).forEach(el => {
+            el.classList.remove('selected');
         });
+        
+        // Add selected class to clicked size
+        this.classList.add('selected');
+        
+        // Update selected product display
+        const size = this.getAttribute('data-size');
+        const productName = product === 'white' ? 'Camiseta Blanca' : 'Camiseta Negra';
+        document.getElementById('selected-product').textContent = `${productName} - Talla ${size}`;
     });
-}
+});
 
 // Handle payment method selection
-function setupPaymentSelection() {
-    document.querySelectorAll('.payment-option').forEach(option => {
-        option.addEventListener('click', function() {
-            // Remove selected class from all payment options
-            document.querySelectorAll('.payment-option').forEach(el => {
-                el.classList.remove('selected');
-            });
-            
-            // Add selected class to clicked option
-            this.classList.add('selected');
-            
-            // Show/hide IBAN info based on selection
-            const paymentMethod = this.getAttribute('data-payment');
-            const form = this.closest('form');
-            const ibanInfo = form ? form.querySelector('.iban-info') : document.getElementById('iban-info');
-            if (paymentMethod === 'transfer') {
-                ibanInfo.classList.add('show');
-            } else {
-                ibanInfo.classList.remove('show');
-            }
+document.querySelectorAll('.payment-option').forEach(option => {
+    option.addEventListener('click', function() {
+        // Remove selected class from all payment options
+        document.querySelectorAll('.payment-option').forEach(el => {
+            el.classList.remove('selected');
         });
+        
+        // Add selected class to clicked option
+        this.classList.add('selected');
+        
+        // Show/hide IBAN info based on selection
+        const paymentMethod = this.getAttribute('data-payment');
+        const ibanInfo = document.getElementById('iban-info');
+        if (paymentMethod === 'transfer') {
+            ibanInfo.classList.add('show');
+        } else {
+            ibanInfo.classList.remove('show');
+        }
     });
-}
+});
 
-// Handle form submission for main form
-function setupFormSubmission() {
-    document.getElementById('reservation-form')?.addEventListener('submit', function(e) {
-        e.preventDefault();
-        handleReservationFormSubmit(this, 'white');
-    });
-
-    // Handle form submission for white product page
-    document.getElementById('reservation-form-white')?.addEventListener('submit', function(e) {
-        e.preventDefault();
-        handleReservationFormSubmit(this, 'white');
-    });
-
-    // Handle form submission for black product page
-    document.getElementById('reservation-form-black')?.addEventListener('submit', function(e) {
-        e.preventDefault();
-        handleReservationFormSubmit(this, 'black');
-    });
-}
-
-// Generic function to handle form submission
-function handleReservationFormSubmit(form, defaultProduct) {
+// Handle form submission
+document.getElementById('reservation-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
     // Get selected product and size
-    const selectedSize = form.querySelector('.size.selected');
+    const selectedSize = document.querySelector('.size.selected');
     if (!selectedSize) {
         alert('Por favor, selecciona una talla de camiseta');
         return;
     }
     
-    const product = selectedSize.getAttribute('data-product') || defaultProduct;
+    const product = selectedSize.getAttribute('data-product');
     const size = selectedSize.getAttribute('data-size');
     
     // Check if selected size is available
@@ -167,7 +127,7 @@ function handleReservationFormSubmit(form, defaultProduct) {
     }
     
     // Get payment method
-    const selectedPayment = form.querySelector('.payment-option.selected');
+    const selectedPayment = document.querySelector('.payment-option.selected');
     if (!selectedPayment) {
         alert('Por favor, selecciona un método de pago');
         return;
@@ -176,19 +136,14 @@ function handleReservationFormSubmit(form, defaultProduct) {
     const paymentMethod = selectedPayment.getAttribute('data-payment');
     
     // Get form data
-    const nameInput = form.querySelector('input[type="text"]');
-    const emailInput = form.querySelector('input[type="email"]');
-    const phoneInput = form.querySelector('input[type="tel"]');
-    const notesInput = form.querySelector('textarea');
-    
     const formData = {
-        name: nameInput.value,
-        email: emailInput.value,
-        phone: phoneInput.value,
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
         product: product === 'white' ? 'Camiseta Blanca' : 'Camiseta Negra',
         size: size,
         payment: paymentMethod === 'transfer' ? 'Transferencia' : 'En mano',
-        notes: notesInput ? notesInput.value : '',
+        notes: document.getElementById('notes').value,
         timestamp: new Date().toISOString()
     };
     
@@ -196,7 +151,7 @@ function handleReservationFormSubmit(form, defaultProduct) {
     const scriptUrl = 'https://script.google.com/macros/s/AKfycbySuEqwHvIVTAM4TcGJ0EgQdJ6X0Z0MVeCe9EFd8-yqnM_8NBgmVwss_l0oXs7LTCKU/exec';
     
     // Mostrar indicador de carga
-    const submitButton = form.querySelector('button[type="submit"]');
+    const submitButton = this.querySelector('button[type="submit"]');
     const originalText = submitButton.textContent;
     submitButton.textContent = 'Procesando reserva...';
     submitButton.disabled = true;
@@ -224,32 +179,15 @@ function handleReservationFormSubmit(form, defaultProduct) {
             initializeStock();
             
             // Reset form
-            form.reset();
-            form.querySelectorAll('.size.selected').forEach(el => {
+            this.reset();
+            document.querySelectorAll('.size.selected').forEach(el => {
                 el.classList.remove('selected');
             });
-            form.querySelectorAll('.payment-option.selected').forEach(el => {
+            document.querySelectorAll('.payment-option.selected').forEach(el => {
                 el.classList.remove('selected');
             });
-            const ibanInfo = form.querySelector('.iban-info');
-            if (ibanInfo) {
-                ibanInfo.classList.remove('show');
-            }
-            
-            // Reset selected product display
-            const selectedProductElement = form.querySelector('#selected-product, #selected-product-white, #selected-product-black');
-            if (selectedProductElement) {
-                const productName = product === 'white' ? 'Camiseta Blanca' : 'Camiseta Negra';
-                selectedProductElement.textContent = `${productName} - Por favor, selecciona una talla`;
-            }
-            
-            // If we're on a product page, redirect to main shop after successful reservation
-            if (form.id.includes('white') || form.id.includes('black')) {
-                setTimeout(() => {
-                    window.location.href = '#tienda';
-                    showSection('tienda');
-                }, 2000);
-            }
+            document.getElementById('iban-info').classList.remove('show');
+            document.getElementById('selected-product').textContent = 'Por favor, selecciona una talla de camiseta';
         } else {
             alert('Error al procesar la reserva: ' + data.error);
         }
@@ -263,9 +201,9 @@ function handleReservationFormSubmit(form, defaultProduct) {
         submitButton.textContent = originalText;
         submitButton.disabled = false;
     });
-}
+});
 
-// Carrusel functionality - SIMPLIFICADO Y CORREGIDO
+// Carrusel functionality
 function initializeCarousel(carouselId, dotsContainerId) {
     const carousel = document.getElementById(carouselId);
     const slides = carousel.querySelectorAll('.carousel-slide');
@@ -275,7 +213,6 @@ function initializeCarousel(carouselId, dotsContainerId) {
     let currentSlide = 0;
     
     // Create dots
-    dotsContainer.innerHTML = '';
     slides.forEach((_, index) => {
         const dot = document.createElement('button');
         dot.classList.add('carousel-dot');
@@ -344,7 +281,7 @@ function initializeCarousel(carouselId, dotsContainerId) {
     });
 }
 
-// Funcionalidad de Zoom MEJORADA
+// Funcionalidad de Zoom para las imágenes del carrusel
 function setupImageZoom() {
     const modal = document.getElementById('modalZoom');
     const zoomedImage = document.getElementById('zoomedImage');
@@ -363,22 +300,16 @@ function setupImageZoom() {
     // Abrir modal al hacer click en cualquier imagen del carrusel
     document.querySelectorAll('.carousel-slide img').forEach(img => {
         img.addEventListener('click', function() {
-            openZoomModal(this.src, this.alt);
+            modal.classList.add('active');
+            zoomedImage.src = this.src;
+            zoomedImage.alt = this.alt;
+            currentScale = 1;
+            translateX = 0;
+            translateY = 0;
+            updateZoomTransform();
+            updateZoomIndicator();
         });
     });
-
-    function openZoomModal(src, alt) {
-        modal.classList.add('active');
-        zoomedImage.src = src;
-        zoomedImage.alt = alt;
-        
-        // Resetear transformaciones
-        currentScale = 1;
-        translateX = 0;
-        translateY = 0;
-        updateZoomTransform();
-        updateZoomIndicator();
-    }
 
     function updateZoomTransform() {
         zoomedImage.style.transform = `scale(${currentScale}) translate(${translateX}px, ${translateY}px)`;
@@ -389,19 +320,20 @@ function setupImageZoom() {
     }
 
     // Cerrar modal
-    closeZoom.addEventListener('click', closeZoomModal);
-
-    function closeZoomModal() {
+    closeZoom.addEventListener('click', function() {
         modal.classList.remove('active');
         currentScale = 1;
         translateX = 0;
         translateY = 0;
-    }
+    });
 
     // Cerrar modal al hacer click fuera de la imagen
     modal.addEventListener('click', function(e) {
         if (e.target === modal) {
-            closeZoomModal();
+            modal.classList.remove('active');
+            currentScale = 1;
+            translateX = 0;
+            translateY = 0;
         }
     });
 
@@ -443,8 +375,6 @@ function setupImageZoom() {
         if (currentScale <= 1) return;
         
         isDragging = true;
-        zoomedImage.classList.add('dragging');
-        
         const event = e.type === 'touchstart' ? e.touches[0] : e;
         startX = event.clientX - translateX;
         startY = event.clientY - translateY;
@@ -459,8 +389,8 @@ function setupImageZoom() {
         const newTranslateX = event.clientX - startX;
         const newTranslateY = event.clientY - startY;
         
-        // Limitar el desplazamiento
-        const maxTranslate = 200;
+        // Limitar el desplazamiento para que no se salga demasiado
+        const maxTranslate = 100 * currentScale;
         translateX = Math.max(Math.min(newTranslateX, maxTranslate), -maxTranslate);
         translateY = Math.max(Math.min(newTranslateY, maxTranslate), -maxTranslate);
         
@@ -469,7 +399,6 @@ function setupImageZoom() {
 
     function stopDrag() {
         isDragging = false;
-        zoomedImage.classList.remove('dragging');
     }
 
     // Event listeners
@@ -481,32 +410,58 @@ function setupImageZoom() {
     // Cerrar con tecla ESC
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' && modal.classList.contains('active')) {
-            closeZoomModal();
+            modal.classList.remove('active');
+            currentScale = 1;
+            translateX = 0;
+            translateY = 0;
         }
     });
+
+    // Zoom con rueda del ratón
+    modal.addEventListener('wheel', function(e) {
+        e.preventDefault();
+        
+        if (e.deltaY < 0) {
+            // Zoom in
+            if (currentScale < maxScale) {
+                currentScale += 0.1;
+            }
+        } else {
+            // Zoom out
+            if (currentScale > minScale) {
+                currentScale -= 0.1;
+            }
+        }
+        
+        updateZoomTransform();
+        updateZoomIndicator();
+    }, { passive: false });
 }
 
-// Navigation between sections - CORREGIDA
+// Navigation between sections
 function showSection(sectionId) {
-    // Hide all sections first
-    document.querySelectorAll('section').forEach(section => {
-        section.style.display = 'none';
+    // Hide all product pages and show main sections
+    document.querySelectorAll('.product-page').forEach(page => {
+        page.style.display = 'none';
     });
     
-    // Show the requested section
-    const targetSection = document.getElementById(sectionId);
-    if (targetSection) {
-        targetSection.style.display = 'block';
+    document.querySelectorAll('section:not(.product-page)').forEach(section => {
+        section.style.display = 'block';
+    });
+    
+    // If a product page is requested, show it and hide main sections
+    if (sectionId === 'camiseta-blanca' || sectionId === 'camiseta-negra') {
+        document.querySelectorAll('section:not(.product-page)').forEach(section => {
+            section.style.display = 'none';
+        });
         
-        // Initialize carousel if it's a product page
+        document.getElementById(sectionId).style.display = 'block';
+        
+        // Initialize carousel for the product page
         if (sectionId === 'camiseta-blanca') {
-            setTimeout(() => {
-                initializeCarousel('carousel-white', 'carousel-dots-white');
-            }, 100);
-        } else if (sectionId === 'camiseta-negra') {
-            setTimeout(() => {
-                initializeCarousel('carousel-black', 'carousel-dots-black');
-            }, 100);
+            initializeCarousel('carousel-white', 'carousel-dots-white');
+        } else {
+            initializeCarousel('carousel-black', 'carousel-dots-black');
         }
     }
     
@@ -514,32 +469,15 @@ function showSection(sectionId) {
     window.scrollTo(0, 0);
 }
 
-// Setup navigation links
-function setupNavigation() {
-    // Handle hash changes for navigation
-    window.addEventListener('hashchange', function() {
-        const sectionId = window.location.hash.substring(1);
-        showSection(sectionId);
-    });
-    
-    // Handle direct clicks on navigation links
-    document.querySelectorAll('a[href^="#"]').forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const sectionId = this.getAttribute('href').substring(1);
-            window.location.hash = sectionId;
-            showSection(sectionId);
-        });
-    });
-}
+// Handle hash changes for navigation
+window.addEventListener('hashchange', function() {
+    const sectionId = window.location.hash.substring(1);
+    showSection(sectionId);
+});
 
-// Initialize the page - CORREGIDA
+// Initialize the page
 document.addEventListener('DOMContentLoaded', function() {
     initializeStock();
-    setupSizeSelection();
-    setupPaymentSelection();
-    setupFormSubmission();
-    setupNavigation();
     setupImageZoom();
     
     // Show appropriate section based on initial hash
