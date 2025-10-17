@@ -5,14 +5,14 @@ const stock = {
         M: 30,
         L: 41,
         XL: 21,
-        XXL: 10
+        XXL: 3
     },
     black: {
         S: 5,
         M: 30,
         L: 41,
         XL: 21,
-        XXL: 10
+        XXL: 3
     }
 };
 
