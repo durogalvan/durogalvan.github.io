@@ -401,7 +401,7 @@ footer {
 .product-page {
     padding: 5rem 0;
     background-color: var(--white);
-    display: none; /* Oculto por defecto */
+    display: none;
 }
 
 .product-detail {
@@ -411,48 +411,34 @@ footer {
     margin-top: 2rem;
 }
 
-/* Carrusel de imágenes - MEJORADO */
+/* Carrusel de imágenes - VERSIÓN ANTERIOR FUNCIONAL */
 .carousel-container {
     position: relative;
     overflow: hidden;
     border-radius: 5px;
     box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-    width: 100%;
-    margin: 0 auto;
-    background-color: var(--light-gray);
-    min-height: 500px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    height: 500px;
 }
 
 .carousel {
     display: flex;
     transition: transform 0.5s ease;
     height: 100%;
-    width: 100%;
 }
 
 .carousel-slide {
     min-width: 100%;
-    flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 20px;
-    box-sizing: border-box;
-    height: 100%;
 }
 
 .carousel-slide img {
-    max-width: 100%;
-    max-height: 100%;
-    width: auto;
-    height: auto;
+    width: 100%;
+    height: 100%;
     object-fit: contain;
     cursor: zoom-in;
     transition: transform 0.3s ease;
-    display: block;
 }
 
 .carousel-btn {
@@ -515,7 +501,7 @@ footer {
     font-size: 1.2rem;
 }
 
-/* Modal para zoom - MEJORADO */
+/* Modal para zoom */
 .modal-zoom {
     display: none;
     position: fixed;
@@ -524,87 +510,52 @@ footer {
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.95);
+    background-color: rgba(0, 0, 0, 0.9);
     cursor: zoom-out;
-    overflow: hidden;
 }
 
 .modal-zoom.active {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.modal-zoom-container {
-    position: relative;
-    max-width: 90%;
-    max-height: 90%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: block;
 }
 
 .modal-zoom-content {
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-    cursor: grab;
-    transition: transform 0.2s ease;
-}
-
-.modal-zoom-content.dragging {
-    cursor: grabbing;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 90%;
+    max-height: 90%;
+    transition: transform 0.3s ease;
 }
 
 .close-zoom {
     position: absolute;
     top: 20px;
-    right: 30px;
+    right: 35px;
     color: white;
     font-size: 40px;
     font-weight: bold;
     cursor: pointer;
     z-index: 3001;
-    background: rgba(0,0,0,0.5);
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    line-height: 1;
 }
 
 .zoom-controls {
     position: absolute;
-    bottom: 30px;
+    bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
     gap: 10px;
     z-index: 3001;
-    background: rgba(0,0,0,0.7);
-    padding: 10px;
-    border-radius: 25px;
 }
 
 .zoom-btn {
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.7);
     border: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
+    padding: 10px 15px;
+    border-radius: 5px;
     cursor: pointer;
-    font-size: 18px;
-    font-weight: bold;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.3s;
-}
-
-.zoom-btn:hover {
-    background-color: var(--light-gray);
+    font-size: 16px;
 }
 
 .zoom-indicator {
@@ -618,28 +569,6 @@ footer {
     border-radius: 15px;
     font-size: 14px;
     z-index: 3001;
-}
-
-/* Ajustes responsive para carrusel */
-@media (max-width: 768px) {
-    .carousel-container {
-        min-height: 400px;
-    }
-    
-    .carousel-slide {
-        padding: 10px;
-    }
-
-    .product-detail {
-        grid-template-columns: 1fr;
-        gap: 2rem;
-    }
-}
-
-@media (max-width: 480px) {
-    .carousel-container {
-        min-height: 350px;
-    }
 }
 
 /* Responsive */
@@ -657,7 +586,8 @@ footer {
     }
     
     .music-container,
-    .products {
+    .products,
+    .product-detail {
         grid-template-columns: 1fr;
     }
     
@@ -669,5 +599,15 @@ footer {
         width: 35px;
         height: 35px;
         font-size: 1rem;
+    }
+    
+    .carousel-container {
+        height: 400px;
+    }
+}
+
+@media (max-width: 480px) {
+    .carousel-container {
+        height: 300px;
     }
 }
