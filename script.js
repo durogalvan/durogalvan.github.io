@@ -5,14 +5,14 @@ const stock = {
         M: 30,
         L: 41,
         XL: 21,
-        XXL: 10
+        XXL: 3
     },
     black: {
         S: 5,
         M: 30,
         L: 41,
         XL: 21,
-        XXL: 10
+        XXL: 3
     }
 };
 
@@ -265,7 +265,7 @@ function handleReservationFormSubmit(form, defaultProduct) {
     });
 }
 
-// Carrusel DINÁMICO que se adapta a cada imagen
+// Carrusel functionality - SIMPLIFICADO Y CORREGIDO
 function initializeCarousel(carouselId, dotsContainerId) {
     const carousel = document.getElementById(carouselId);
     const slides = carousel.querySelectorAll('.carousel-slide');
@@ -274,60 +274,8 @@ function initializeCarousel(carouselId, dotsContainerId) {
     
     let currentSlide = 0;
     
-    // Analizar cada imagen y aplicar clase según orientación
-    slides.forEach((slide, index) => {
-        const img = slide.querySelector('img');
-        const tempImg = new Image();
-        
-        tempImg.onload = function() {
-            const aspectRatio = this.width / this.height;
-            
-            // Determinar orientación y aplicar clase correspondiente
-            if (aspectRatio > 1) {
-                // Imagen horizontal
-                slide.classList.add('landscape');
-            } else {
-                // Imagen vertical
-                slide.classList.add('portrait');
-            }
-            
-            // Si es la primera imagen, inicializar
-            if (index === 0) {
-                updateCarouselHeight();
-            }
-        };
-        
-        tempImg.src = img.src;
-    });
-    
-    // Función para actualizar la altura del carrusel según la imagen actual
-    function updateCarouselHeight() {
-        const currentSlideElement = slides[currentSlide];
-        const img = currentSlideElement.querySelector('img');
-        
-        if (img && img.naturalHeight) {
-            const aspectRatio = img.naturalWidth / img.naturalHeight;
-            const container = carousel.parentElement;
-            
-            // Ajustar altura según orientación
-            if (aspectRatio > 1.5) {
-                // Muy horizontal - altura menor
-                container.style.height = '400px';
-            } else if (aspectRatio > 1) {
-                // Horizontal estándar
-                container.style.height = '450px';
-            } else if (aspectRatio > 0.7) {
-                // Cuadrada o casi
-                container.style.height = '500px';
-            } else {
-                // Vertical
-                container.style.height = '550px';
-            }
-        }
-    }
-    
     // Create dots
-    dotsContainer.innerHTML = ''; // Limpiar dots existentes
+    dotsContainer.innerHTML = '';
     slides.forEach((_, index) => {
         const dot = document.createElement('button');
         dot.classList.add('carousel-dot');
@@ -342,9 +290,6 @@ function initializeCarousel(carouselId, dotsContainerId) {
     function goToSlide(slideIndex) {
         currentSlide = slideIndex;
         carousel.style.transform = `translateX(-${currentSlide * 100}%)`;
-        
-        // Actualizar altura del carrusel
-        updateCarouselHeight();
         
         // Update dots
         dotsContainer.querySelectorAll('.carousel-dot').forEach((dot, index) => {
@@ -397,12 +342,9 @@ function initializeCarousel(carouselId, dotsContainerId) {
             nextSlide();
         }, 5000);
     });
-    
-    // Ajustar altura al redimensionar ventana
-    window.addEventListener('resize', updateCarouselHeight);
 }
 
-// Funcionalidad de Zoom MEJORADA para las imágenes del carrusel
+// Funcionalidad de Zoom MEJORADA
 function setupImageZoom() {
     const modal = document.getElementById('modalZoom');
     const zoomedImage = document.getElementById('zoomedImage');
@@ -417,18 +359,11 @@ function setupImageZoom() {
     let maxScale = 3;
     let isDragging = false;
     let startX, startY, translateX = 0, translateY = 0;
-    let currentImageAspectRatio = 1;
 
     // Abrir modal al hacer click en cualquier imagen del carrusel
     document.querySelectorAll('.carousel-slide img').forEach(img => {
         img.addEventListener('click', function() {
-            const imgSrc = this.src;
-            const img = new Image();
-            img.onload = function() {
-                currentImageAspectRatio = this.width / this.height;
-                openZoomModal(imgSrc, this.alt);
-            };
-            img.src = imgSrc;
+            openZoomModal(this.src, this.alt);
         });
     });
 
@@ -443,15 +378,6 @@ function setupImageZoom() {
         translateY = 0;
         updateZoomTransform();
         updateZoomIndicator();
-        
-        // Centrar la imagen
-        setTimeout(centerImage, 100);
-    }
-
-    function centerImage() {
-        translateX = 0;
-        translateY = 0;
-        updateZoomTransform();
     }
 
     function updateZoomTransform() {
@@ -494,13 +420,6 @@ function setupImageZoom() {
         e.stopPropagation();
         if (currentScale > minScale) {
             currentScale -= 0.25;
-            
-            // Si el zoom es muy pequeño, centrar la imagen
-            if (currentScale <= 1) {
-                translateX = 0;
-                translateY = 0;
-            }
-            
             updateZoomTransform();
             updateZoomIndicator();
         }
@@ -540,8 +459,8 @@ function setupImageZoom() {
         const newTranslateX = event.clientX - startX;
         const newTranslateY = event.clientY - startY;
         
-        // Limitar el desplazamiento para que no se salga demasiado
-        const maxTranslate = 100 * currentScale;
+        // Limitar el desplazamiento
+        const maxTranslate = 200;
         translateX = Math.max(Math.min(newTranslateX, maxTranslate), -maxTranslate);
         translateY = Math.max(Math.min(newTranslateY, maxTranslate), -maxTranslate);
         
@@ -553,7 +472,7 @@ function setupImageZoom() {
         zoomedImage.classList.remove('dragging');
     }
 
-    // Event listeners mejorados
+    // Event listeners
     document.addEventListener('mousemove', drag);
     document.addEventListener('touchmove', drag);
     document.addEventListener('mouseup', stopDrag);
@@ -565,67 +484,29 @@ function setupImageZoom() {
             closeZoomModal();
         }
     });
-
-    // Zoom con rueda del ratón
-    modal.addEventListener('wheel', function(e) {
-        e.preventDefault();
-        
-        if (e.deltaY < 0) {
-            // Zoom in
-            if (currentScale < maxScale) {
-                currentScale += 0.1;
-            }
-        } else {
-            // Zoom out
-            if (currentScale > minScale) {
-                currentScale -= 0.1;
-                
-                // Si el zoom es muy pequeño, centrar la imagen
-                if (currentScale <= 1) {
-                    translateX = 0;
-                    translateY = 0;
-                }
-            }
-        }
-        
-        updateZoomTransform();
-        updateZoomIndicator();
-    }, { passive: false });
 }
 
-// Navigation between sections
+// Navigation between sections - CORREGIDA
 function showSection(sectionId) {
-    // Hide all product pages and show main sections
-    document.querySelectorAll('.product-page').forEach(page => {
-        page.style.display = 'none';
+    // Hide all sections first
+    document.querySelectorAll('section').forEach(section => {
+        section.style.display = 'none';
     });
     
-    document.querySelectorAll('section:not(.product-page)').forEach(section => {
-        section.style.display = 'block';
-    });
-    
-    // If a product page is requested, show it and hide main sections
-    if (sectionId === 'camiseta-blanca' || sectionId === 'camiseta-negra') {
-        document.querySelectorAll('section:not(.product-page)').forEach(section => {
-            section.style.display = 'none';
-        });
+    // Show the requested section
+    const targetSection = document.getElementById(sectionId);
+    if (targetSection) {
+        targetSection.style.display = 'block';
         
-        const productSection = document.getElementById(sectionId);
-        if (productSection) {
-            productSection.style.display = 'block';
-            
-            // Pequeño delay para asegurar que el DOM esté listo
+        // Initialize carousel if it's a product page
+        if (sectionId === 'camiseta-blanca') {
             setTimeout(() => {
-                if (sectionId === 'camiseta-blanca') {
-                    initializeCarousel('carousel-white', 'carousel-dots-white');
-                } else {
-                    initializeCarousel('carousel-black', 'carousel-dots-black');
-                }
+                initializeCarousel('carousel-white', 'carousel-dots-white');
             }, 100);
-            
-            // Re-initialize event listeners for the product page
-            setupSizeSelection();
-            setupPaymentSelection();
+        } else if (sectionId === 'camiseta-negra') {
+            setTimeout(() => {
+                initializeCarousel('carousel-black', 'carousel-dots-black');
+            }, 100);
         }
     }
     
@@ -641,8 +522,8 @@ function setupNavigation() {
         showSection(sectionId);
     });
     
-    // Handle direct clicks on product links
-    document.querySelectorAll('a[href="#camiseta-blanca"], a[href="#camiseta-negra"]').forEach(link => {
+    // Handle direct clicks on navigation links
+    document.querySelectorAll('a[href^="#"]').forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
             const sectionId = this.getAttribute('href').substring(1);
@@ -650,18 +531,9 @@ function setupNavigation() {
             showSection(sectionId);
         });
     });
-    
-    // Handle back links
-    document.querySelectorAll('.back-link').forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            window.location.hash = 'tienda';
-            showSection('tienda');
-        });
-    });
 }
 
-// Initialize the page
+// Initialize the page - CORREGIDA
 document.addEventListener('DOMContentLoaded', function() {
     initializeStock();
     setupSizeSelection();
