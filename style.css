@@ -410,17 +410,50 @@ footer {
     margin-top: 2rem;
 }
 
-/* Carrusel de imágenes - MODIFICADO */
+/* Carrusel de imágenes - MEJORADO */
 .carousel-container {
     position: relative;
     overflow: hidden;
     border-radius: 5px;
     box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-    height: 500px; /* Altura fija para el contenedor */
+    width: 100%;
+    margin: 0 auto;
+}
+
+.carousel {
+    display: flex;
+    transition: transform 0.5s ease;
+    height: 100%;
+}
+
+.carousel-slide {
+    min-width: 100%;
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: var(--light-gray);
+    padding: 0;
+    margin: 0;
+}
+
+.carousel-slide img {
+    width: 100%;
+    height: auto;
+    max-height: 500px;
+    object-fit: contain;
+    cursor: zoom-in;
+    transition: transform 0.3s ease;
+    display: block;
+}
+
+/* Asegurar que no hay espacios entre slides */
+.carousel-container {
+    position: relative;
+    overflow: hidden;
+    border-radius: 5px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    width: 100%;
+    margin: 0 auto;
 }
 
 .carousel {
@@ -432,23 +465,24 @@ footer {
 
 .carousel-slide {
     min-width: 100%;
+    flex-shrink: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100%;
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
 }
 
 .carousel-slide img {
-    max-width: 100%;
-    max-height: 100%;
-    width: auto;
+    width: 100%;
     height: auto;
-    object-fit: contain; /* Mantiene la proporción sin recortar */
-    cursor: zoom-in; /* Indica que se puede hacer zoom */
-    transition: transform 0.3s ease;
+    max-height: 500px;
+    object-fit: contain;
+    display: block;
 }
 
-/* Modal para zoom */
+/* Modal para zoom - MEJORADO */
 .modal-zoom {
     display: none;
     position: fixed;
@@ -457,54 +491,102 @@ footer {
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.9);
+    background-color: rgba(0, 0, 0, 0.95);
     cursor: zoom-out;
-}
-
-.modal-zoom-content {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    max-width: 90%;
-    max-height: 90%;
-    transition: transform 0.3s ease;
+    overflow: hidden;
 }
 
 .modal-zoom.active {
-    display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-zoom-container {
+    position: relative;
+    max-width: 90%;
+    max-height: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-zoom-content {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    cursor: grab;
+    transition: transform 0.2s ease;
+}
+
+.modal-zoom-content.dragging {
+    cursor: grabbing;
 }
 
 .close-zoom {
     position: absolute;
     top: 20px;
-    right: 35px;
+    right: 30px;
     color: white;
     font-size: 40px;
     font-weight: bold;
     cursor: pointer;
     z-index: 3001;
+    background: rgba(0,0,0,0.5);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
 }
 
 .zoom-controls {
     position: absolute;
-    bottom: 20px;
+    bottom: 30px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
     gap: 10px;
     z-index: 3001;
+    background: rgba(0,0,0,0.7);
+    padding: 10px;
+    border-radius: 25px;
 }
 
 .zoom-btn {
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: white;
     border: none;
-    padding: 10px 15px;
-    border-radius: 5px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 18px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s;
 }
 
+.zoom-btn:hover {
+    background-color: var(--light-gray);
+}
+
+/* Indicador de zoom */
+.zoom-indicator {
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: white;
+    background: rgba(0,0,0,0.7);
+    padding: 5px 15px;
+    border-radius: 15px;
+    font-size: 14px;
+    z-index: 3001;
+}
 /* Responsive */
 @media (max-width: 768px) {
     .header-container {
