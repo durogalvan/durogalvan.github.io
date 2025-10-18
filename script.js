@@ -43,15 +43,16 @@ function initializeStock() {
 function syncStockFromServer() {
     fetch(STOCK_SCRIPT_URL, {
         method: 'GET',
+        mode: 'cors',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'text/plain'
         }
     })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
+        .then(response => response.text())
+        .then(text => {
+            console.log('Stock response:', text);
+            const data = JSON.parse(text);
+            return data;
         })
         .then(data => {
             if (data.success && data.stock) {
@@ -227,6 +228,7 @@ function handleReservationFormSubmit(form, product) {
     
     fetch(SCRIPT_URL, {
         method: 'POST',
+        mode: 'cors',
         headers: {
             'Content-Type': 'text/plain'
         },
@@ -234,10 +236,13 @@ function handleReservationFormSubmit(form, product) {
     })
     .then(response => {
         console.log('Response status:', response.status);
-        if (!response.ok) {
-            throw new Error('Error de red: ' + response.status);
-        }
-        return response.json();
+        console.log('Response:', response);
+        return response.text();
+    })
+    .then(text => {
+        console.log('Response text:', text);
+        const data = JSON.parse(text);
+        return data;
     })
     .then(data => {
         console.log('Response data:', data);
