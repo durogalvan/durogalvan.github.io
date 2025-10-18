@@ -193,7 +193,14 @@ function handleReservationFormSubmit(form, product) {
         return;
     }
     
-    // URL de tu Google Apps Script (ACTUALIZA ESTA URL CON LA TUYA)
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(formData.email)) {
+        alert('Por favor, introduce un email válido');
+        return;
+    }
+    
+    // URL de tu Google Apps Script (ACTUALIZADA CON TU ID)
     const scriptUrl = 'https://script.google.com/macros/s/AKfycbzEWMDVelvduAqeTl5HNzqscDttSN2GZUVb8qQebep15TSamP5AXYIxSySjqwoRD1N0/exec';
     
     // Mostrar indicador de carga
@@ -202,7 +209,9 @@ function handleReservationFormSubmit(form, product) {
     submitButton.textContent = 'Procesando reserva...';
     submitButton.disabled = true;
     
-    // Enviar datos a Google Apps Script
+    console.log('Enviando datos al Google Apps Script:', formData);
+    
+    // Enviar datos a Google Apps Script con mejor manejo de errores
     fetch(scriptUrl, {
         method: 'POST',
         headers: {
@@ -211,12 +220,19 @@ function handleReservationFormSubmit(form, product) {
         body: JSON.stringify(formData)
     })
     .then(response => {
+        console.log('Respuesta recibida, status:', response.status);
+        
         if (!response.ok) {
-            throw new Error('Error de red: ' + response.status);
+            // Si la respuesta no es OK, intentamos leer el cuerpo del error
+            return response.text().then(text => {
+                throw new Error(`Error del servidor: ${response.status} - ${text}`);
+            });
         }
         return response.json();
     })
     .then(data => {
+        console.log('Datos procesados:', data);
+        
         if (data.success) {
             alert('¡Reserva realizada con éxito! Te hemos enviado un email de confirmación. ID de reserva: ' + data.reservationId);
             
@@ -234,12 +250,26 @@ function handleReservationFormSubmit(form, product) {
                 showSectionBasedOnHash();
             }, 2000);
         } else {
-            alert('Error al procesar la reserva: ' + data.error);
+            throw new Error(data.error || 'Error desconocido del servidor');
         }
     })
     .catch(error => {
-        console.error('Error:', error);
-        alert('Hubo un error al procesar la reserva. Por favor, inténtalo de nuevo o contacta con nosotros directamente en durogalvanband@gmail.com.');
+        console.error('Error completo:', error);
+        
+        // Mensaje de error más específico
+        let errorMessage = 'Hubo un error al procesar la reserva. ';
+        
+        if (error.message.includes('Failed to fetch')) {
+            errorMessage += 'No se pudo conectar con el servidor. ';
+        } else if (error.message.includes('NetworkError')) {
+            errorMessage += 'Error de conexión. ';
+        } else if (error.message.includes('CORS')) {
+            errorMessage += 'Error de configuración CORS. ';
+        }
+        
+        errorMessage += 'Por favor, inténtalo de nuevo o contacta con nosotros directamente en durogalvanband@gmail.com.';
+        
+        alert(errorMessage);
     })
     .finally(() => {
         // Restaurar el botón
@@ -408,7 +438,7 @@ function setupNavigation() {
     // Handle hash changes for navigation
     window.addEventListener('hashchange', showSectionBasedOnHash);
     
-    // Handle direct clicks on product links - CORREGIDO
+    // Handle direct clicks on product links
     document.querySelectorAll('a[href="#camiseta-blanca"]').forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
