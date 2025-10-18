@@ -27,9 +27,12 @@ let selectedPayment = {
     black: null
 };
 
-// Google Apps Script URL
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzEWMDVelvduAqeTl5HNzqscDttSN2GZUVb8qQebep15TSamP5AXYIxSySjqwoRD1N0/exec';
-const STOCK_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzEWMDVelvduAqeTl5HNzqscDttSN2GZUVb8qQebep15TSamP5AXYIxSySjqwoRD1N0/exec?action=getStock';
+// Google Apps Script URL - ACTUALIZA ESTO CON TU URL REAL
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzEWMDVelvduAqeTl5HNzqscDttSN2GZUVb8qQebep15TSamP5AXYIxSySjqwoRD1N0/usercontent';
+const STOCK_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzEWMDVelvduAqeTl5HNzqscDttSN2GZUVb8qQebep15TSamP5AXYIxSySjqwoRD1N0/usercontent?action=getStock';
+
+// Proxy CORS (alternativa si CORS falla)
+const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/';
 
 // Initialize stock display and sync with server
 function initializeStock() {
@@ -38,8 +41,18 @@ function initializeStock() {
 
 // Sync stock from Google Sheet
 function syncStockFromServer() {
-    fetch(STOCK_SCRIPT_URL)
-        .then(response => response.json())
+    fetch(STOCK_SCRIPT_URL, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
         .then(data => {
             if (data.success && data.stock) {
                 stock = data.stock;
@@ -51,6 +64,7 @@ function syncStockFromServer() {
         })
         .catch(error => {
             console.log('No se pudo sincronizar stock desde servidor:', error);
+            console.log('Usando stock local...');
             updateStockDisplay();
             markSoldOutSizes('white');
             markSoldOutSizes('black');
@@ -214,17 +228,19 @@ function handleReservationFormSubmit(form, product) {
     fetch(SCRIPT_URL, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'text/plain'
         },
         body: JSON.stringify(formData)
     })
     .then(response => {
+        console.log('Response status:', response.status);
         if (!response.ok) {
             throw new Error('Error de red: ' + response.status);
         }
         return response.json();
     })
     .then(data => {
+        console.log('Response data:', data);
         if (data.success) {
             alert('¡Reserva realizada con éxito! Te hemos enviado un email de confirmación. ID de reserva: ' + data.reservationId);
             
@@ -241,7 +257,7 @@ function handleReservationFormSubmit(form, product) {
                 showSectionBasedOnHash();
             }, 2000);
         } else {
-            alert('Error al procesar la reserva: ' + data.error);
+            alert('Error al procesar la reserva: ' + (data.error || 'Error desconocido'));
         }
     })
     .catch(error => {
