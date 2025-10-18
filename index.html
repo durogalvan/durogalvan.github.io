@@ -91,10 +91,8 @@
                         <div class="size" data-size="XL" data-product="white">XL</div>
                         <div class="size" data-size="XXL" data-product="white">XXL</div>
                     </div>
-                    <div class="stock-info" id="white-stock">
-                        <!-- Stock information will be displayed here -->
-                    </div>
-                    <a href="#camiseta-blanca" class="btn" style="margin-top: 1rem;" onclick="showProductPage('camiseta-blanca')">Ver detalles y reservar</a>
+                    <div class="stock-info" id="white-stock"></div>
+                    <button class="btn" style="margin-top: 1rem;" onclick="showProductPage('camiseta-blanca')">Ver detalles y reservar</button>
                 </div>
                 
                 <div class="product">
@@ -110,10 +108,8 @@
                         <div class="size" data-size="XL" data-product="black">XL</div>
                         <div class="size" data-size="XXL" data-product="black">XXL</div>
                     </div>
-                    <div class="stock-info" id="black-stock">
-                        <!-- Stock information will be displayed here -->
-                    </div>
-                    <a href="#camiseta-negra" class="btn" style="margin-top: 1rem;" onclick="showProductPage('camiseta-negra')">Ver detalles y reservar</a>
+                    <div class="stock-info" id="black-stock"></div>
+                    <button class="btn" style="margin-top: 1rem;" onclick="showProductPage('camiseta-negra')">Ver detalles y reservar</button>
                 </div>
             </div>
         </div>
@@ -126,26 +122,35 @@
             
             <div class="product-detail">
                 <div class="product-gallery">
-                    <div class="carousel-container">
-                        <div class="carousel" id="carousel-white">
-                            <div class="carousel-slide">
-                                <img src="images/camiseta-blanca-1.jpeg" alt="Camiseta Blanca - Vista frontal">
+                    <div class="carousel-wrapper">
+                        <div class="carousel-container">
+                            <div class="carousel" id="carousel-white">
+                                <div class="carousel-slide">
+                                    <img src="images/camiseta-blanca-1.jpeg" alt="Camiseta Blanca - Vista frontal">
+                                </div>
+                                <div class="carousel-slide">
+                                    <img src="images/camiseta-blanca-2.jpeg" alt="Camiseta Blanca - Vista trasera">
+                                </div>
+                                <div class="carousel-slide">
+                                    <img src="images/camiseta-blanca-3.jpeg" alt="Camiseta Blanca - 3">
+                                </div>
+                                <div class="carousel-slide">
+                                    <img src="images/camiseta-blanca-4.jpeg" alt="Camiseta Blanca - 4">
+                                </div>
                             </div>
-                            <div class="carousel-slide">
-                                <img src="images/camiseta-blanca-2.jpeg" alt="Camiseta Blanca - Vista trasera">
-                            </div>
-                            <div class="carousel-slide">
-                                <img src="images/camiseta-blanca-3.jpeg" alt="Camiseta Blanca - 3">
-                            </div>
-                            <div class="carousel-slide">
-                                <img src="images/camiseta-blanca-4.jpeg" alt="Camiseta Blanca - 4">
-                            </div>
+                            <button class="carousel-btn carousel-prev" data-carousel="white">&#10094;</button>
+                            <button class="carousel-btn carousel-next" data-carousel="white">&#10095;</button>
                         </div>
-                        <button class="carousel-btn carousel-prev" data-carousel="white">&#10094;</button>
-                        <button class="carousel-btn carousel-next" data-carousel="white">&#10095;</button>
+                        <button class="zoom-btn" id="zoom-btn-white" title="Ampliar imagen">🔍</button>
                     </div>
-                    <div class="carousel-dots" id="carousel-dots-white">
-                        <!-- Los puntos se generarán automáticamente con JavaScript -->
+                    <div class="carousel-dots" id="carousel-dots-white"></div>
+                </div>
+
+                <!-- Modal Zoom -->
+                <div class="zoom-modal" id="zoom-modal-white" style="display: none;">
+                    <div class="zoom-modal-content">
+                        <button class="zoom-close">&times;</button>
+                        <img id="zoom-image-white" src="" alt="Imagen ampliada">
                     </div>
                 </div>
                 
@@ -154,21 +159,19 @@
                     <p>Precio: 15€</p>
                     <p>Camiseta de algodón 100% con el logo de Duro Galván impreso en serigrafía de alta calidad. Disponible en varias tallas.</p>
                     
-                    <div class="form-group">
-                        <label>Talla:</label>
-                        <div class="sizes">
-                            <div class="size" data-size="S" data-product="white">S</div>
-                            <div class="size" data-size="M" data-product="white">M</div>
-                            <div class="size" data-size="L" data-product="white">L</div>
-                            <div class="size" data-size="XL" data-product="white">XL</div>
-                            <div class="size" data-size="XXL" data-product="white">XXL</div>
-                        </div>
-                        <div class="stock-info" id="white-stock-detail">
-                            <!-- Stock information will be displayed here -->
-                        </div>
-                    </div>
-                    
                     <form class="reservation-form" id="reservation-form-white">
+                        <div class="form-group">
+                            <label>Talla:</label>
+                            <div class="sizes">
+                                <div class="size" data-size="S" data-product="white">S</div>
+                                <div class="size" data-size="M" data-product="white">M</div>
+                                <div class="size" data-size="L" data-product="white">L</div>
+                                <div class="size" data-size="XL" data-product="white">XL</div>
+                                <div class="size" data-size="XXL" data-product="white">XXL</div>
+                            </div>
+                            <div class="stock-info" id="white-stock-detail"></div>
+                        </div>
+                        
                         <div class="form-group">
                             <label for="name-white">Nombre completo</label>
                             <input type="text" id="name-white" name="name" required>
@@ -229,26 +232,35 @@
             
             <div class="product-detail">
                 <div class="product-gallery">
-                    <div class="carousel-container">
-                        <div class="carousel" id="carousel-black">
-                            <div class="carousel-slide">
-                                <img src="images/camiseta-negra-1.jpeg" alt="Camiseta Negra - Vista frontal">
+                    <div class="carousel-wrapper">
+                        <div class="carousel-container">
+                            <div class="carousel" id="carousel-black">
+                                <div class="carousel-slide">
+                                    <img src="images/camiseta-negra-1.jpeg" alt="Camiseta Negra - Vista frontal">
+                                </div>
+                                <div class="carousel-slide">
+                                    <img src="images/camiseta-negra-2.jpeg" alt="Camiseta Negra - Vista trasera">
+                                </div>
+                                <div class="carousel-slide">
+                                    <img src="images/camiseta-negra-3.jpeg" alt="Camiseta Negra - 3">
+                                </div>
+                                <div class="carousel-slide">
+                                    <img src="images/camiseta-negra-4.jpeg" alt="Camiseta Negra - 4">
+                                </div>
                             </div>
-                            <div class="carousel-slide">
-                                <img src="images/camiseta-negra-2.jpeg" alt="Camiseta Negra - Vista trasera">
-                            </div>
-                            <div class="carousel-slide">
-                                <img src="images/camiseta-negra-3.jpeg" alt="Camiseta Negra - 3">
-                            </div>
-                            <div class="carousel-slide">
-                                <img src="images/camiseta-negra-4.jpeg" alt="Camiseta Negra - 4">
-                            </div>
+                            <button class="carousel-btn carousel-prev" data-carousel="black">&#10094;</button>
+                            <button class="carousel-btn carousel-next" data-carousel="black">&#10095;</button>
                         </div>
-                        <button class="carousel-btn carousel-prev" data-carousel="black">&#10094;</button>
-                        <button class="carousel-btn carousel-next" data-carousel="black">&#10095;</button>
+                        <button class="zoom-btn" id="zoom-btn-black" title="Ampliar imagen">🔍</button>
                     </div>
-                    <div class="carousel-dots" id="carousel-dots-black">
-                        <!-- Los puntos se generarán automáticamente con JavaScript -->
+                    <div class="carousel-dots" id="carousel-dots-black"></div>
+                </div>
+
+                <!-- Modal Zoom -->
+                <div class="zoom-modal" id="zoom-modal-black" style="display: none;">
+                    <div class="zoom-modal-content">
+                        <button class="zoom-close">&times;</button>
+                        <img id="zoom-image-black" src="" alt="Imagen ampliada">
                     </div>
                 </div>
                 
@@ -257,21 +269,19 @@
                     <p>Precio: 15€</p>
                     <p>Camiseta de algodón 100% con el logo de Duro Galván impreso en serigrafía de alta calidad. Disponible en varias tallas.</p>
                     
-                    <div class="form-group">
-                        <label>Talla:</label>
-                        <div class="sizes">
-                            <div class="size" data-size="S" data-product="black">S</div>
-                            <div class="size" data-size="M" data-product="black">M</div>
-                            <div class="size" data-size="L" data-product="black">L</div>
-                            <div class="size" data-size="XL" data-product="black">XL</div>
-                            <div class="size" data-size="XXL" data-product="black">XXL</div>
-                        </div>
-                        <div class="stock-info" id="black-stock-detail">
-                            <!-- Stock information will be displayed here -->
-                        </div>
-                    </div>
-                    
                     <form class="reservation-form" id="reservation-form-black">
+                        <div class="form-group">
+                            <label>Talla:</label>
+                            <div class="sizes">
+                                <div class="size" data-size="S" data-product="black">S</div>
+                                <div class="size" data-size="M" data-product="black">M</div>
+                                <div class="size" data-size="L" data-product="black">L</div>
+                                <div class="size" data-size="XL" data-product="black">XL</div>
+                                <div class="size" data-size="XXL" data-product="black">XXL</div>
+                            </div>
+                            <div class="stock-info" id="black-stock-detail"></div>
+                        </div>
+                        
                         <div class="form-group">
                             <label for="name-black">Nombre completo</label>
                             <input type="text" id="name-black" name="name" required>
