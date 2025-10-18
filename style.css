@@ -264,6 +264,7 @@ section {
     justify-content: center;
     gap: 10px;
     margin: 1rem 0;
+    flex-wrap: wrap;
 }
 
 .size {
@@ -275,6 +276,8 @@ section {
     border: 1px solid var(--black);
     cursor: pointer;
     transition: all 0.3s;
+    border-radius: 4px;
+    font-size: 0.85rem;
 }
 
 .size.selected {
@@ -324,6 +327,7 @@ section {
     border: 1px solid #ddd;
     border-radius: 4px;
     font-family: 'Grand Paradiso', serif;
+    font-size: 1rem;
 }
 
 .payment-method {
@@ -342,6 +346,10 @@ section {
     transition: all 0.3s;
 }
 
+.payment-option:hover {
+    border-color: var(--dark-red);
+}
+
 .payment-option.selected {
     border-color: var(--dark-red);
     background-color: rgba(128, 0, 32, 0.05);
@@ -353,16 +361,30 @@ section {
     border-radius: 4px;
     margin-top: 1rem;
     display: none;
+    border-left: 4px solid var(--dark-red);
 }
 
 .iban-info.show {
     display: block;
 }
 
+.iban-info p {
+    margin: 0.5rem 0;
+}
+
 /* Contacto */
 .contact-info {
     text-align: center;
     margin-bottom: 2rem;
+}
+
+.contact-info a {
+    color: var(--dark-red);
+    text-decoration: none;
+}
+
+.contact-info a:hover {
+    text-decoration: underline;
 }
 
 .social-links {
@@ -373,13 +395,12 @@ section {
 }
 
 .social-link {
-    display: inline-block;
+    display: inline-flex;
     width: 40px;
     height: 40px;
     background-color: var(--black);
     color: var(--white);
     border-radius: 50%;
-    display: flex;
     align-items: center;
     justify-content: center;
     text-decoration: none;
@@ -411,12 +432,18 @@ footer {
     margin-top: 2rem;
 }
 
+.product-info {
+    display: flex;
+    flex-direction: column;
+}
+
 /* Carrusel de imágenes */
 .carousel-container {
     position: relative;
     overflow: hidden;
     border-radius: 5px;
     box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    background-color: var(--light-gray);
 }
 
 .carousel {
@@ -491,20 +518,35 @@ footer {
     text-decoration: none;
     font-family: 'Bebas Neue', sans-serif;
     font-size: 1.2rem;
+    transition: color 0.3s;
+}
+
+.back-link:hover {
+    color: #600018;
 }
 
 /* Responsive */
 @media (max-width: 768px) {
     .header-container {
         flex-direction: column;
+        gap: 1rem;
     }
     
     nav ul {
-        margin-top: 1rem;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    nav ul li {
+        margin-left: 0;
     }
     
     .hero h1 {
         font-size: 2.5rem;
+    }
+    
+    .hero p {
+        font-size: 1rem;
     }
     
     .music-container,
@@ -521,5 +563,14 @@ footer {
         width: 35px;
         height: 35px;
         font-size: 1rem;
+    }
+    
+    .sizes {
+        justify-content: center;
+    }
+    
+    .size {
+        width: 45px;
+        height: 45px;
     }
 }
