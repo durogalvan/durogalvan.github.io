@@ -1,5 +1,5 @@
 // Stock data from the provided table
-const stock = {
+let stock = {
     white: {
         S: 5,
         M: 30,
@@ -27,11 +27,34 @@ let selectedPayment = {
     black: null
 };
 
-// Initialize stock display
+// Google Apps Script URL
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzEWMDVelvduAqeTl5HNzqscDttSN2GZUVb8qQebep15TSamP5AXYIxSySjqwoRD1N0/exec';
+const STOCK_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzEWMDVelvduAqeTl5HNzqscDttSN2GZUVb8qQebep15TSamP5AXYIxSySjqwoRD1N0/exec?action=getStock';
+
+// Initialize stock display and sync with server
 function initializeStock() {
-    updateStockDisplay();
-    markSoldOutSizes('white');
-    markSoldOutSizes('black');
+    syncStockFromServer();
+}
+
+// Sync stock from Google Sheet
+function syncStockFromServer() {
+    fetch(STOCK_SCRIPT_URL)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.stock) {
+                stock = data.stock;
+                updateStockDisplay();
+                markSoldOutSizes('white');
+                markSoldOutSizes('black');
+                console.log('Stock sincronizado desde servidor:', stock);
+            }
+        })
+        .catch(error => {
+            console.log('No se pudo sincronizar stock desde servidor:', error);
+            updateStockDisplay();
+            markSoldOutSizes('white');
+            markSoldOutSizes('black');
+        });
 }
 
 function updateStockDisplay() {
@@ -61,11 +84,19 @@ function markSoldOutSizes(product) {
     const sizes = document.querySelectorAll(`.size[data-product="${product}"]`);
     sizes.forEach(sizeElement => {
         const size = sizeElement.getAttribute('data-size');
-        if (stock[product][size] <= 0) {
+        const quantity = stock[product][size];
+        
+        sizeElement.classList.remove('sold-out');
+        sizeElement.style.opacity = '1';
+        
+        if (quantity <= 0) {
             sizeElement.classList.add('sold-out');
             sizeElement.textContent = `${size} (Agotado)`;
             sizeElement.style.cursor = 'not-allowed';
             sizeElement.style.opacity = '0.6';
+        } else {
+            sizeElement.textContent = size;
+            sizeElement.style.cursor = 'pointer';
         }
     });
 }
@@ -79,18 +110,12 @@ function setupSizeSelection() {
             const product = this.getAttribute('data-product');
             const size = this.getAttribute('data-size');
             
-            // Remove selected class from all sizes of the same product
             document.querySelectorAll(`.size[data-product="${product}"]`).forEach(el => {
                 el.classList.remove('selected');
             });
             
-            // Add selected class to clicked size
             this.classList.add('selected');
-            
-            // Store selection
             selectedSize[product] = size;
-            
-            // Update selected product display
             updateSelectedProductDisplay(product, size);
         });
     });
@@ -116,18 +141,13 @@ function setupPaymentSelection() {
             const form = this.closest('form');
             const product = form.id.includes('white') ? 'white' : 'black';
             
-            // Remove selected class from all payment options in this form
             form.querySelectorAll('.payment-option').forEach(el => {
                 el.classList.remove('selected');
             });
             
-            // Add selected class to clicked option
             this.classList.add('selected');
-            
-            // Store selection
             selectedPayment[product] = this.getAttribute('data-payment');
             
-            // Show/hide IBAN info based on selection
             const ibanInfo = form.querySelector('.iban-info');
             if (selectedPayment[product] === 'transfer') {
                 ibanInfo.classList.add('show');
@@ -140,13 +160,11 @@ function setupPaymentSelection() {
 
 // Handle form submission
 function setupFormSubmission() {
-    // Handle form submission for white product page
     document.getElementById('reservation-form-white')?.addEventListener('submit', function(e) {
         e.preventDefault();
         handleReservationFormSubmit(this, 'white');
     });
 
-    // Handle form submission for black product page
     document.getElementById('reservation-form-black')?.addEventListener('submit', function(e) {
         e.preventDefault();
         handleReservationFormSubmit(this, 'black');
@@ -155,7 +173,6 @@ function setupFormSubmission() {
 
 // Generic function to handle form submission
 function handleReservationFormSubmit(form, product) {
-    // Validate size selection
     if (!selectedSize[product]) {
         alert('Por favor, selecciona una talla de camiseta');
         return;
@@ -163,19 +180,16 @@ function handleReservationFormSubmit(form, product) {
     
     const size = selectedSize[product];
     
-    // Check if selected size is available
     if (stock[product][size] <= 0) {
         alert('Lo sentimos, esta talla ya no está disponible');
         return;
     }
     
-    // Validate payment method selection
     if (!selectedPayment[product]) {
         alert('Por favor, selecciona un método de pago');
         return;
     }
     
-    // Get form data
     const formData = {
         name: form.querySelector('input[type="text"]').value,
         email: form.querySelector('input[type="email"]').value,
@@ -187,23 +201,17 @@ function handleReservationFormSubmit(form, product) {
         timestamp: new Date().toISOString()
     };
     
-    // Validate required fields
     if (!formData.name || !formData.email || !formData.phone) {
         alert('Por favor, completa todos los campos obligatorios');
         return;
     }
     
-    // URL de tu Google Apps Script (ACTUALIZA ESTA URL CON LA TUYA)
-    const scriptUrl = 'https://script.google.com/macros/s/AKfycbzEWMDVelvduAqeTl5HNzqscDttSN2GZUVb8qQebep15TSamP5AXYIxSySjqwoRD1N0/exec';
-    
-    // Mostrar indicador de carga
     const submitButton = form.querySelector('button[type="submit"]');
     const originalText = submitButton.textContent;
     submitButton.textContent = 'Procesando reserva...';
     submitButton.disabled = true;
     
-    // Enviar datos a Google Apps Script
-    fetch(scriptUrl, {
+    fetch(SCRIPT_URL, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
@@ -222,13 +230,12 @@ function handleReservationFormSubmit(form, product) {
             
             // Actualizar stock localmente
             stock[product][size]--;
-            initializeStock();
+            updateStockDisplay();
+            markSoldOutSizes(product);
             
-            // Reset form and selections
             form.reset();
             resetSelections(product);
             
-            // Redirect to main shop after successful reservation
             setTimeout(() => {
                 window.location.hash = '#tienda';
                 showSectionBasedOnHash();
@@ -242,7 +249,6 @@ function handleReservationFormSubmit(form, product) {
         alert('Hubo un error al procesar la reserva. Por favor, inténtalo de nuevo o contacta con nosotros directamente en durogalvanband@gmail.com.');
     })
     .finally(() => {
-        // Restaurar el botón
         submitButton.textContent = originalText;
         submitButton.disabled = false;
     });
@@ -252,7 +258,6 @@ function resetSelections(product) {
     selectedSize[product] = null;
     selectedPayment[product] = null;
     
-    // Reset UI selections
     document.querySelectorAll(`.size[data-product="${product}"]`).forEach(el => {
         el.classList.remove('selected');
     });
@@ -265,7 +270,6 @@ function resetSelections(product) {
         el.classList.remove('show');
     });
     
-    // Reset selected product display
     const selectedProductElements = document.querySelectorAll(`#selected-product-${product}`);
     selectedProductElements.forEach(element => {
         if (element) {
@@ -277,16 +281,33 @@ function resetSelections(product) {
     });
 }
 
-// Enhanced carousel functionality
-function initializeCarousel(carouselId, dotsContainerId) {
+// Carousel functionality with zoom
+function initializeCarousel(carouselId, dotsContainerId, zoomBtnId, zoomModalId, zoomImageId) {
     const carousel = document.getElementById(carouselId);
     if (!carousel) return;
     
     const slides = carousel.querySelectorAll('.carousel-slide');
     const dotsContainer = document.getElementById(dotsContainerId);
+    const zoomBtn = document.getElementById(zoomBtnId);
+    const zoomModal = document.getElementById(zoomModalId);
+    const zoomImage = document.getElementById(zoomImageId);
+    const zoomClose = zoomModal.querySelector('.zoom-close');
     
     let currentSlide = 0;
     let slideInterval;
+    
+    // Adaptar altura del carrusel a las imágenes
+    function adaptCarouselHeight() {
+        const currentImg = slides[currentSlide].querySelector('img');
+        if (currentImg) {
+            currentImg.onload = () => {
+                carousel.parentElement.style.maxWidth = '100%';
+            };
+            currentImg.onerror = () => {
+                carousel.parentElement.style.maxHeight = '500px';
+            };
+        }
+    }
     
     // Clear existing dots
     if (dotsContainer) {
@@ -298,6 +319,7 @@ function initializeCarousel(carouselId, dotsContainerId) {
         const dot = document.createElement('button');
         dot.classList.add('carousel-dot');
         if (index === 0) dot.classList.add('active');
+        dot.type = 'button';
         dot.addEventListener('click', () => {
             goToSlide(index);
         });
@@ -310,7 +332,180 @@ function initializeCarousel(carouselId, dotsContainerId) {
         currentSlide = slideIndex;
         carousel.style.transform = `translateX(-${currentSlide * 100}%)`;
         
-        // Update dots
         if (dotsContainer) {
             dotsContainer.querySelectorAll('.carousel-dot').forEach((dot, index) => {
                 dot.classList.toggle('active', index === currentSlide);
+            });
+        }
+        
+        adaptCarouselHeight();
+    }
+    
+    slideInterval = setInterval(() => {
+        nextSlide();
+    }, 5000);
+    
+    function nextSlide() {
+        currentSlide = (currentSlide + 1) % slides.length;
+        goToSlide(currentSlide);
+    }
+    
+    function prevSlide() {
+        currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+        goToSlide(currentSlide);
+    }
+    
+    // Zoom functionality
+    if (zoomBtn) {
+        zoomBtn.addEventListener('click', () => {
+            const currentImg = slides[currentSlide].querySelector('img');
+            if (currentImg) {
+                zoomImage.src = currentImg.src;
+                zoomModal.style.display = 'flex';
+            }
+        });
+    }
+    
+    if (zoomClose) {
+        zoomClose.addEventListener('click', () => {
+            zoomModal.style.display = 'none';
+        });
+    }
+    
+    zoomModal.addEventListener('click', (e) => {
+        if (e.target === zoomModal) {
+            zoomModal.style.display = 'none';
+        }
+    });
+    
+    const productType = carouselId.split('-')[1];
+    
+    // Add event listeners for carousel buttons
+    document.querySelectorAll(`[data-carousel="${productType}"]`).forEach(button => {
+        button.addEventListener('click', () => {
+            if (button.classList.contains('carousel-next')) {
+                nextSlide();
+            } else {
+                prevSlide();
+            }
+            
+            clearInterval(slideInterval);
+            slideInterval = setInterval(() => {
+                nextSlide();
+            }, 5000);
+        });
+    });
+    
+    // Pause auto-advance on hover
+    const carouselContainer = carousel.parentElement;
+    if (carouselContainer) {
+        carouselContainer.addEventListener('mouseenter', () => {
+            clearInterval(slideInterval);
+        });
+        
+        carouselContainer.addEventListener('mouseleave', () => {
+            clearInterval(slideInterval);
+            slideInterval = setInterval(() => {
+                nextSlide();
+            }, 5000);
+        });
+    }
+    
+    adaptCarouselHeight();
+}
+
+// Function to show a specific section
+function showProductPage(productId) {
+    const sectionId = productId;
+    
+    document.querySelectorAll('section').forEach(section => {
+        section.style.display = 'none';
+    });
+    
+    const targetSection = document.getElementById(sectionId);
+    if (targetSection) {
+        targetSection.style.display = 'block';
+        
+        if (sectionId === 'camiseta-blanca') {
+            initializeCarousel('carousel-white', 'carousel-dots-white', 'zoom-btn-white', 'zoom-modal-white', 'zoom-image-white');
+        } else if (sectionId === 'camiseta-negra') {
+            initializeCarousel('carousel-black', 'carousel-dots-black', 'zoom-btn-black', 'zoom-modal-black', 'zoom-image-black');
+        }
+        
+        setTimeout(() => {
+            setupSizeSelection();
+            setupPaymentSelection();
+        }, 100);
+    }
+    
+    window.scrollTo(0, 0);
+}
+
+function showSection(sectionId) {
+    document.querySelectorAll('section').forEach(section => {
+        section.style.display = 'none';
+    });
+    
+    const targetSection = document.getElementById(sectionId);
+    if (targetSection) {
+        targetSection.style.display = 'block';
+        
+        if (sectionId === 'camiseta-blanca') {
+            initializeCarousel('carousel-white', 'carousel-dots-white', 'zoom-btn-white', 'zoom-modal-white', 'zoom-image-white');
+        } else if (sectionId === 'camiseta-negra') {
+            initializeCarousel('carousel-black', 'carousel-dots-black', 'zoom-btn-black', 'zoom-modal-black', 'zoom-image-black');
+        }
+        
+        setTimeout(() => {
+            setupSizeSelection();
+            setupPaymentSelection();
+        }, 100);
+    }
+    
+    window.scrollTo(0, 0);
+}
+
+function showSectionBasedOnHash() {
+    const hash = window.location.hash.substring(1);
+    const sectionId = hash || 'inicio';
+    showSection(sectionId);
+}
+
+// Setup navigation
+function setupNavigation() {
+    window.addEventListener('hashchange', showSectionBasedOnHash);
+    
+    document.querySelectorAll('.back-link').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            window.location.hash = 'tienda';
+        });
+    });
+    
+    document.querySelectorAll('nav a[href^="#"]').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href').substring(1);
+            window.location.hash = targetId;
+        });
+    });
+}
+
+// Sincronizar stock cada 30 segundos
+function setupStockSync() {
+    setInterval(() => {
+        syncStockFromServer();
+    }, 30000);
+}
+
+// Initialize the page
+document.addEventListener('DOMContentLoaded', function() {
+    initializeStock();
+    setupSizeSelection();
+    setupPaymentSelection();
+    setupFormSubmission();
+    setupNavigation();
+    setupStockSync();
+    
+    showSectionBasedOnHash();
+});
