@@ -27,9 +27,9 @@ let selectedPayment = {
     black: null
 };
 
-// Google Apps Script URL - ACTUALIZA ESTO CON TU URL REAL
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzEWMDVelvduAqeTl5HNzqscDttSN2GZUVb8qQebep15TSamP5AXYIxSySjqwoRD1N0/usercontent';
-const STOCK_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzEWMDVelvduAqeTl5HNzqscDttSN2GZUVb8qQebep15TSamP5AXYIxSySjqwoRD1N0/usercontent?action=getStock';
+// Google Apps Script URL
+const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx4fbmrL9nbqJB6uZZHfQEKbb1CDMkSni92noF12c2RcTpW9yThKobb7owXp4GZsV74/exec';
+const STOCK_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx4fbmrL9nbqJB6uZZHfQEKbb1CDMkSni92noF12c2RcTpW9yThKobb7owXp4GZsV74/exec?action=getStock';
 
 // Proxy CORS (alternativa si CORS falla)
 const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/';
