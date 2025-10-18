@@ -84,13 +84,6 @@
                     </div>
                     <h3>Camiseta Blanca</h3>
                     <p>Precio: 15€</p>
-                    <div class="sizes">
-                        <div class="size" data-size="S" data-product="white">S</div>
-                        <div class="size" data-size="M" data-product="white">M</div>
-                        <div class="size" data-size="L" data-product="white">L</div>
-                        <div class="size" data-size="XL" data-product="white">XL</div>
-                        <div class="size" data-size="XXL" data-product="white">XXL</div>
-                    </div>
                     <div class="stock-info" id="white-stock"></div>
                     <button class="btn" style="margin-top: 1rem;" onclick="showProductPage('camiseta-blanca')">Ver detalles y reservar</button>
                 </div>
@@ -101,13 +94,6 @@
                     </div>
                     <h3>Camiseta Negra</h3>
                     <p>Precio: 15€</p>
-                    <div class="sizes">
-                        <div class="size" data-size="S" data-product="black">S</div>
-                        <div class="size" data-size="M" data-product="black">M</div>
-                        <div class="size" data-size="L" data-product="black">L</div>
-                        <div class="size" data-size="XL" data-product="black">XL</div>
-                        <div class="size" data-size="XXL" data-product="black">XXL</div>
-                    </div>
                     <div class="stock-info" id="black-stock"></div>
                     <button class="btn" style="margin-top: 1rem;" onclick="showProductPage('camiseta-negra')">Ver detalles y reservar</button>
                 </div>
@@ -159,50 +145,49 @@
                     <p>Precio: 15€</p>
                     <p>Camiseta de algodón 100% con el logo de Duro Galván impreso en serigrafía de alta calidad. Disponible en varias tallas.</p>
                     
-                    <form class="reservation-form" id="reservation-form-white">
-                        <div class="form-group">
-                            <label>Talla:</label>
-                            <div class="sizes">
-                                <div class="size" data-size="S" data-product="white">S</div>
-                                <div class="size" data-size="M" data-product="white">M</div>
-                                <div class="size" data-size="L" data-product="white">L</div>
-                                <div class="size" data-size="XL" data-product="white">XL</div>
-                                <div class="size" data-size="XXL" data-product="white">XXL</div>
-                            </div>
-                            <div class="stock-info" id="white-stock-detail"></div>
-                        </div>
-                        
+                    <div class="stock-info" id="white-stock-detail"></div>
+                    
+                    <!-- Google Form Embebido -->
+                    <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" onload="if(this.src!='')this.src='';"></iframe>
+                    <form id="gform-white" action="https://forms.gle/CfzsrbpTJPNbqPcJ8" method="POST" target="hidden_iframe" onsubmit="submitted=true; return false;">
                         <div class="form-group">
                             <label for="name-white">Nombre completo</label>
-                            <input type="text" id="name-white" name="name" required>
+                            <input type="text" id="name-white" name="entry.CAMPO_NOMBRE" required>
                         </div>
                         
                         <div class="form-group">
                             <label for="email-white">Email</label>
-                            <input type="email" id="email-white" name="email" required>
+                            <input type="email" id="email-white" name="entry.CAMPO_EMAIL" required>
                         </div>
                         
                         <div class="form-group">
                             <label for="phone-white">Teléfono</label>
-                            <input type="tel" id="phone-white" name="phone" required>
+                            <input type="tel" id="phone-white" name="entry.CAMPO_TELEFONO" required>
                         </div>
                         
                         <div class="form-group">
-                            <label>Producto seleccionado</label>
-                            <div id="selected-product-white">Camiseta Blanca - Por favor, selecciona una talla</div>
+                            <label for="size-white">Talla</label>
+                            <select id="size-white" name="entry.CAMPO_TALLA_BLANCA" required>
+                                <option value="">Selecciona una talla</option>
+                                <option value="S">S</option>
+                                <option value="M">M</option>
+                                <option value="L">L</option>
+                                <option value="XL">XL</option>
+                                <option value="XXL">XXL</option>
+                            </select>
                         </div>
                         
                         <div class="form-group">
                             <label>Método de pago</label>
                             <div class="payment-method">
-                                <div class="payment-option" data-payment="transfer">
-                                    <div>Transferencia</div>
-                                    <small>(15€ ahora)</small>
-                                </div>
-                                <div class="payment-option" data-payment="cash">
-                                    <div>En mano</div>
-                                    <small>(al recoger)</small>
-                                </div>
+                                <label style="flex: 1; margin: 0; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; cursor: pointer; text-align: center;">
+                                    <input type="radio" name="entry.CAMPO_PAGO" value="Transferencia" required style="margin-right: 0.5rem;">
+                                    Transferencia (15€ ahora)
+                                </label>
+                                <label style="flex: 1; margin: 0; margin-left: 0.5rem; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; cursor: pointer; text-align: center;">
+                                    <input type="radio" name="entry.CAMPO_PAGO" value="En mano" required style="margin-right: 0.5rem;">
+                                    En mano (al recoger)
+                                </label>
                             </div>
                             
                             <div class="iban-info" id="iban-info-white">
@@ -215,7 +200,7 @@
                         
                         <div class="form-group">
                             <label for="notes-white">Observaciones (opcional)</label>
-                            <textarea id="notes-white" name="notes" rows="3"></textarea>
+                            <textarea id="notes-white" name="entry.CAMPO_OBSERVACIONES" rows="3"></textarea>
                         </div>
                         
                         <button type="submit" class="btn" style="width: 100%;">Reservar ahora</button>
@@ -269,50 +254,49 @@
                     <p>Precio: 15€</p>
                     <p>Camiseta de algodón 100% con el logo de Duro Galván impreso en serigrafía de alta calidad. Disponible en varias tallas.</p>
                     
-                    <form class="reservation-form" id="reservation-form-black">
-                        <div class="form-group">
-                            <label>Talla:</label>
-                            <div class="sizes">
-                                <div class="size" data-size="S" data-product="black">S</div>
-                                <div class="size" data-size="M" data-product="black">M</div>
-                                <div class="size" data-size="L" data-product="black">L</div>
-                                <div class="size" data-size="XL" data-product="black">XL</div>
-                                <div class="size" data-size="XXL" data-product="black">XXL</div>
-                            </div>
-                            <div class="stock-info" id="black-stock-detail"></div>
-                        </div>
-                        
+                    <div class="stock-info" id="black-stock-detail"></div>
+                    
+                    <!-- Google Form Embebido -->
+                    <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" onload="if(this.src!='')this.src='';"></iframe>
+                    <form id="gform-black" action="https://forms.gle/CfzsrbpTJPNbqPcJ8" method="POST" target="hidden_iframe" onsubmit="submitted=true; return false;">
                         <div class="form-group">
                             <label for="name-black">Nombre completo</label>
-                            <input type="text" id="name-black" name="name" required>
+                            <input type="text" id="name-black" name="entry.CAMPO_NOMBRE" required>
                         </div>
                         
                         <div class="form-group">
                             <label for="email-black">Email</label>
-                            <input type="email" id="email-black" name="email" required>
+                            <input type="email" id="email-black" name="entry.CAMPO_EMAIL" required>
                         </div>
                         
                         <div class="form-group">
                             <label for="phone-black">Teléfono</label>
-                            <input type="tel" id="phone-black" name="phone" required>
+                            <input type="tel" id="phone-black" name="entry.CAMPO_TELEFONO" required>
                         </div>
                         
                         <div class="form-group">
-                            <label>Producto seleccionado</label>
-                            <div id="selected-product-black">Camiseta Negra - Por favor, selecciona una talla</div>
+                            <label for="size-black">Talla</label>
+                            <select id="size-black" name="entry.CAMPO_TALLA_NEGRA" required>
+                                <option value="">Selecciona una talla</option>
+                                <option value="S">S</option>
+                                <option value="M">M</option>
+                                <option value="L">L</option>
+                                <option value="XL">XL</option>
+                                <option value="XXL">XXL</option>
+                            </select>
                         </div>
                         
                         <div class="form-group">
                             <label>Método de pago</label>
                             <div class="payment-method">
-                                <div class="payment-option" data-payment="transfer">
-                                    <div>Transferencia</div>
-                                    <small>(15€ ahora)</small>
-                                </div>
-                                <div class="payment-option" data-payment="cash">
-                                    <div>En mano</div>
-                                    <small>(al recoger)</small>
-                                </div>
+                                <label style="flex: 1; margin: 0; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; cursor: pointer; text-align: center;">
+                                    <input type="radio" name="entry.CAMPO_PAGO" value="Transferencia" required style="margin-right: 0.5rem;">
+                                    Transferencia (15€ ahora)
+                                </label>
+                                <label style="flex: 1; margin: 0; margin-left: 0.5rem; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; cursor: pointer; text-align: center;">
+                                    <input type="radio" name="entry.CAMPO_PAGO" value="En mano" required style="margin-right: 0.5rem;">
+                                    En mano (al recoger)
+                                </label>
                             </div>
                             
                             <div class="iban-info" id="iban-info-black">
@@ -325,7 +309,7 @@
                         
                         <div class="form-group">
                             <label for="notes-black">Observaciones (opcional)</label>
-                            <textarea id="notes-black" name="notes" rows="3"></textarea>
+                            <textarea id="notes-black" name="entry.CAMPO_OBSERVACIONES" rows="3"></textarea>
                         </div>
                         
                         <button type="submit" class="btn" style="width: 100%;">Reservar ahora</button>
