@@ -230,8 +230,8 @@ function handleReservationFormSubmit(form, product) {
             
             // Redirect to main shop after successful reservation
             setTimeout(() => {
-                window.location.href = '#tienda';
-                showSection('tienda');
+                window.location.hash = '#tienda';
+                showSectionBasedOnHash();
             }, 2000);
         } else {
             alert('Error al procesar la reserva: ' + data.error);
@@ -275,36 +275,6 @@ function resetSelections(product) {
             element.style.color = 'inherit';
         }
     });
-}
-
-// Improved navigation function
-function showProductPage(productId) {
-    // Hide all sections
-    document.querySelectorAll('section').forEach(section => {
-        section.style.display = 'none';
-    });
-    
-    // Show the requested product page
-    const productSection = document.getElementById(productId);
-    if (productSection) {
-        productSection.style.display = 'block';
-        
-        // Initialize carousel for the product page
-        if (productId === 'camiseta-blanca') {
-            initializeCarousel('carousel-white', 'carousel-dots-white');
-        } else {
-            initializeCarousel('carousel-black', 'carousel-dots-black');
-        }
-        
-        // Re-initialize event listeners for the product page
-        setTimeout(() => {
-            setupSizeSelection();
-            setupPaymentSelection();
-        }, 100);
-    }
-    
-    // Scroll to top
-    window.scrollTo(0, 0);
 }
 
 // Enhanced carousel functionality
@@ -396,20 +366,62 @@ function initializeCarousel(carouselId, dotsContainerId) {
     }
 }
 
+// Function to show a specific section
+function showSection(sectionId) {
+    // Hide all sections first
+    document.querySelectorAll('section').forEach(section => {
+        section.style.display = 'none';
+    });
+    
+    // Show the requested section
+    const targetSection = document.getElementById(sectionId);
+    if (targetSection) {
+        targetSection.style.display = 'block';
+        
+        // Initialize carousels if we're on a product page
+        if (sectionId === 'camiseta-blanca') {
+            initializeCarousel('carousel-white', 'carousel-dots-white');
+        } else if (sectionId === 'camiseta-negra') {
+            initializeCarousel('carousel-black', 'carousel-dots-black');
+        }
+        
+        // Re-initialize event listeners for form elements
+        setTimeout(() => {
+            setupSizeSelection();
+            setupPaymentSelection();
+        }, 100);
+    }
+    
+    // Scroll to top
+    window.scrollTo(0, 0);
+}
+
+// Function to handle hash changes and show appropriate section
+function showSectionBasedOnHash() {
+    const hash = window.location.hash.substring(1);
+    const sectionId = hash || 'inicio';
+    showSection(sectionId);
+}
+
 // Setup navigation
 function setupNavigation() {
     // Handle hash changes for navigation
-    window.addEventListener('hashchange', function() {
-        const sectionId = window.location.hash.substring(1);
-        showSection(sectionId);
-    });
+    window.addEventListener('hashchange', showSectionBasedOnHash);
     
-    // Handle direct clicks on product links
-    document.querySelectorAll('a[href="#camiseta-blanca"], a[href="#camiseta-negra"]').forEach(link => {
+    // Handle direct clicks on product links - CORREGIDO
+    document.querySelectorAll('a[href="#camiseta-blanca"]').forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
-            const productId = this.getAttribute('href').substring(1);
-            showProductPage(productId);
+            showSection('camiseta-blanca');
+            window.location.hash = 'camiseta-blanca';
+        });
+    });
+    
+    document.querySelectorAll('a[href="#camiseta-negra"]').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            showSection('camiseta-negra');
+            window.location.hash = 'camiseta-negra';
         });
     });
     
@@ -418,29 +430,17 @@ function setupNavigation() {
         link.addEventListener('click', function(e) {
             e.preventDefault();
             window.location.hash = 'tienda';
-            showSection('tienda');
         });
     });
-}
-
-// Show section based on hash
-function showSection(sectionId) {
-    // Hide all product pages and show main sections
-    document.querySelectorAll('.product-page').forEach(page => {
-        page.style.display = 'none';
+    
+    // Handle main navigation links
+    document.querySelectorAll('nav a[href^="#"]').forEach(link => {
+        link.addEventListener('click', function(e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href').substring(1);
+            window.location.hash = targetId;
+        });
     });
-    
-    document.querySelectorAll('section:not(.product-page)').forEach(section => {
-        section.style.display = 'block';
-    });
-    
-    // If a product page is requested, show it
-    if (sectionId === 'camiseta-blanca' || sectionId === 'camiseta-negra') {
-        showProductPage(sectionId);
-    }
-    
-    // Scroll to top
-    window.scrollTo(0, 0);
 }
 
 // Initialize the page
@@ -452,6 +452,5 @@ document.addEventListener('DOMContentLoaded', function() {
     setupNavigation();
     
     // Show appropriate section based on initial hash
-    const initialSection = window.location.hash.substring(1) || 'inicio';
-    showSection(initialSection);
+    showSectionBasedOnHash();
 });
