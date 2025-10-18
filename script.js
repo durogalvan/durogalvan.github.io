@@ -193,14 +193,7 @@ function handleReservationFormSubmit(form, product) {
         return;
     }
     
-    // Validate email format
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(formData.email)) {
-        alert('Por favor, introduce un email válido');
-        return;
-    }
-    
-    // URL de tu Google Apps Script (ACTUALIZADA CON TU ID)
+    // URL de tu Google Apps Script (ACTUALIZA ESTA URL CON LA TUYA)
     const scriptUrl = 'https://script.google.com/macros/s/AKfycbzEWMDVelvduAqeTl5HNzqscDttSN2GZUVb8qQebep15TSamP5AXYIxSySjqwoRD1N0/exec';
     
     // Mostrar indicador de carga
@@ -209,9 +202,7 @@ function handleReservationFormSubmit(form, product) {
     submitButton.textContent = 'Procesando reserva...';
     submitButton.disabled = true;
     
-    console.log('Enviando datos al Google Apps Script:', formData);
-    
-    // Enviar datos a Google Apps Script con mejor manejo de errores
+    // Enviar datos a Google Apps Script
     fetch(scriptUrl, {
         method: 'POST',
         headers: {
@@ -220,19 +211,12 @@ function handleReservationFormSubmit(form, product) {
         body: JSON.stringify(formData)
     })
     .then(response => {
-        console.log('Respuesta recibida, status:', response.status);
-        
         if (!response.ok) {
-            // Si la respuesta no es OK, intentamos leer el cuerpo del error
-            return response.text().then(text => {
-                throw new Error(`Error del servidor: ${response.status} - ${text}`);
-            });
+            throw new Error('Error de red: ' + response.status);
         }
         return response.json();
     })
     .then(data => {
-        console.log('Datos procesados:', data);
-        
         if (data.success) {
             alert('¡Reserva realizada con éxito! Te hemos enviado un email de confirmación. ID de reserva: ' + data.reservationId);
             
@@ -250,26 +234,12 @@ function handleReservationFormSubmit(form, product) {
                 showSectionBasedOnHash();
             }, 2000);
         } else {
-            throw new Error(data.error || 'Error desconocido del servidor');
+            alert('Error al procesar la reserva: ' + data.error);
         }
     })
     .catch(error => {
-        console.error('Error completo:', error);
-        
-        // Mensaje de error más específico
-        let errorMessage = 'Hubo un error al procesar la reserva. ';
-        
-        if (error.message.includes('Failed to fetch')) {
-            errorMessage += 'No se pudo conectar con el servidor. ';
-        } else if (error.message.includes('NetworkError')) {
-            errorMessage += 'Error de conexión. ';
-        } else if (error.message.includes('CORS')) {
-            errorMessage += 'Error de configuración CORS. ';
-        }
-        
-        errorMessage += 'Por favor, inténtalo de nuevo o contacta con nosotros directamente en durogalvanband@gmail.com.';
-        
-        alert(errorMessage);
+        console.error('Error:', error);
+        alert('Hubo un error al procesar la reserva. Por favor, inténtalo de nuevo o contacta con nosotros directamente en durogalvanband@gmail.com.');
     })
     .finally(() => {
         // Restaurar el botón
@@ -314,9 +284,9 @@ function initializeCarousel(carouselId, dotsContainerId) {
     
     const slides = carousel.querySelectorAll('.carousel-slide');
     const dotsContainer = document.getElementById(dotsContainerId);
-    const productType = carouselId.split('-')[1];
     
     let currentSlide = 0;
+    let slideInterval;
     
     // Clear existing dots
     if (dotsContainer) {
@@ -344,143 +314,3 @@ function initializeCarousel(carouselId, dotsContainerId) {
         if (dotsContainer) {
             dotsContainer.querySelectorAll('.carousel-dot').forEach((dot, index) => {
                 dot.classList.toggle('active', index === currentSlide);
-            });
-        }
-    }
-    
-    // Auto-advance slides every 5 seconds
-    let slideInterval = setInterval(() => {
-        nextSlide();
-    }, 5000);
-    
-    function nextSlide() {
-        currentSlide = (currentSlide + 1) % slides.length;
-        goToSlide(currentSlide);
-    }
-    
-    function prevSlide() {
-        currentSlide = (currentSlide - 1 + slides.length) % slides.length;
-        goToSlide(currentSlide);
-    }
-    
-    // Add event listeners for carousel buttons
-    document.querySelectorAll(`[data-carousel="${productType}"]`).forEach(button => {
-        button.addEventListener('click', () => {
-            if (button.classList.contains('carousel-next')) {
-                nextSlide();
-            } else {
-                prevSlide();
-            }
-            
-            // Reset auto-advance timer
-            clearInterval(slideInterval);
-            slideInterval = setInterval(() => {
-                nextSlide();
-            }, 5000);
-        });
-    });
-    
-    // Pause auto-advance on hover
-    const carouselContainer = carousel.parentElement;
-    if (carouselContainer) {
-        carouselContainer.addEventListener('mouseenter', () => {
-            clearInterval(slideInterval);
-        });
-        
-        carouselContainer.addEventListener('mouseleave', () => {
-            clearInterval(slideInterval);
-            slideInterval = setInterval(() => {
-                nextSlide();
-            }, 5000);
-        });
-    }
-}
-
-// Function to show a specific section
-function showSection(sectionId) {
-    // Hide all sections first
-    document.querySelectorAll('section').forEach(section => {
-        section.style.display = 'none';
-    });
-    
-    // Show the requested section
-    const targetSection = document.getElementById(sectionId);
-    if (targetSection) {
-        targetSection.style.display = 'block';
-        
-        // Initialize carousels if we're on a product page
-        if (sectionId === 'camiseta-blanca') {
-            initializeCarousel('carousel-white', 'carousel-dots-white');
-        } else if (sectionId === 'camiseta-negra') {
-            initializeCarousel('carousel-black', 'carousel-dots-black');
-        }
-        
-        // Re-initialize event listeners for form elements
-        setTimeout(() => {
-            setupSizeSelection();
-            setupPaymentSelection();
-        }, 100);
-    }
-    
-    // Scroll to top
-    window.scrollTo(0, 0);
-}
-
-// Function to handle hash changes and show appropriate section
-function showSectionBasedOnHash() {
-    const hash = window.location.hash.substring(1);
-    const sectionId = hash || 'inicio';
-    showSection(sectionId);
-}
-
-// Setup navigation
-function setupNavigation() {
-    // Handle hash changes for navigation
-    window.addEventListener('hashchange', showSectionBasedOnHash);
-    
-    // Handle direct clicks on product links
-    document.querySelectorAll('a[href="#camiseta-blanca"]').forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            showSection('camiseta-blanca');
-            window.location.hash = 'camiseta-blanca';
-        });
-    });
-    
-    document.querySelectorAll('a[href="#camiseta-negra"]').forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            showSection('camiseta-negra');
-            window.location.hash = 'camiseta-negra';
-        });
-    });
-    
-    // Handle back links
-    document.querySelectorAll('.back-link').forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            window.location.hash = 'tienda';
-        });
-    });
-    
-    // Handle main navigation links
-    document.querySelectorAll('nav a[href^="#"]').forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const targetId = this.getAttribute('href').substring(1);
-            window.location.hash = targetId;
-        });
-    });
-}
-
-// Initialize the page
-document.addEventListener('DOMContentLoaded', function() {
-    initializeStock();
-    setupSizeSelection();
-    setupPaymentSelection();
-    setupFormSubmission();
-    setupNavigation();
-    
-    // Show appropriate section based on initial hash
-    showSectionBasedOnHash();
-});
