@@ -194,7 +194,7 @@ function handleReservationFormSubmit(form, product) {
     }
     
     // URL de tu Google Apps Script
-    const scriptUrl = 'https://script.google.com/macros/s/AKfycbySuEqwHvIVTAM4TcGJ0EgQdJ6X0Z0MVeCe9EFd8-yqnM_8NBgmVwss_l0oXs7LTCKU/exec';
+    const scriptUrl = 'https://script.google.com/macros/s/AKfycbzEWMDVelvduAqeTl5HNzqscDttSN2GZUVb8qQebep15TSamP5AXYIxSySjqwoRD1N0/exec';
     
     // Mostrar indicador de carga
     const submitButton = form.querySelector('button[type="submit"]');
