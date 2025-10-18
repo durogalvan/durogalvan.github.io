@@ -11,7 +11,7 @@
     <!-- Header -->
     <header>
         <div class="container header-container">
-            <a href="#inicio" class="logo">DURO <span>GALVÁN</span></a>
+            <a href="#" class="logo">DURO <span>GALVÁN</span></a>
             <nav>
                 <ul>
                     <li><a href="#inicio">Inicio</a></li>
@@ -41,12 +41,12 @@
                 <div class="concert-item">
                     <div class="concert-date">19 NOVIEMBRE 2025</div>
                     <div class="concert-location">The Godfather Rock Club</div>
-                    <p>No te pierdas nuestro próximo concierto en una de las salas más emblemáticas.</p>
+                    <p>No te pierdas nuestro próximo concierto en el barrio.</p>
                     <a href="https://buytickets.at/durogalvn/1888685" class="btn" target="_blank" style="margin-top: 1rem;">Comprar entradas</a>
                 </div>
                 <div class="concert-item">
                     <div class="concert-date">19 JUNIO 2026</div>
-                    <div class="concert-location">Sala El Sol</div>
+                    <div class="concert-location">Sala ??? con ???</div>
                     <p>Próximamente más información sobre este concierto.</p>
                     <div class="btn" style="margin-top: 1rem; background-color: #ccc; cursor: not-allowed;">Entradas no disponibles</div>
                 </div>
@@ -89,7 +89,7 @@
                         <div class="size" data-size="M" data-product="white">M</div>
                         <div class="size" data-size="L" data-product="white">L</div>
                         <div class="size" data-size="XL" data-product="white">XL</div>
-                        <div class="size" data-size="XXL" data-product="white">XXL</div>
+                        <div class="size" data-size="XL" data-product="white">XXL</div>
                     </div>
                     <div class="stock-info" id="white-stock">
                         <!-- Stock information will be displayed here -->
@@ -120,7 +120,7 @@
     </section>
 
     <!-- Página de Camiseta Blanca -->
-    <section id="camiseta-blanca" class="product-page">
+    <section id="camiseta-blanca" class="product-page" style="display: none;">
         <div class="container">
             <a href="#tienda" class="back-link">← Volver a la tienda</a>
             
@@ -133,12 +133,6 @@
                             </div>
                             <div class="carousel-slide">
                                 <img src="images/camiseta-blanca-2.jpeg" alt="Camiseta Blanca - Vista trasera">
-                            </div>
-                            <div class="carousel-slide">
-                                <img src="images/camiseta-blanca-3.jpeg" alt="Camiseta Blanca - Detalle 1">
-                            </div>
-                            <div class="carousel-slide">
-                                <img src="images/camiseta-blanca-4.jpeg" alt="Camiseta Blanca - Detalle 2">
                             </div>
                         </div>
                         <button class="carousel-btn carousel-prev" data-carousel="white">&#10094;</button>
@@ -223,7 +217,7 @@
     </section>
 
     <!-- Página de Camiseta Negra -->
-    <section id="camiseta-negra" class="product-page">
+    <section id="camiseta-negra" class="product-page" style="display: none;">
         <div class="container">
             <a href="#tienda" class="back-link">← Volver a la tienda</a>
             
@@ -236,12 +230,6 @@
                             </div>
                             <div class="carousel-slide">
                                 <img src="images/camiseta-negra-2.jpeg" alt="Camiseta Negra - Vista trasera">
-                            </div>
-                            <div class="carousel-slide">
-                                <img src="images/camiseta-negra-3.jpeg" alt="Camiseta Negra - Detalle 1">
-                            </div>
-                            <div class="carousel-slide">
-                                <img src="images/camiseta-negra-4.jpeg" alt="Camiseta Negra - Detalle 2">
                             </div>
                         </div>
                         <button class="carousel-btn carousel-prev" data-carousel="black">&#10094;</button>
@@ -345,20 +333,6 @@
             <p>&copy; 2025 Duro Galván. Todos los derechos reservados.</p>
         </div>
     </footer>
-
-    <!-- Modal para Zoom -->
-    <div id="modalZoom" class="modal-zoom">
-        <span class="close-zoom">&times;</span>
-        <div class="zoom-indicator" id="zoomIndicator">100%</div>
-        <div class="modal-zoom-container">
-            <img class="modal-zoom-content" id="zoomedImage">
-        </div>
-        <div class="zoom-controls">
-            <button class="zoom-btn" id="zoomOut">-</button>
-            <button class="zoom-btn" id="resetZoom">1:1</button>
-            <button class="zoom-btn" id="zoomIn">+</button>
-        </div>
-    </div>
 
     <script src="script.js"></script>
 </body>
