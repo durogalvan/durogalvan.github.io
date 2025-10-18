@@ -5,14 +5,14 @@ const stock = {
         M: 30,
         L: 41,
         XL: 21,
-        XXL: 3
+        XXL: 10
     },
     black: {
         S: 5,
         M: 30,
         L: 41,
         XL: 21,
-        XXL: 3
+        XXL: 10
     }
 };
 
@@ -128,18 +128,36 @@ function setupPaymentSelection() {
     });
 }
 
-// Handle form submission
-document.getElementById('reservation-form').addEventListener('submit', function(e) {
-    e.preventDefault();
-    
+// Handle form submission for main form
+function setupFormSubmission() {
+    document.getElementById('reservation-form')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        handleReservationFormSubmit(this, 'white');
+    });
+
+    // Handle form submission for white product page
+    document.getElementById('reservation-form-white')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        handleReservationFormSubmit(this, 'white');
+    });
+
+    // Handle form submission for black product page
+    document.getElementById('reservation-form-black')?.addEventListener('submit', function(e) {
+        e.preventDefault();
+        handleReservationFormSubmit(this, 'black');
+    });
+}
+
+// Generic function to handle form submission
+function handleReservationFormSubmit(form, defaultProduct) {
     // Get selected product and size
-    const selectedSize = document.querySelector('.size.selected');
+    const selectedSize = form.querySelector('.size.selected');
     if (!selectedSize) {
         alert('Por favor, selecciona una talla de camiseta');
         return;
     }
     
-    const product = selectedSize.getAttribute('data-product');
+    const product = selectedSize.getAttribute('data-product') || defaultProduct;
     const size = selectedSize.getAttribute('data-size');
     
     // Check if selected size is available
@@ -149,7 +167,7 @@ document.getElementById('reservation-form').addEventListener('submit', function(
     }
     
     // Get payment method
-    const selectedPayment = document.querySelector('.payment-option.selected');
+    const selectedPayment = form.querySelector('.payment-option.selected');
     if (!selectedPayment) {
         alert('Por favor, selecciona un método de pago');
         return;
@@ -158,14 +176,19 @@ document.getElementById('reservation-form').addEventListener('submit', function(
     const paymentMethod = selectedPayment.getAttribute('data-payment');
     
     // Get form data
+    const nameInput = form.querySelector('input[type="text"]');
+    const emailInput = form.querySelector('input[type="email"]');
+    const phoneInput = form.querySelector('input[type="tel"]');
+    const notesInput = form.querySelector('textarea');
+    
     const formData = {
-        name: document.getElementById('name').value,
-        email: document.getElementById('email').value,
-        phone: document.getElementById('phone').value,
+        name: nameInput.value,
+        email: emailInput.value,
+        phone: phoneInput.value,
         product: product === 'white' ? 'Camiseta Blanca' : 'Camiseta Negra',
         size: size,
         payment: paymentMethod === 'transfer' ? 'Transferencia' : 'En mano',
-        notes: document.getElementById('notes').value,
+        notes: notesInput ? notesInput.value : '',
         timestamp: new Date().toISOString()
     };
     
@@ -173,7 +196,7 @@ document.getElementById('reservation-form').addEventListener('submit', function(
     const scriptUrl = 'https://script.google.com/macros/s/AKfycbySuEqwHvIVTAM4TcGJ0EgQdJ6X0Z0MVeCe9EFd8-yqnM_8NBgmVwss_l0oXs7LTCKU/exec';
     
     // Mostrar indicador de carga
-    const submitButton = this.querySelector('button[type="submit"]');
+    const submitButton = form.querySelector('button[type="submit"]');
     const originalText = submitButton.textContent;
     submitButton.textContent = 'Procesando reserva...';
     submitButton.disabled = true;
@@ -201,15 +224,32 @@ document.getElementById('reservation-form').addEventListener('submit', function(
             initializeStock();
             
             // Reset form
-            this.reset();
-            document.querySelectorAll('.size.selected').forEach(el => {
+            form.reset();
+            form.querySelectorAll('.size.selected').forEach(el => {
                 el.classList.remove('selected');
             });
-            document.querySelectorAll('.payment-option.selected').forEach(el => {
+            form.querySelectorAll('.payment-option.selected').forEach(el => {
                 el.classList.remove('selected');
             });
-            document.getElementById('iban-info').classList.remove('show');
-            document.getElementById('selected-product').textContent = 'Por favor, selecciona una talla de camiseta';
+            const ibanInfo = form.querySelector('.iban-info');
+            if (ibanInfo) {
+                ibanInfo.classList.remove('show');
+            }
+            
+            // Reset selected product display
+            const selectedProductElement = form.querySelector('#selected-product, #selected-product-white, #selected-product-black');
+            if (selectedProductElement) {
+                const productName = product === 'white' ? 'Camiseta Blanca' : 'Camiseta Negra';
+                selectedProductElement.textContent = `${productName} - Por favor, selecciona una talla`;
+            }
+            
+            // If we're on a product page, redirect to main shop after successful reservation
+            if (form.id.includes('white') || form.id.includes('black')) {
+                setTimeout(() => {
+                    window.location.href = '#tienda';
+                    showSection('tienda');
+                }, 2000);
+            }
         } else {
             alert('Error al procesar la reserva: ' + data.error);
         }
@@ -223,7 +263,6 @@ document.getElementById('reservation-form').addEventListener('submit', function(
         submitButton.textContent = originalText;
         submitButton.disabled = false;
     });
-});
 }
 
 // Carrusel functionality
