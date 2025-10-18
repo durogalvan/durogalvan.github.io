@@ -193,7 +193,7 @@ function handleReservationFormSubmit(form, product) {
         return;
     }
     
-    // URL de tu Google Apps Script
+    // URL de tu Google Apps Script (ACTUALIZA ESTA URL CON LA TUYA)
     const scriptUrl = 'https://script.google.com/macros/s/AKfycbzEWMDVelvduAqeTl5HNzqscDttSN2GZUVb8qQebep15TSamP5AXYIxSySjqwoRD1N0/exec';
     
     // Mostrar indicador de carga
@@ -246,6 +246,7 @@ function handleReservationFormSubmit(form, product) {
         submitButton.textContent = originalText;
         submitButton.disabled = false;
     });
+}
 
 function resetSelections(product) {
     selectedSize[product] = null;
