@@ -205,30 +205,37 @@ function handleReservationFormSubmit(form, product) {
     // Enviar datos a Google Apps Script
     fetch(scriptUrl, {
         method: 'POST',
-        mode: 'no-cors',
-        body: JSON.stringify(formData),
         headers: {
             'Content-Type': 'application/json'
-        }
+        },
+        body: JSON.stringify(formData)
     })
-    .then(() => {
-        // Since we're using no-cors, we can't read the response
-        // But we assume it was successful if we reach this point
-        alert('¡Reserva realizada con éxito! Te hemos enviado un email de confirmación.');
-        
-        // Actualizar stock localmente
-        stock[product][size]--;
-        initializeStock();
-        
-        // Reset form and selections
-        form.reset();
-        resetSelections(product);
-        
-        // Redirect to main shop after successful reservation
-        setTimeout(() => {
-            window.location.href = '#tienda';
-            showSection('tienda');
-        }, 2000);
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Error de red: ' + response.status);
+        }
+        return response.json();
+    })
+    .then(data => {
+        if (data.success) {
+            alert('¡Reserva realizada con éxito! Te hemos enviado un email de confirmación. ID de reserva: ' + data.reservationId);
+            
+            // Actualizar stock localmente
+            stock[product][size]--;
+            initializeStock();
+            
+            // Reset form and selections
+            form.reset();
+            resetSelections(product);
+            
+            // Redirect to main shop after successful reservation
+            setTimeout(() => {
+                window.location.href = '#tienda';
+                showSection('tienda');
+            }, 2000);
+        } else {
+            alert('Error al procesar la reserva: ' + data.error);
+        }
     })
     .catch(error => {
         console.error('Error:', error);
@@ -239,7 +246,6 @@ function handleReservationFormSubmit(form, product) {
         submitButton.textContent = originalText;
         submitButton.disabled = false;
     });
-}
 
 function resetSelections(product) {
     selectedSize[product] = null;
