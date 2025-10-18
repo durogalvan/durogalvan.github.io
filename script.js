@@ -1,170 +1,89 @@
-// Stock data from the provided table
+// Stock data
 let stock = {
-    white: {
-        S: 5,
-        M: 30,
-        L: 41,
-        XL: 21,
-        XXL: 3
-    },
-    black: {
-        S: 5,
-        M: 30,
-        L: 41,
-        XL: 21,
-        XXL: 3
-    }
+    'Camiseta Blanca': { S: 5, M: 30, L: 41, XL: 21, XXL: 3 },
+    'Camiseta Negra': { S: 5, M: 30, L: 41, XL: 21, XXL: 3 }
 };
 
-// Global variables to track selections
-let selectedSize = {
-    white: null,
-    black: null
-};
+// Google Apps Script URL para obtener stock
+const STOCK_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx4fbmrL9nbqJB6uZZHfQEKbb1CDMkSni92noF12c2RcTpW9yThKobb7owXp4GZsV74/exec';
 
-let selectedPayment = {
-    white: null,
-    black: null
-};
-
-// Google Apps Script URL
-const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx4fbmrL9nbqJB6uZZHfQEKbb1CDMkSni92noF12c2RcTpW9yThKobb7owXp4GZsV74/exec';
-const STOCK_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx4fbmrL9nbqJB6uZZHfQEKbb1CDMkSni92noF12c2RcTpW9yThKobb7owXp4GZsV74/exec?action=getStock';
-
-// Proxy CORS (alternativa si CORS falla)
-const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/';
-
-// Initialize stock display and sync with server
+// Initialize stock display
 function initializeStock() {
     syncStockFromServer();
 }
 
 // Sync stock from Google Sheet
 function syncStockFromServer() {
-    fetch(STOCK_SCRIPT_URL, {
-        method: 'GET',
-        mode: 'cors',
-        headers: {
-            'Content-Type': 'text/plain'
-        }
-    })
-        .then(response => response.text())
-        .then(text => {
-            console.log('Stock response:', text);
-            const data = JSON.parse(text);
-            return data;
-        })
+    fetch(STOCK_SCRIPT_URL)
+        .then(response => response.json())
         .then(data => {
             if (data.success && data.stock) {
                 stock = data.stock;
                 updateStockDisplay();
-                markSoldOutSizes('white');
-                markSoldOutSizes('black');
-                console.log('Stock sincronizado desde servidor:', stock);
+                updateFormValidation();
+                console.log('Stock sincronizado:', stock);
             }
         })
         .catch(error => {
-            console.log('No se pudo sincronizar stock desde servidor:', error);
-            console.log('Usando stock local...');
+            console.log('No se pudo sincronizar stock:', error);
             updateStockDisplay();
-            markSoldOutSizes('white');
-            markSoldOutSizes('black');
+            updateFormValidation();
         });
 }
 
+// Update stock display
 function updateStockDisplay() {
-    // Update white shirt stock info
     const whiteStockElements = document.querySelectorAll('#white-stock, #white-stock-detail');
     let whiteStockText = 'Disponible: ';
-    for (const size in stock.white) {
-        whiteStockText += `${size}: ${stock.white[size]} | `;
+    for (const size in stock['Camiseta Blanca']) {
+        whiteStockText += `${size}: ${stock['Camiseta Blanca'][size]} | `;
     }
     whiteStockElements.forEach(el => {
         if (el) el.textContent = whiteStockText.slice(0, -3);
     });
 
-    // Update black shirt stock info
     const blackStockElements = document.querySelectorAll('#black-stock, #black-stock-detail');
     let blackStockText = 'Disponible: ';
-    for (const size in stock.black) {
-        blackStockText += `${size}: ${stock.black[size]} | `;
+    for (const size in stock['Camiseta Negra']) {
+        blackStockText += `${size}: ${stock['Camiseta Negra'][size]} | `;
     }
     blackStockElements.forEach(el => {
         if (el) el.textContent = blackStockText.slice(0, -3);
     });
 }
 
-// Mark sold out sizes
-function markSoldOutSizes(product) {
-    const sizes = document.querySelectorAll(`.size[data-product="${product}"]`);
-    sizes.forEach(sizeElement => {
-        const size = sizeElement.getAttribute('data-size');
-        const quantity = stock[product][size];
-        
-        sizeElement.classList.remove('sold-out');
-        sizeElement.style.opacity = '1';
-        
-        if (quantity <= 0) {
-            sizeElement.classList.add('sold-out');
-            sizeElement.textContent = `${size} (Agotado)`;
-            sizeElement.style.cursor = 'not-allowed';
-            sizeElement.style.opacity = '0.6';
-        } else {
-            sizeElement.textContent = size;
-            sizeElement.style.cursor = 'pointer';
-        }
-    });
+// Update form validation - desabilitar tallas sin stock
+function updateFormValidation() {
+    updateSelectOptions('size-white', stock['Camiseta Blanca']);
+    updateSelectOptions('size-black', stock['Camiseta Negra']);
 }
 
-// Handle size selection
-function setupSizeSelection() {
-    document.querySelectorAll('.size').forEach(sizeElement => {
-        sizeElement.addEventListener('click', function() {
-            if (this.classList.contains('sold-out')) return;
-            
-            const product = this.getAttribute('data-product');
-            const size = this.getAttribute('data-size');
-            
-            document.querySelectorAll(`.size[data-product="${product}"]`).forEach(el => {
-                el.classList.remove('selected');
-            });
-            
-            this.classList.add('selected');
-            selectedSize[product] = size;
-            updateSelectedProductDisplay(product, size);
-        });
-    });
-}
-
-function updateSelectedProductDisplay(product, size) {
-    const productName = product === 'white' ? 'Camiseta Blanca' : 'Camiseta Negra';
-    const selectedProductElements = document.querySelectorAll(`#selected-product-${product}`);
+// Actualizar opciones de un select
+function updateSelectOptions(selectId, stockData) {
+    const select = document.getElementById(selectId);
+    if (!select) return;
     
-    selectedProductElements.forEach(element => {
-        if (element) {
-            element.textContent = `${productName} - Talla ${size}`;
-            element.style.fontWeight = 'bold';
-            element.style.color = '#800020';
+    const options = select.querySelectorAll('option');
+    options.forEach(option => {
+        if (option.value === '') return; // Skip placeholder
+        
+        const quantity = stockData[option.value];
+        if (quantity > 0) {
+            option.textContent = option.value;
+            option.disabled = false;
+        } else {
+            option.textContent = `${option.value} (Agotado)`;
+            option.disabled = true;
         }
     });
 }
 
-// Handle payment method selection
-function setupPaymentSelection() {
-    document.querySelectorAll('.payment-option').forEach(option => {
-        option.addEventListener('click', function() {
-            const form = this.closest('form');
-            const product = form.id.includes('white') ? 'white' : 'black';
-            
-            form.querySelectorAll('.payment-option').forEach(el => {
-                el.classList.remove('selected');
-            });
-            
-            this.classList.add('selected');
-            selectedPayment[product] = this.getAttribute('data-payment');
-            
-            const ibanInfo = form.querySelector('.iban-info');
-            if (selectedPayment[product] === 'transfer') {
+// Handle payment method visibility
+function setupPaymentHandler() {
+    document.querySelectorAll('input[type="radio"][name="entry.CAMPO_PAGO"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            const ibanInfo = this.closest('form').querySelector('.iban-info');
+            if (this.value === 'Transferencia') {
                 ibanInfo.classList.add('show');
             } else {
                 ibanInfo.classList.remove('show');
@@ -175,134 +94,37 @@ function setupPaymentSelection() {
 
 // Handle form submission
 function setupFormSubmission() {
-    document.getElementById('reservation-form-white')?.addEventListener('submit', function(e) {
-        e.preventDefault();
-        handleReservationFormSubmit(this, 'white');
-    });
-
-    document.getElementById('reservation-form-black')?.addEventListener('submit', function(e) {
-        e.preventDefault();
-        handleReservationFormSubmit(this, 'black');
-    });
-}
-
-// Generic function to handle form submission
-function handleReservationFormSubmit(form, product) {
-    if (!selectedSize[product]) {
-        alert('Por favor, selecciona una talla de camiseta');
-        return;
-    }
+    const forms = document.querySelectorAll('form[id^="gform-"]');
     
-    const size = selectedSize[product];
-    
-    if (stock[product][size] <= 0) {
-        alert('Lo sentimos, esta talla ya no está disponible');
-        return;
-    }
-    
-    if (!selectedPayment[product]) {
-        alert('Por favor, selecciona un método de pago');
-        return;
-    }
-    
-    const formData = {
-        name: form.querySelector('input[type="text"]').value,
-        email: form.querySelector('input[type="email"]').value,
-        phone: form.querySelector('input[type="tel"]').value,
-        product: product === 'white' ? 'Camiseta Blanca' : 'Camiseta Negra',
-        size: size,
-        payment: selectedPayment[product] === 'transfer' ? 'Transferencia' : 'En mano',
-        notes: form.querySelector('textarea') ? form.querySelector('textarea').value : '',
-        timestamp: new Date().toISOString()
-    };
-    
-    if (!formData.name || !formData.email || !formData.phone) {
-        alert('Por favor, completa todos los campos obligatorios');
-        return;
-    }
-    
-    const submitButton = form.querySelector('button[type="submit"]');
-    const originalText = submitButton.textContent;
-    submitButton.textContent = 'Procesando reserva...';
-    submitButton.disabled = true;
-    
-    fetch(SCRIPT_URL, {
-        method: 'POST',
-        mode: 'cors',
-        headers: {
-            'Content-Type': 'text/plain'
-        },
-        body: JSON.stringify(formData)
-    })
-    .then(response => {
-        console.log('Response status:', response.status);
-        console.log('Response:', response);
-        return response.text();
-    })
-    .then(text => {
-        console.log('Response text:', text);
-        const data = JSON.parse(text);
-        return data;
-    })
-    .then(data => {
-        console.log('Response data:', data);
-        if (data.success) {
-            alert('¡Reserva realizada con éxito! Te hemos enviado un email de confirmación. ID de reserva: ' + data.reservationId);
+    forms.forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
             
-            // Actualizar stock localmente
-            stock[product][size]--;
-            updateStockDisplay();
-            markSoldOutSizes(product);
+            const submitBtn = this.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Enviando...';
+            submitBtn.disabled = true;
             
-            form.reset();
-            resetSelections(product);
-            
+            // Esperar un poco para que el formulario se envíe
             setTimeout(() => {
-                window.location.hash = '#tienda';
-                showSectionBasedOnHash();
-            }, 2000);
-        } else {
-            alert('Error al procesar la reserva: ' + (data.error || 'Error desconocido'));
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('Hubo un error al procesar la reserva. Por favor, inténtalo de nuevo o contacta con nosotros directamente en durogalvanband@gmail.com.');
-    })
-    .finally(() => {
-        submitButton.textContent = originalText;
-        submitButton.disabled = false;
+                alert('¡Reserva realizada con éxito! Te hemos enviado un email de confirmación. Por favor, revisa tu bandeja de entrada.');
+                
+                // Limpiar formulario
+                this.reset();
+                
+                // Volver a la tienda después de 2 segundos
+                setTimeout(() => {
+                    window.location.hash = '#tienda';
+                    showSectionBasedOnHash();
+                    submitBtn.textContent = originalText;
+                    submitBtn.disabled = false;
+                }, 2000);
+            }, 1000);
+        });
     });
 }
 
-function resetSelections(product) {
-    selectedSize[product] = null;
-    selectedPayment[product] = null;
-    
-    document.querySelectorAll(`.size[data-product="${product}"]`).forEach(el => {
-        el.classList.remove('selected');
-    });
-    
-    document.querySelectorAll(`#reservation-form-${product} .payment-option`).forEach(el => {
-        el.classList.remove('selected');
-    });
-    
-    document.querySelectorAll(`#reservation-form-${product} .iban-info`).forEach(el => {
-        el.classList.remove('show');
-    });
-    
-    const selectedProductElements = document.querySelectorAll(`#selected-product-${product}`);
-    selectedProductElements.forEach(element => {
-        if (element) {
-            const productName = product === 'white' ? 'Camiseta Blanca' : 'Camiseta Negra';
-            element.textContent = `${productName} - Por favor, selecciona una talla`;
-            element.style.fontWeight = 'normal';
-            element.style.color = 'inherit';
-        }
-    });
-}
-
-// Carousel functionality with zoom
+// Carousel functionality
 function initializeCarousel(carouselId, dotsContainerId, zoomBtnId, zoomModalId, zoomImageId) {
     const carousel = document.getElementById(carouselId);
     if (!carousel) return;
@@ -316,19 +138,6 @@ function initializeCarousel(carouselId, dotsContainerId, zoomBtnId, zoomModalId,
     
     let currentSlide = 0;
     let slideInterval;
-    
-    // Adaptar altura del carrusel a las imágenes
-    function adaptCarouselHeight() {
-        const currentImg = slides[currentSlide].querySelector('img');
-        if (currentImg) {
-            currentImg.onload = () => {
-                carousel.parentElement.style.maxWidth = '100%';
-            };
-            currentImg.onerror = () => {
-                carousel.parentElement.style.maxHeight = '500px';
-            };
-        }
-    }
     
     // Clear existing dots
     if (dotsContainer) {
@@ -358,8 +167,6 @@ function initializeCarousel(carouselId, dotsContainerId, zoomBtnId, zoomModalId,
                 dot.classList.toggle('active', index === currentSlide);
             });
         }
-        
-        adaptCarouselHeight();
     }
     
     slideInterval = setInterval(() => {
@@ -431,11 +238,9 @@ function initializeCarousel(carouselId, dotsContainerId, zoomBtnId, zoomModalId,
             }, 5000);
         });
     }
-    
-    adaptCarouselHeight();
 }
 
-// Function to show a specific section
+// Show product page
 function showProductPage(productId) {
     const sectionId = productId;
     
@@ -454,8 +259,7 @@ function showProductPage(productId) {
         }
         
         setTimeout(() => {
-            setupSizeSelection();
-            setupPaymentSelection();
+            setupPaymentHandler();
         }, 100);
     }
     
@@ -478,8 +282,7 @@ function showSection(sectionId) {
         }
         
         setTimeout(() => {
-            setupSizeSelection();
-            setupPaymentSelection();
+            setupPaymentHandler();
         }, 100);
     }
     
@@ -522,9 +325,8 @@ function setupStockSync() {
 // Initialize the page
 document.addEventListener('DOMContentLoaded', function() {
     initializeStock();
-    setupSizeSelection();
-    setupPaymentSelection();
     setupFormSubmission();
+    setupPaymentHandler();
     setupNavigation();
     setupStockSync();
     
