@@ -148,63 +148,9 @@
                     <div class="stock-info" id="white-stock-detail"></div>
                     
                     <!-- Google Form Embebido -->
-                    <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" onload="if(this.src!='')this.src='';"></iframe>
-                    <form id="gform-white" action="https://forms.gle/CfzsrbpTJPNbqPcJ8" method="POST" target="hidden_iframe" onsubmit="submitted=true; return false;">
-                        <div class="form-group">
-                            <label for="name-white">Nombre completo</label>
-                            <input type="text" id="name-white" name="entry.CAMPO_NOMBRE" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="email-white">Email</label>
-                            <input type="email" id="email-white" name="entry.CAMPO_EMAIL" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="phone-white">Teléfono</label>
-                            <input type="tel" id="phone-white" name="entry.CAMPO_TELEFONO" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="size-white">Talla</label>
-                            <select id="size-white" name="entry.CAMPO_TALLA_BLANCA" required>
-                                <option value="">Selecciona una talla</option>
-                                <option value="S">S</option>
-                                <option value="M">M</option>
-                                <option value="L">L</option>
-                                <option value="XL">XL</option>
-                                <option value="XXL">XXL</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>Método de pago</label>
-                            <div class="payment-method">
-                                <label style="flex: 1; margin: 0; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; cursor: pointer; text-align: center;">
-                                    <input type="radio" name="entry.CAMPO_PAGO" value="Transferencia" required style="margin-right: 0.5rem;">
-                                    Transferencia (15€ ahora)
-                                </label>
-                                <label style="flex: 1; margin: 0; margin-left: 0.5rem; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; cursor: pointer; text-align: center;">
-                                    <input type="radio" name="entry.CAMPO_PAGO" value="En mano" required style="margin-right: 0.5rem;">
-                                    En mano (al recoger)
-                                </label>
-                            </div>
-                            
-                            <div class="iban-info" id="iban-info-white">
-                                <p>Realiza una transferencia de 15€ al siguiente IBAN:</p>
-                                <p><strong>ES91 1583 0001 1290 2592 8758</strong></p>
-                                <p>A nombre de: Antonio Fernández Batanero</p>
-                                <p>Una vez realizada, envíanos el comprobante a durogalvanband@gmail.com</p>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="notes-white">Observaciones (opcional)</label>
-                            <textarea id="notes-white" name="entry.CAMPO_OBSERVACIONES" rows="3"></textarea>
-                        </div>
-                        
-                        <button type="submit" class="btn" style="width: 100%;">Reservar ahora</button>
-                    </form>
+                    <div style="margin-top: 2rem;">
+                        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfk26ChcLyfErGwnB6oU5Q4l0B063AExFuZcd4qQUn4ElRCUQ/viewform?embedded=true" width="100%" height="800" frameborder="0" marginheight="0" marginwidth="0">Cargando…</iframe>
+                    </div>
                 </div>
             </div>
         </div>
@@ -257,63 +203,9 @@
                     <div class="stock-info" id="black-stock-detail"></div>
                     
                     <!-- Google Form Embebido -->
-                    <iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" onload="if(this.src!='')this.src='';"></iframe>
-                    <form id="gform-black" action="https://forms.gle/CfzsrbpTJPNbqPcJ8" method="POST" target="hidden_iframe" onsubmit="submitted=true; return false;">
-                        <div class="form-group">
-                            <label for="name-black">Nombre completo</label>
-                            <input type="text" id="name-black" name="entry.CAMPO_NOMBRE" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="email-black">Email</label>
-                            <input type="email" id="email-black" name="entry.CAMPO_EMAIL" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="phone-black">Teléfono</label>
-                            <input type="tel" id="phone-black" name="entry.CAMPO_TELEFONO" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="size-black">Talla</label>
-                            <select id="size-black" name="entry.CAMPO_TALLA_NEGRA" required>
-                                <option value="">Selecciona una talla</option>
-                                <option value="S">S</option>
-                                <option value="M">M</option>
-                                <option value="L">L</option>
-                                <option value="XL">XL</option>
-                                <option value="XXL">XXL</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label>Método de pago</label>
-                            <div class="payment-method">
-                                <label style="flex: 1; margin: 0; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; cursor: pointer; text-align: center;">
-                                    <input type="radio" name="entry.CAMPO_PAGO" value="Transferencia" required style="margin-right: 0.5rem;">
-                                    Transferencia (15€ ahora)
-                                </label>
-                                <label style="flex: 1; margin: 0; margin-left: 0.5rem; padding: 0.5rem; border: 1px solid #ddd; border-radius: 4px; cursor: pointer; text-align: center;">
-                                    <input type="radio" name="entry.CAMPO_PAGO" value="En mano" required style="margin-right: 0.5rem;">
-                                    En mano (al recoger)
-                                </label>
-                            </div>
-                            
-                            <div class="iban-info" id="iban-info-black">
-                                <p>Realiza una transferencia de 15€ al siguiente IBAN:</p>
-                                <p><strong>ES91 1583 0001 1290 2592 8758</strong></p>
-                                <p>A nombre de: Antonio Fernández Batanero</p>
-                                <p>Una vez realizada, envíanos el comprobante a durogalvanband@gmail.com</p>
-                            </div>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="notes-black">Observaciones (opcional)</label>
-                            <textarea id="notes-black" name="entry.CAMPO_OBSERVACIONES" rows="3"></textarea>
-                        </div>
-                        
-                        <button type="submit" class="btn" style="width: 100%;">Reservar ahora</button>
-                    </form>
+                    <div style="margin-top: 2rem;">
+                        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfk26ChcLyfErGwnB6oU5Q4l0B063AExFuZcd4qQUn4ElRCUQ/viewform?embedded=true" width="100%" height="800" frameborder="0" marginheight="0" marginwidth="0">Cargando…</iframe>
+                    </div>
                 </div>
             </div>
         </div>
