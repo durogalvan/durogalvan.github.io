@@ -61,15 +61,21 @@ header {
     font-size: 2rem;
     color: var(--white);
     text-decoration: none;
+    flex-shrink: 0;
 }
 
 .logo span {
     color: var(--dark-red);
 }
 
+nav {
+    flex: 1;
+}
+
 nav ul {
     display: flex;
     list-style: none;
+    gap: 0;
 }
 
 nav ul li {
@@ -82,6 +88,7 @@ nav ul li a {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 1.2rem;
     transition: color 0.3s;
+    white-space: nowrap;
 }
 
 nav ul li a:hover {
@@ -299,6 +306,27 @@ section {
     color: #666;
 }
 
+/* Availability Warning */
+.availability-warning {
+    margin: 1rem 0;
+    padding: 1rem;
+    border-radius: 4px;
+    display: none;
+}
+
+.availability-warning.show {
+    display: block;
+    background-color: #fff3cd;
+    border: 1px solid #ffc107;
+    color: #856404;
+}
+
+.availability-warning.show.all-sold-out {
+    background-color: #f8d7da;
+    border: 1px solid #f5c6cb;
+    color: #721c24;
+}
+
 /* Formulario de reserva */
 .reservation-form {
     background-color: var(--white);
@@ -328,6 +356,10 @@ section {
     border-radius: 4px;
     font-family: 'Grand Paradiso', serif;
     font-size: 1rem;
+}
+
+.form-group select option:disabled {
+    color: #999;
 }
 
 .payment-method {
@@ -437,6 +469,20 @@ footer {
     flex-direction: column;
 }
 
+.back-link {
+    display: inline-block;
+    margin-bottom: 2rem;
+    color: var(--dark-red);
+    text-decoration: none;
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.2rem;
+    transition: color 0.3s;
+}
+
+.back-link:hover {
+    color: #600018;
+}
+
 /* Carrusel de imágenes */
 .carousel-wrapper {
     position: relative;
@@ -485,6 +531,7 @@ footer {
     align-items: center;
     justify-content: center;
     transition: background-color 0.3s;
+    z-index: 10;
 }
 
 .carousel-btn:hover {
@@ -551,8 +598,8 @@ footer {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.9);
-    z-index: 2000;
+    background-color: rgba(0, 0, 0, 0.95);
+    z-index: 3000;
     align-items: center;
     justify-content: center;
     flex-direction: column;
@@ -593,7 +640,7 @@ footer {
     align-items: center;
     justify-content: center;
     transition: background-color 0.3s;
-    z-index: 2001;
+    z-index: 3001;
     padding: 0;
     line-height: 1;
 }
@@ -601,33 +648,43 @@ footer {
 .zoom-close:hover {
     background-color: rgba(255, 255, 255, 0.4);
 }
-    display: inline-block;
-    margin-bottom: 2rem;
-    color: var(--dark-red);
-    text-decoration: none;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.2rem;
-    transition: color 0.3s;
-}
-
-.back-link:hover {
-    color: #600018;
-}
 
 /* Responsive */
 @media (max-width: 768px) {
     .header-container {
-        flex-direction: column;
+        flex-direction: row;
         gap: 1rem;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .logo {
+        font-size: 1.5rem;
+    }
+    
+    nav {
+        flex: 1;
+        min-width: 0;
     }
     
     nav ul {
-        flex-direction: column;
+        flex-direction: row;
         gap: 0.5rem;
+        overflow-x: auto;
+        padding: 0.5rem 0;
+        -webkit-overflow-scrolling: touch;
+        scroll-behavior: smooth;
     }
     
     nav ul li {
         margin-left: 0;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+    
+    nav ul li a {
+        font-size: 1rem;
+        padding: 0.5rem;
     }
     
     .hero h1 {
