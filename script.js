@@ -1,7 +1,7 @@
 // Stock data
 let stock = {
-    'Camiseta Blanca': { S: 5, M: 30, L: 41, XL: 21, XXL: 3 },
-    'Camiseta Negra': { S: 5, M: 30, L: 41, XL: 21, XXL: 3 }
+    'Blanca': { S: 5, M: 30, L: 41, XL: 21, XXL: 3 },
+    'Negra': { S: 5, M: 30, L: 41, XL: 21, XXL: 3 }
 };
 
 // Google Apps Script URL para obtener stock
@@ -35,8 +35,8 @@ function syncStockFromServer() {
 function updateStockDisplay() {
     const whiteStockElements = document.querySelectorAll('#white-stock, #white-stock-detail');
     let whiteStockText = 'Disponible: ';
-    for (const size in stock['Camiseta Blanca']) {
-        whiteStockText += `${size}: ${stock['Camiseta Blanca'][size]} | `;
+    for (const size in stock['Blanca']) {
+        whiteStockText += `${size}: ${stock['Blanca'][size]} | `;
     }
     whiteStockElements.forEach(el => {
         if (el) el.textContent = whiteStockText.slice(0, -3);
@@ -44,8 +44,8 @@ function updateStockDisplay() {
 
     const blackStockElements = document.querySelectorAll('#black-stock, #black-stock-detail');
     let blackStockText = 'Disponible: ';
-    for (const size in stock['Camiseta Negra']) {
-        blackStockText += `${size}: ${stock['Camiseta Negra'][size]} | `;
+    for (const size in stock['Negra']) {
+        blackStockText += `${size}: ${stock['Negra'][size]} | `;
     }
     blackStockElements.forEach(el => {
         if (el) el.textContent = blackStockText.slice(0, -3);
@@ -54,8 +54,8 @@ function updateStockDisplay() {
 
 // Update form validation - desabilitar tallas sin stock
 function updateFormValidation() {
-    updateSelectOptions('size-white', stock['Camiseta Blanca']);
-    updateSelectOptions('size-black', stock['Camiseta Negra']);
+    updateSelectOptions('size-white', stock['Blanca']);
+    updateSelectOptions('size-black', stock['Negra']);
 }
 
 // Actualizar opciones de un select
