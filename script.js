@@ -9,23 +9,34 @@ const STOCK_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx4fbmrL9nbqJB
 
 // Initialize stock display
 function initializeStock() {
+    console.log('=== Initializing Stock ===');
     syncStockFromServer();
 }
 
 // Sync stock from Google Sheet
 function syncStockFromServer() {
+    console.log('=== Syncing Stock from Server ===');
     fetch(STOCK_SCRIPT_URL)
-        .then(response => response.json())
+        .then(response => {
+            console.log('Response status:', response.status);
+            return response.json();
+        })
         .then(data => {
+            console.log('Stock API Response:', data);
             if (data.success && data.stock) {
+                console.log('Stock received from server:', data.stock);
                 stock = data.stock;
+                console.log('Stock object updated:', stock);
                 updateStockDisplay();
                 updateFormValidation();
                 console.log('Stock sincronizado:', stock);
+            } else {
+                console.warn('API returned success=false or no stock data');
             }
         })
         .catch(error => {
-            console.log('No se pudo sincronizar stock:', error);
+            console.error('Error syncing stock:', error);
+            console.log('Usando stock local...');
             updateStockDisplay();
             updateFormValidation();
         });
