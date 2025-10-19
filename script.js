@@ -330,17 +330,25 @@ function showSection(sectionId) {
 function showSectionBasedOnHash() {
     const hash = window.location.hash.substring(1);
     const sectionId = hash || 'inicio';
+    console.log('Showing section:', sectionId);
     showSection(sectionId);
 }
 
 // Setup navigation
 function setupNavigation() {
-    window.addEventListener('hashchange', showSectionBasedOnHash);
+    console.log('Setting up navigation');
+    
+    window.addEventListener('hashchange', () => {
+        console.log('Hash changed to:', window.location.hash);
+        showSectionBasedOnHash();
+    });
     
     document.querySelectorAll('.back-link').forEach(link => {
         link.addEventListener('click', function(e) {
             e.preventDefault();
+            console.log('Back link clicked');
             window.location.hash = 'tienda';
+            showSectionBasedOnHash();
         });
     });
     
@@ -348,7 +356,9 @@ function setupNavigation() {
         link.addEventListener('click', function(e) {
             e.preventDefault();
             const targetId = this.getAttribute('href').substring(1);
+            console.log('Nav link clicked, going to:', targetId);
             window.location.hash = targetId;
+            showSectionBasedOnHash();
         });
     });
 }
