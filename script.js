@@ -216,9 +216,12 @@ function initializeCarousel(carouselId, dotsContainerId, zoomBtnId, zoomModalId,
     
     // Zoom functionality
     if (zoomBtn) {
-        zoomBtn.addEventListener('click', () => {
+        zoomBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
             const currentImg = slides[currentSlide].querySelector('img');
             if (currentImg) {
+                console.log('Opening zoom for image:', currentImg.src);
                 zoomImage.src = currentImg.src;
                 zoomModal.style.display = 'flex';
             }
@@ -226,13 +229,17 @@ function initializeCarousel(carouselId, dotsContainerId, zoomBtnId, zoomModalId,
     }
     
     if (zoomClose) {
-        zoomClose.addEventListener('click', () => {
+        zoomClose.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('Closing zoom');
             zoomModal.style.display = 'none';
         });
     }
     
     zoomModal.addEventListener('click', (e) => {
         if (e.target === zoomModal) {
+            console.log('Closing zoom (clicked outside)');
             zoomModal.style.display = 'none';
         }
     });
