@@ -76,6 +76,52 @@ function updateStockDisplay() {
 function updateFormValidation() {
     updateSelectOptions('size-white', stock['Blanca']);
     updateSelectOptions('size-black', stock['Negra']);
+    updateAvailabilityWarnings();
+}
+
+// Mostrar avisos de disponibilidad
+function updateAvailabilityWarnings() {
+    updateAvailabilityWarning('white', stock['Blanca']);
+    updateAvailabilityWarning('black', stock['Negra']);
+}
+
+function updateAvailabilityWarning(product, stockData) {
+    const warningElement = document.getElementById(`${product}-availability-warning`);
+    if (!warningElement) return;
+    
+    const soldOutSizes = [];
+    const availableSizes = [];
+    
+    for (const size in stockData) {
+        if (stockData[size] <= 0) {
+            soldOutSizes.push(size);
+        } else {
+            availableSizes.push(`${size} (${stockData[size]} ud.)`);
+        }
+    }
+    
+    warningElement.innerHTML = '';
+    
+    if (soldOutSizes.length > 0) {
+        const allSoldOut = soldOutSizes.length === Object.keys(stockData).length;
+        
+        if (allSoldOut) {
+            warningElement.innerHTML = `
+                <strong>⚠️ Camiseta agotada</strong><br>
+                Lo sentimos, todas las tallas están agotadas.
+            `;
+            warningElement.classList.add('show', 'all-sold-out');
+        } else {
+            warningElement.innerHTML = `
+                <strong>⚠️ Tallas agotadas:</strong> ${soldOutSizes.join(', ')}<br>
+                <strong>✓ Disponibles:</strong> ${availableSizes.join(', ')}
+            `;
+            warningElement.classList.add('show');
+            warningElement.classList.remove('all-sold-out');
+        }
+    } else {
+        warningElement.classList.remove('show', 'all-sold-out');
+    }
 }
 
 // Actualizar opciones de un select
