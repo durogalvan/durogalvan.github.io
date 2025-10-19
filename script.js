@@ -78,50 +78,15 @@ function updateSelectOptions(selectId, stockData) {
     });
 }
 
-// Handle payment method visibility
+// Handle payment method visibility (no necesario con iframe embebido)
 function setupPaymentHandler() {
-    document.querySelectorAll('input[type="radio"][name="entry.CAMPO_PAGO"]').forEach(radio => {
-        radio.addEventListener('change', function() {
-            const ibanInfo = this.closest('form').querySelector('.iban-info');
-            if (this.value === 'Transferencia') {
-                ibanInfo.classList.add('show');
-            } else {
-                ibanInfo.classList.remove('show');
-            }
-        });
-    });
+    // Google Forms maneja esto automáticamente
 }
 
 // Handle form submission
 function setupFormSubmission() {
-    const forms = document.querySelectorAll('form[id^="gform-"]');
-    
-    forms.forEach(form => {
-        form.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const submitBtn = this.querySelector('button[type="submit"]');
-            const originalText = submitBtn.textContent;
-            submitBtn.textContent = 'Enviando...';
-            submitBtn.disabled = true;
-            
-            // Esperar un poco para que el formulario se envíe
-            setTimeout(() => {
-                alert('¡Reserva realizada con éxito! Te hemos enviado un email de confirmación. Por favor, revisa tu bandeja de entrada.');
-                
-                // Limpiar formulario
-                this.reset();
-                
-                // Volver a la tienda después de 2 segundos
-                setTimeout(() => {
-                    window.location.hash = '#tienda';
-                    showSectionBasedOnHash();
-                    submitBtn.textContent = originalText;
-                    submitBtn.disabled = false;
-                }, 2000);
-            }, 1000);
-        });
-    });
+    // Con el iframe embebido de Google Forms, no necesitamos manejar el envío
+    // Google Forms lo maneja automáticamente
 }
 
 // Carousel functionality
