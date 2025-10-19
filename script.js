@@ -16,27 +16,36 @@ function initializeStock() {
 // Sync stock from Google Sheet
 function syncStockFromServer() {
     console.log('=== Syncing Stock from Server ===');
+    console.log('Fetching from:', STOCK_SCRIPT_URL);
+    
     fetch(STOCK_SCRIPT_URL)
         .then(response => {
             console.log('Response status:', response.status);
+            console.log('Response type:', response.type);
             return response.json();
         })
         .then(data => {
-            console.log('Stock API Response:', data);
+            console.log('Full API Response:', JSON.stringify(data));
+            console.log('Data keys:', Object.keys(data));
+            console.log('data.success:', data.success);
+            console.log('data.stock:', data.stock);
+            
             if (data.success && data.stock) {
-                console.log('Stock received from server:', data.stock);
+                console.log('✓ Stock received successfully');
                 stock = data.stock;
-                console.log('Stock object updated:', stock);
+                console.log('Stock object updated to:', stock);
                 updateStockDisplay();
                 updateFormValidation();
-                console.log('Stock sincronizado:', stock);
+                console.log('Display and validation updated');
             } else {
-                console.warn('API returned success=false or no stock data');
+                console.warn('✗ API response not successful');
+                console.warn('Success:', data.success, 'Stock:', data.stock);
+                console.warn('Error:', data.error);
             }
         })
         .catch(error => {
-            console.error('Error syncing stock:', error);
-            console.log('Usando stock local...');
+            console.error('✗ Fetch error:', error);
+            console.log('Using stock local...');
             updateStockDisplay();
             updateFormValidation();
         });
