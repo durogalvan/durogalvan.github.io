@@ -70,6 +70,7 @@ header {
 }
 
 .logo span {
+    font-family: 'Grand Paradiso', sans-serif;
     color: var(--dark-red);
 }
 
@@ -130,7 +131,7 @@ nav ul li a:hover {
     justify-content: center;
     scroll-snap-align: start;
     scroll-snap-stop: always;
-    background-color: var(--black);
+    background-color: var(--ivory);
     padding: 0;
     margin: 0;
     line-height: 0;
