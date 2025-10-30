@@ -2,7 +2,8 @@
     --white: #ffffff;
     --black: #000000;
     --dark-red: #800020;
-    --light-gray: #f5f5f5;
+    --light-gray: #f5f5f5
+    --ivory: #fffff0;
 }
 
 * {
@@ -45,8 +46,8 @@ h2 {
 
 /* Header */
 header {
-    background-color: var(--black);
-    color: var(--white);
+    background-color: var(--ivory);
+    color: var(--black);
     padding: 1rem 0;
     position: sticky;
     top: 0;
@@ -63,7 +64,7 @@ header {
 .logo {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 2rem;
-    color: var(--white);
+    color: var(--black);
     text-decoration: none;
     flex-shrink: 0;
 }
@@ -87,7 +88,7 @@ nav ul li {
 }
 
 nav ul li a {
-    color: var(--white);
+    color: var(--black);
     text-decoration: none;
     font-family: 'Bebas Neue', sans-serif;
     font-size: 1.2rem;
@@ -101,7 +102,7 @@ nav ul li a:hover {
 
 /* Hero Section con Dossier */
 .dossier-hero {
-    background-color: var(--black);
+    background-color: var(--ivory);
     padding: 0;
     margin: 0;
     position: relative;
@@ -504,8 +505,8 @@ section {
 
 /* Footer */
 footer {
-    background-color: var(--black);
-    color: var(--white);
+    background-color: var(--ivory);
+    color: var(--black);
     text-align: center;
     padding: 2rem 0;
 }
