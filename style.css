@@ -11,6 +11,10 @@
     box-sizing: border-box;
 }
 
+html {
+    scroll-behavior: smooth;
+}
+
 body {
     font-family: 'Grand Paradiso', serif;
     color: var(--black);
@@ -95,25 +99,64 @@ nav ul li a:hover {
     color: var(--dark-red);
 }
 
-/* Hero Section */
-.hero {
-    background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('images/banner.jpg');
-    background-size: cover;
-    background-position: center;
-    color: var(--white);
+/* Hero Section con Dossier */
+.dossier-hero {
+    background-color: var(--black);
+    padding: 0;
+    margin: 0;
+    position: relative;
+}
+
+.dossier-container {
+    width: 100%;
+    height: 100vh;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+
+.dossier-slide {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    background-color: var(--black);
+}
+
+.dossier-slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    display: block;
+}
+
+.scroll-down-hint {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
     text-align: center;
-    padding: 8rem 0;
 }
 
-.hero h1 {
-    font-size: 4rem;
-    margin-bottom: 1rem;
+.scroll-down-hint .btn {
+    animation: pulse 2s infinite;
 }
 
-.hero p {
-    font-size: 1.2rem;
-    max-width: 700px;
-    margin: 0 auto 2rem;
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+    50% {
+        transform: scale(1.05);
+        opacity: 0.9;
+    }
 }
 
 .btn {
@@ -687,12 +730,20 @@ footer {
         padding: 0.5rem;
     }
     
-    .hero h1 {
-        font-size: 2.5rem;
+    .dossier-slide img {
+        object-fit: contain;
+        width: 100%;
+        height: auto;
+        max-height: 100vh;
     }
     
-    .hero p {
+    .scroll-down-hint {
+        bottom: 1rem;
+    }
+    
+    .scroll-down-hint .btn {
         font-size: 1rem;
+        padding: 0.6rem 1.2rem;
     }
     
     .music-container,
