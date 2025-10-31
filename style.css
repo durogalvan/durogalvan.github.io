@@ -760,11 +760,15 @@ body#index-home header {
     }
     
     /* Optimización móvil para dossier */
+    .dossier-hero {
+        padding-top: 60px; /* Añadir padding para compensar el header fijo */
+    }
+    
     .dossier-container {
         scroll-padding: 0;
         scroll-snap-type: none; /* Desactivar scroll snap en móvil */
         height: auto; /* Permitir altura automática */
-        max-height: 100vh;
+        max-height: calc(100vh - 60px); /* Restar altura del header */
     }
     
     .dossier-slide {
@@ -790,4 +794,8 @@ body#index-home header {
         padding: 0;
         display: block;
         vertical-align: top;
+    }
+    
+    .scroll-down-hint {
+        top: 70px; /* Ajustar posición del botón */
     }
