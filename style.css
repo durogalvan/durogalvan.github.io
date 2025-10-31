@@ -70,17 +70,17 @@ header {
     flex-shrink: 0;
 } */
 
-.logo span {
-    font-family: 'Grand Paradiso', serif;
-    color: var(--dark-red);
-}
-
 .logo {
-    font-size: 1.5rem;
+    font-size: 1rem;
 }
     
 .logo img {
-    height: 30px;
+    height: 20px;
+}
+
+.logo span {
+    font-family: 'Grand Paradiso', serif;
+    color: var(--dark-red);
 }
 
 nav {
@@ -739,7 +739,7 @@ body#index-home header {
     }
     
     .logo {
-        font-size: 1.5rem;
+        font-size: 1rem;
     }
     
     .logo img {
