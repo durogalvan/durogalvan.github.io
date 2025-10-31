@@ -735,7 +735,7 @@ body#index-home header {
         flex-direction: row;
         gap: 0rem;
         justify-content: space-between;
-        align-items: center;
+        align-items: left;
     }
     
     .logo {
@@ -743,7 +743,7 @@ body#index-home header {
     }
     
     .logo img {
-        height: 30px;
+        height: 20px;
     }
     
     nav {
