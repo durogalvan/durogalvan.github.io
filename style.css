@@ -711,6 +711,11 @@ footer {
     background-color: rgba(255, 255, 255, 0.4);
 }
 
+body#index-home header {
+    position: relative;
+    box-shadow: none;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
     .header-container {
