@@ -62,7 +62,7 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 1.5rem;
+    gap: 2rem;
 }
 
 .logo {
@@ -71,7 +71,7 @@ header {
 }
     
 .logo img {
-    height: 30px;
+    height: 35px;
 }
 
 .logo span {
@@ -166,12 +166,21 @@ nav ul li a:hover {
     vertical-align: top; /* Importante para imágenes */
 }
 
+/* Mostrar solo imágenes desktop por defecto */
+.dossier-mobile {
+    display: none !important;
+}
+
+.dossier-desktop {
+    display: block;
+}
+
 .scroll-down-hint {
     position: fixed;
-    top: 3.5rem;
+    top: 80px;
     left: 50%;
     transform: translateX(-50%) scale(0.7);
-    z-index: 1000;
+    z-index: 1001;
     text-align: center;
 }
 
@@ -735,7 +744,7 @@ body#index-home header {
         flex-direction: row;
         gap: 0rem;
         justify-content: space-between;
-        align-items: left;
+        align-items: center;
     }
     
     .logo {
@@ -808,9 +817,19 @@ body#index-home header {
         vertical-align: top;
     }
     
+    /* Mostrar imágenes móvil en dispositivos pequeños */
+    .dossier-mobile {
+        display: block !important;
+    }
+    
+    .dossier-desktop {
+        display: none !important;
+    }
+    
     .scroll-down-hint {
         top: 70px; /* Ajustar posición del botón */
     }
+    
     .music-container,
     .products,
     .product-detail {
@@ -856,4 +875,3 @@ body#index-home header {
         top: 10px;
         right: 10px;
     }
-}
