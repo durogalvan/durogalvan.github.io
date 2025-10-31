@@ -155,9 +155,9 @@ nav ul li a:hover {
 
 .scroll-down-hint {
     position: absolute;
-    top: 3rem;
+    top: 2rem;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%) scale(0.7);
     z-index: 100;
     text-align: center;
 }
