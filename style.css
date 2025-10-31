@@ -108,7 +108,7 @@ nav ul li a:hover {
     margin: 0;
     position: relative;
     overflow: hidden;
-    height: 100vh;
+    height: 90vh;
     padding-top: 96px; /* Ajusta este valor */
     box-sizing: border-box;
 }
