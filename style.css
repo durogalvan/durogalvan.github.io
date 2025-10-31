@@ -506,10 +506,11 @@ section {
 
 /* Footer */
 footer {
-    background-color: var(--ivory);
+    /* background-color: var(--ivory);
     color: var(--black);
     text-align: center;
-    padding: 2rem 0;
+    padding: 2rem 0; */
+    display: none;
 }
 
 /* Páginas de producto */
