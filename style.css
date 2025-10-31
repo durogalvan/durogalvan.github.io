@@ -122,6 +122,7 @@ nav ul li a:hover {
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
     scroll-padding: 0;
+    line-height: 0; /* Forzar line-height 0 aquí también */
 }
 
 .dossier-slide {
@@ -139,6 +140,7 @@ nav ul li a:hover {
     margin: 0;
     line-height: 0;
     position: relative;
+    font-size: 0; /* Esto elimina el espacio entre elementos inline */
 }
 
 .dossier-slide img {
@@ -154,6 +156,7 @@ nav ul li a:hover {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+    vertical-align: top; /* Importante para imágenes */
 }
 
 .scroll-down-hint {
