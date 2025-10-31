@@ -172,7 +172,7 @@ nav ul li a:hover {
 }
 
 .dossier-desktop {
-    display: block;
+    display: block !important;
 }
 
 .scroll-down-hint {
