@@ -743,7 +743,8 @@ body#index-home header {
     }
     
     .logo img {
-        height: 30px;
+        height: 25px;
+        align-items: left;
     }
     
     nav {
