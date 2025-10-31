@@ -48,7 +48,7 @@ h2 {
 header {
     background-color: var(--ivory);
     color: var(--black);
-    padding: 0.75rem 0;
+    padding: 0.5rem 0;
     position: fixed;
     top: 0;
     left: 0;
@@ -62,7 +62,7 @@ header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: 3rem;
+    gap: 2rem;
 }
 
 .logo {
@@ -71,7 +71,7 @@ header {
 }
     
 .logo img {
-    height: 45px;
+    height: 30px;
 }
 
 .logo span {
@@ -88,7 +88,7 @@ nav {
 nav ul {
     display: flex;
     list-style: none;
-    gap: 3rem;
+    gap: 2rem;
     align-items: center;
     margin: 0;
 }
@@ -101,7 +101,7 @@ nav ul li a {
     color: var(--black);
     text-decoration: none;
     font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     transition: color 0.3s;
     white-space: nowrap;
 }
