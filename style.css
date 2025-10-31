@@ -101,21 +101,18 @@ nav ul li a:hover {
     color: var(--dark-red);
 }
 
-/* Hero Section con Dossier - MODIFICADO */
+/* Hero Section con Dossier */
 .dossier-hero {
     background-color: var(--ivory);
     padding: 0;
     margin: 0;
     position: relative;
     overflow: hidden;
-    height: 90vh;
-    padding-top: 96px; /* Ajusta este valor */
-    box-sizing: border-box;
 }
 
 .dossier-container {
     width: 100%;
-    height: calc(100vh - 96px); /* Ajusta este valor */
+    height: 100vh;
     overflow-y: scroll;
     overflow-x: hidden;
     scroll-snap-type: y mandatory;
@@ -126,9 +123,9 @@ nav ul li a:hover {
 
 .dossier-slide {
     width: 100%;
-    height: calc(100vh - 96px); /* Ajusta este valor */
-    min-height: calc(100vh - 96px); /* Ajusta este valor */
-    max-height: calc(100vh - 96px); /* Ajusta este valor */
+    height: 100vh;
+    min-height: 100vh;
+    max-height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -140,6 +137,7 @@ nav ul li a:hover {
     line-height: 0;
     position: relative;
 }
+
 .dossier-slide img {
     width: 100%;
     height: 100%;
