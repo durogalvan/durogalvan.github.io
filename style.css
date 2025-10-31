@@ -240,7 +240,7 @@ section {
 
 /* Conciertos */
 .concerts {
-    background-color: var(--light-gray);
+    background-color: var(--ivory);
 }
 
 .concert-list {
@@ -277,7 +277,7 @@ section {
 }
 
 .music-widget {
-    background-color: var(--light-gray);
+    background-color: var(--ivory);
     padding: 1.5rem;
     border-radius: 5px;
     text-align: center;
@@ -291,7 +291,7 @@ section {
 
 /* Tienda */
 .shop {
-    background-color: var(--light-gray);
+    background-color: var(--ivory);
 }
 
 .products {
@@ -303,7 +303,7 @@ section {
 
 .product {
     text-align: center;
-    background-color: var(--white);
+    background-color: var(--ivory);
     padding: 2rem;
     border-radius: 5px;
     box-shadow: 0 3px 10px rgba(0,0,0,0.1);
@@ -403,7 +403,7 @@ section {
 
 /* Formulario de reserva */
 .reservation-form {
-    background-color: var(--white);
+    background-color: var(--ivory);
     padding: 2rem;
     border-radius: 5px;
     box-shadow: 0 3px 10px rgba(0,0,0,0.1);
@@ -462,7 +462,7 @@ section {
 }
 
 .iban-info {
-    background-color: var(--light-gray);
+    background-color: var(--ivory);
     padding: 1rem;
     border-radius: 4px;
     margin-top: 1rem;
@@ -529,7 +529,7 @@ footer {
 /* Páginas de producto */
 .product-page {
     padding: 5rem 0;
-    background-color: var(--white);
+    background-color: var(--ivory);
 }
 
 .product-detail {
@@ -568,7 +568,7 @@ footer {
     overflow: hidden;
     border-radius: 5px;
     box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-    background-color: var(--light-gray);
+    background-color: var(--ivory);
 }
 
 .carousel {
