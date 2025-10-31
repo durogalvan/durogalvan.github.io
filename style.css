@@ -167,7 +167,7 @@ nav ul li a:hover {
 }
 
 .scroll-down-hint {
-    position: absolute;
+    position: fixed;
     top: 5.5rem;
     left: 50%;
     transform: translateX(-50%) scale(0.7);
