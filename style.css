@@ -818,12 +818,13 @@ body#index-home header {
     }
     
     /* Mostrar imágenes móvil en dispositivos pequeños */
-    .dossier-mobile {
-        display: block !important;
-    }
-    
+
     .dossier-desktop {
         display: none !important;
+    }
+    
+    .dossier-mobile {
+        display: block !important;
     }
     
     .scroll-down-hint {
