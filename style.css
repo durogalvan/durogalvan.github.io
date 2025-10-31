@@ -71,11 +71,11 @@ header {
 } */
 
 .logo {
-    font-size: 1rem;
+    font-size: 1.2rem;
 }
     
 .logo img {
-    height: 20px;
+    height: 25px;
 }
 
 .logo span {
@@ -739,12 +739,11 @@ body#index-home header {
     }
     
     .logo {
-        font-size: 1rem;
+        font-size: 1.2rem;
     }
     
     .logo img {
         height: 25px;
-        align-items: left;
     }
     
     nav {
