@@ -51,6 +51,9 @@ header {
     padding: 0;
     position: fixed;
     top: 0;
+    left: 0; /* Añadir esto */
+    right: 0; /* Añadir esto */
+    width: 100%; /* Añadir esto */
     z-index: 1000;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 
@@ -71,11 +74,11 @@ header {
 } */
 
 .logo {
-    font-size: 1.2rem;
+    font-size: 1.5rem;
 }
     
 .logo img {
-    height: 25px;
+    height: 30px;
 }
 
 .logo span {
@@ -739,11 +742,11 @@ body#index-home header {
     }
     
     .logo {
-        font-size: 1.2rem;
+        font-size: 1.5rem;
     }
     
     .logo img {
-        height: 25px;
+        height: 30px;
     }
     
     nav {
