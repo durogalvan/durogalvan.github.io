@@ -109,13 +109,13 @@ nav ul li a:hover {
     position: relative;
     overflow: hidden;
     height: 100vh;
-    padding-top: 85px; /* Ajusta este valor */
+    padding-top: 96px; /* Ajusta este valor */
     box-sizing: border-box;
 }
 
 .dossier-container {
     width: 100%;
-    height: calc(100vh - 85px); /* Ajusta este valor */
+    height: calc(100vh - 96px); /* Ajusta este valor */
     overflow-y: scroll;
     overflow-x: hidden;
     scroll-snap-type: y mandatory;
@@ -126,9 +126,9 @@ nav ul li a:hover {
 
 .dossier-slide {
     width: 100%;
-    height: calc(100vh - 85px); /* Ajusta este valor */
-    min-height: calc(100vh - 85px); /* Ajusta este valor */
-    max-height: calc(100vh - 85px); /* Ajusta este valor */
+    height: calc(100vh - 96px); /* Ajusta este valor */
+    min-height: calc(100vh - 96px); /* Ajusta este valor */
+    max-height: calc(100vh - 96px); /* Ajusta este valor */
     display: flex;
     align-items: center;
     justify-content: center;
