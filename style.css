@@ -62,17 +62,25 @@ header {
     align-items: center;
 }
 
-.logo {
+/* .logo {
     font-family: 'Bebas Neue', sans-serif;
     font-size: 2rem;
     color: var(--black);
     text-decoration: none;
     flex-shrink: 0;
-}
+} */
 
 .logo span {
     font-family: 'Grand Paradiso', serif;
     color: var(--dark-red);
+}
+
+.logo {
+    font-size: 1.5rem;
+}
+    
+.logo img {
+    height: 30px;
 }
 
 nav {
@@ -732,6 +740,10 @@ body#index-home header {
     
     .logo {
         font-size: 1.5rem;
+    }
+    
+    .logo img {
+        height: 30px;
     }
     
     nav {
