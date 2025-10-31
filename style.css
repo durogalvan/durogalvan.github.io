@@ -171,7 +171,7 @@ nav ul li a:hover {
     top: 5.5rem;
     left: 50%;
     transform: translateX(-50%) scale(0.7);
-    z-index: 100;
+    z-index: 1000;
     text-align: center;
 }
 
