@@ -759,80 +759,35 @@ body#index-home header {
         padding: 0.5rem;
     }
     
+    /* Optimización móvil para dossier */
     .dossier-container {
         scroll-padding: 0;
+        scroll-snap-type: none; /* Desactivar scroll snap en móvil */
+        height: auto; /* Permitir altura automática */
+        max-height: 100vh;
     }
     
     .dossier-slide {
-        height: 100vh;
-        min-height: 100vh;
-        max-height: 100vh;
+        height: auto; /* Altura automática basada en la imagen */
+        min-height: unset;
+        max-height: unset;
+        scroll-snap-align: none; /* Sin snap */
+        scroll-snap-stop: normal;
         padding: 0;
         margin: 0;
         line-height: 0;
+        font-size: 0;
     }
     
     .dossier-slide img {
+        position: static; /* Cambiar de absolute a static */
+        transform: none;
         object-fit: contain;
         width: 100%;
-        height: 100vh;
-        max-height: 100vh;
+        height: auto; /* Altura automática */
+        max-height: none;
         margin: 0;
         padding: 0;
+        display: block;
+        vertical-align: top;
     }
-    
-    .scroll-down-hint {
-        bottom: 1rem;
-    }
-    
-    .scroll-down-hint .btn {
-        font-size: 1rem;
-        padding: 0.6rem 1.2rem;
-    }
-    
-    .music-container,
-    .products,
-    .product-detail {
-        grid-template-columns: 1fr;
-    }
-    
-    .payment-method {
-        flex-direction: column;
-    }
-    
-    .carousel-btn {
-        width: 35px;
-        height: 35px;
-        font-size: 1rem;
-    }
-    
-    .sizes {
-        justify-content: center;
-    }
-    
-    .size {
-        width: 45px;
-        height: 45px;
-    }
-    
-    .zoom-btn {
-        width: 40px;
-        height: 40px;
-        font-size: 1.2rem;
-        bottom: 10px;
-        right: 10px;
-    }
-    
-    .zoom-modal-content {
-        width: 95%;
-        height: 70vh;
-    }
-    
-    .zoom-close {
-        width: 50px;
-        height: 50px;
-        font-size: 2.5rem;
-        top: 10px;
-        right: 10px;
-    }
-}
