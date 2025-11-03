@@ -29,7 +29,7 @@ body {
         Arial,                   /* Fallback genérico */
         sans-serif; 
     color: var(--black);
-    background-color: var(--white);
+    background-color: var(--ivory);
     line-height: 1.6;
 }
 
@@ -352,11 +352,11 @@ section {
 }
 
 .white-shirt {
-    background-color: var(--white);
+    background-color: var(--ivory);
 }
 
 .black-shirt {
-    background-color: var(--black);
+    background-color: var(--ivory);
 }
 
 .sizes {
@@ -382,7 +382,7 @@ section {
 
 .size.selected {
     background-color: var(--dark-red);
-    color: var(--white);
+    color: var(--ivory);
     border-color: var(--dark-red);
 }
 
@@ -523,8 +523,8 @@ section {
     display: inline-flex;
     width: 40px;
     height: 40px;
-    background-color: var(--black);
-    color: var(--white);
+    background-color: var(--ivory);
+    color: var(--dark-red);
     border-radius: 50%;
     align-items: center;
     justify-content: center;
