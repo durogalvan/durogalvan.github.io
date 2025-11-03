@@ -17,7 +17,17 @@ html {
 }
 
 body {
-    font-family: 'Grand Paradiso', serif;
+    font-family: 
+        -apple-system,           /* iOS y macOS (San Francisco) */
+        BlinkMacSystemFont,      /* macOS Chrome */
+        "Segoe UI",              /* Windows */
+        Roboto,                  /* Android y Chrome OS */
+        Oxygen-Sans,             /* Linux KDE */
+        Ubuntu,                  /* Linux Ubuntu */
+        Cantarell,               /* Linux GNOME */
+        "Helvetica Neue",        /* macOS antiguos */
+        Arial,                   /* Fallback genérico */
+        sans-serif; 
     color: var(--black);
     background-color: var(--white);
     line-height: 1.6;
