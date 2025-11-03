@@ -155,7 +155,12 @@ function setupFormSubmission() {
     // Google Forms lo maneja automáticamente
 }
 
-// Carousel functionality
+// Detectar si es dispositivo móvil
+function isMobile() {
+    return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
+}
+
+// Carousel functionality con zoom mejorado
 function initializeCarousel(carouselId, dotsContainerId, zoomBtnId, zoomModalId, zoomImageId) {
     const carousel = document.getElementById(carouselId);
     if (!carousel) return;
@@ -165,7 +170,7 @@ function initializeCarousel(carouselId, dotsContainerId, zoomBtnId, zoomModalId,
     const zoomBtn = document.getElementById(zoomBtnId);
     const zoomModal = document.getElementById(zoomModalId);
     const zoomImage = document.getElementById(zoomImageId);
-    const zoomClose = zoomModal.querySelector('.zoom-close');
+    const zoomClose = zoomModal ? zoomModal.querySelector('.zoom-close') : null;
     
     let currentSlide = 0;
     let slideInterval;
@@ -214,41 +219,103 @@ function initializeCarousel(carouselId, dotsContainerId, zoomBtnId, zoomModalId,
         goToSlide(currentSlide);
     }
     
-    // Zoom functionality
-    if (zoomBtn) {
-        zoomBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            const currentImg = slides[currentSlide].querySelector('img');
-            if (currentImg) {
-                console.log('Opening zoom for image:', currentImg.src);
-                zoomImage.src = currentImg.src;
-                zoomModal.style.display = 'flex';
-            }
+    // NUEVO SISTEMA DE ZOOM
+    const mobile = isMobile();
+    
+    if (!mobile) {
+        // DESKTOP: Zoom con hover del cursor
+        slides.forEach(slide => {
+            const img = slide.querySelector('img');
+            if (!img) return;
+            
+            // Crear contenedor de zoom
+            const zoomOverlay = document.createElement('div');
+            zoomOverlay.className = 'zoom-overlay';
+            zoomOverlay.style.backgroundImage = `url(${img.src})`;
+            slide.appendChild(zoomOverlay);
+            
+            slide.addEventListener('mouseenter', () => {
+                zoomOverlay.style.display = 'block';
+            });
+            
+            slide.addEventListener('mouseleave', () => {
+                zoomOverlay.style.display = 'none';
+            });
+            
+            slide.addEventListener('mousemove', (e) => {
+                const rect = slide.getBoundingClientRect();
+                const x = ((e.clientX - rect.left) / rect.width) * 100;
+                const y = ((e.clientY - rect.top) / rect.height) * 100;
+                
+                zoomOverlay.style.backgroundPosition = `${x}% ${y}%`;
+            });
+            
+            // Click para zoom modal completo
+            slide.addEventListener('click', () => {
+                if (zoomModal && zoomImage) {
+                    zoomImage.src = img.src;
+                    zoomModal.classList.add('show');
+                    document.body.style.overflow = 'hidden';
+                }
+            });
         });
+    } else {
+        // MÓVIL: Click para abrir modal con pinch zoom nativo
+        slides.forEach(slide => {
+            const img = slide.querySelector('img');
+            if (!img) return;
+            
+            slide.addEventListener('click', () => {
+                if (zoomModal && zoomImage) {
+                    zoomImage.src = img.src;
+                    zoomModal.classList.add('show');
+                    document.body.style.overflow = 'hidden';
+                }
+            });
+        });
+        
+        // Botón de lupa también abre el modal
+        if (zoomBtn) {
+            zoomBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                const currentImg = slides[currentSlide].querySelector('img');
+                if (currentImg && zoomModal && zoomImage) {
+                    zoomImage.src = currentImg.src;
+                    zoomModal.classList.add('show');
+                    document.body.style.overflow = 'hidden';
+                }
+            });
+        }
     }
     
+    // Cerrar modal
     if (zoomClose) {
         zoomClose.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
-            console.log('Closing zoom');
-            zoomModal.style.display = 'none';
+            if (zoomModal) {
+                zoomModal.classList.remove('show');
+                document.body.style.overflow = '';
+            }
         });
     }
     
-    zoomModal.addEventListener('click', (e) => {
-        if (e.target === zoomModal) {
-            console.log('Closing zoom (clicked outside)');
-            zoomModal.style.display = 'none';
-        }
-    });
+    if (zoomModal) {
+        zoomModal.addEventListener('click', (e) => {
+            if (e.target === zoomModal) {
+                zoomModal.classList.remove('show');
+                document.body.style.overflow = '';
+            }
+        });
+    }
     
     const productType = carouselId.split('-')[1];
     
     // Add event listeners for carousel buttons
     document.querySelectorAll(`[data-carousel="${productType}"]`).forEach(button => {
-        button.addEventListener('click', () => {
+        button.addEventListener('click', (e) => {
+            e.stopPropagation();
             if (button.classList.contains('carousel-next')) {
                 nextSlide();
             } else {
