@@ -425,7 +425,7 @@
 
         .product-image {
             width: 100%;
-            height: 350px;
+            height: 500px;
             margin: 0 auto 2rem;
             border-radius: 15px;
             overflow: hidden;
@@ -435,7 +435,7 @@
         .product-image img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
             transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
@@ -497,12 +497,24 @@
             border-radius: 20px;
             overflow: hidden;
             box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+            position: relative;
+        }
+
+        .splide__slide {
+            position: relative;
+            overflow: hidden;
         }
 
         .splide__slide img {
             width: 100%;
             height: 500px;
             object-fit: cover;
+            transition: transform 0.3s ease;
+            cursor: zoom-in;
+        }
+
+        .splide__slide:hover img {
+            transform: scale(1.05);
         }
 
         .splide__arrow {
@@ -889,6 +901,10 @@
                 <div class="music-widget">
                     <h3>Nuestro último vídeo</h3>
                     <iframe width="100%" height="315" src="https://www.youtube.com/embed/a_PeEV-MVaQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+                <div class="music-widget">
+                    <h3>Vídeos anteriores</h3>
+                    <iframe width="100%" height="315" src="https://www.youtube.com/embed/f_C5xEpYyDA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                 </div>
             </div>
         </div>
@@ -1286,7 +1302,7 @@
             }, 30000);
         }
 
-        // ============ NUEVO CÓDIGO PARA MEJORAS VISUALES ============
+        // ============ CÓDIGO PARA MEJORAS VISUALES ============
         
         // Inicializar Splide para carruseles
         function initializeSplide(splideId, zoomBtnId, zoomModalId, zoomImageId) {
@@ -1307,7 +1323,7 @@
             
             splide.mount();
             
-            // Zoom functionality
+            // Zoom functionality - Click en el botón
             const zoomBtn = document.getElementById(zoomBtnId);
             const zoomModal = document.getElementById(zoomModalId);
             const zoomImage = document.getElementById(zoomImageId);
@@ -1320,6 +1336,18 @@
                         zoomImage.src = img.src;
                         zoomModal.classList.add('show');
                         document.body.style.overflow = 'hidden';
+                    }
+                });
+                
+                // Zoom on click sobre las imágenes
+                splide.Components.Elements.slides.forEach(slide => {
+                    const img = slide.querySelector('img');
+                    if (img) {
+                        img.addEventListener('click', () => {
+                            zoomImage.src = img.src;
+                            zoomModal.classList.add('show');
+                            document.body.style.overflow = 'hidden';
+                        });
                     }
                 });
                 
