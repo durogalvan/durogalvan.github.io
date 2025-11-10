@@ -1,0 +1,1476 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duro Galván - Página Oficial</title>
+    <link rel="icon" type="image/png" href="images/32.png">
+    
+    <!-- Fuentes modernas -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Librerías externas -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/splide/4.1.4/css/splide.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/splide/4.1.4/js/splide.min.js"></script>
+    
+    <style>
+        :root {
+            --primary: #1a1a1a;
+            --secondary: #800020;
+            --accent: #c41e3a;
+            --light: #f8f8f8;
+            --white: #ffffff;
+            --gray: #6b6b6b;
+            --gradient: linear-gradient(135deg, #800020 0%, #c41e3a 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--primary);
+            background: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Canvas de fondo con partículas */
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.4;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header mejorado */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        header.scrolled {
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo img {
+            height: 40px;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover img {
+            transform: scale(1.05);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        nav ul li a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            letter-spacing: 0.02em;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient);
+            transition: width 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: var(--secondary);
+        }
+
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section modernizado */
+        .dossier-hero {
+            background: linear-gradient(to bottom, #f8f8f8 0%, #ffffff 100%);
+            padding: 0;
+            margin: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dossier-container {
+            width: 100%;
+            height: 100vh;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .dossier-slide {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            scroll-snap-align: start;
+            position: relative;
+            opacity: 0;
+            animation: fadeInSlide 0.8s ease forwards;
+        }
+
+        @keyframes fadeInSlide {
+            to { opacity: 1; }
+        }
+
+        .dossier-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: contrast(1.05) brightness(1.02);
+            transition: transform 0.5s ease;
+        }
+
+        .dossier-slide:hover img {
+            transform: scale(1.02);
+        }
+
+        .dossier-mobile {
+            display: none !important;
+        }
+
+        .scroll-down-hint {
+            position: fixed;
+            top: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1001;
+        }
+
+        /* Botones modernos */
+        .btn {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: var(--gradient);
+            color: var(--white);
+            text-decoration: none;
+            border: none;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 0.95rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 50px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 30px rgba(128, 0, 32, 0.3);
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(128, 0, 32, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
+        }
+
+        /* Sections mejoradas */
+        section {
+            padding: 8rem 0;
+            position: relative;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 3.5rem;
+            margin-bottom: 4rem;
+            position: relative;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .section-title.animate {
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--gradient);
+            margin: 1.5rem auto;
+            border-radius: 2px;
+        }
+
+        /* Conciertos modernizados */
+        .concert-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+        }
+
+        .concert-item {
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .concert-item.animate {
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .concert-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--gradient);
+            transform: scaleY(0);
+            transition: transform 0.4s ease;
+        }
+
+        .concert-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .concert-item:hover::before {
+            transform: scaleY(1);
+        }
+
+        .concert-date {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .concert-location {
+            font-weight: 600;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        /* Música con grid mejorado */
+        .music-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 3rem;
+        }
+
+        .music-widget {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s ease;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .music-widget.animate {
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .music-widget:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .music-widget h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+
+        .music-widget iframe {
+            width: 100%;
+            border-radius: 12px;
+        }
+
+        /* Tienda moderna */
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 4rem;
+        }
+
+        .product {
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .product.animate {
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .product::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(128, 0, 32, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .product:hover::before {
+            opacity: 1;
+        }
+
+        .product:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.2);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 350px;
+            margin: 0 auto 2rem;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .product:hover .product-image img {
+            transform: scale(1.1) rotate(2deg);
+        }
+
+        .product h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .product h3 {
+            color: var(--secondary);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .stock-info {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin: 1rem 0;
+            padding: 1rem;
+            background: rgba(128, 0, 32, 0.05);
+            border-radius: 10px;
+        }
+
+        /* Página de producto */
+        .product-page {
+            padding: 8rem 0;
+            background: var(--white);
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--secondary);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            margin-bottom: 3rem;
+        }
+
+        .back-link:hover {
+            gap: 1rem;
+            color: var(--accent);
+        }
+
+        .product-detail {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5rem;
+        }
+
+        /* Carrusel con Splide */
+        .splide {
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .splide__slide img {
+            width: 100%;
+            height: 500px;
+            object-fit: cover;
+        }
+
+        .splide__arrow {
+            background: var(--gradient);
+            opacity: 0.9;
+            width: 3rem;
+            height: 3rem;
+        }
+
+        .splide__arrow:hover {
+            opacity: 1;
+        }
+
+        .splide__pagination__page.is-active {
+            background: var(--secondary);
+        }
+
+        .zoom-btn {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 20px rgba(128, 0, 32, 0.4);
+            z-index: 10;
+        }
+
+        .zoom-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 30px rgba(128, 0, 32, 0.6);
+        }
+
+        /* Modal de zoom */
+        .zoom-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .zoom-modal.show {
+            display: flex !important;
+        }
+
+        .zoom-modal-content {
+            position: relative;
+            max-width: 90%;
+            max-height: 90vh;
+        }
+
+        .zoom-modal-content img {
+            max-width: 100%;
+            max-height: 90vh;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        .zoom-close {
+            position: absolute;
+            top: -50px;
+            right: 0;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 3rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .zoom-close:hover {
+            transform: rotate(90deg);
+        }
+
+        .availability-warning {
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            border-radius: 12px;
+            display: none;
+        }
+
+        .availability-warning.show {
+            display: block;
+            background: linear-gradient(135deg, #fff3cd 0%, #ffe9a6 100%);
+            border-left: 4px solid #ffc107;
+            color: #856404;
+        }
+
+        .availability-warning.all-sold-out {
+            background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+            border-left: 4px solid #dc3545;
+            color: #721c24;
+        }
+
+        /* Contacto */
+        .contact-info {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .contact-info p {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-info a {
+            color: var(--secondary);
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .contact-info a:hover {
+            color: var(--accent);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .social-link {
+            display: flex;
+            width: 60px;
+            height: 60px;
+            background: var(--gradient);
+            color: white;
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.2rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 30px rgba(128, 0, 32, 0.3);
+        }
+
+        .social-link:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 15px 40px rgba(128, 0, 32, 0.5);
+        }
+
+        /* Loading animation */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--white);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(128, 0, 32, 0.1);
+            border-top: 4px solid var(--secondary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-container {
+                padding: 0.8rem 0;
+            }
+
+            .logo img {
+                height: 30px;
+            }
+
+            nav ul {
+                gap: 1rem;
+                overflow-x: auto;
+                padding: 0.5rem 0;
+            }
+
+            nav ul li a {
+                font-size: 0.85rem;
+                white-space: nowrap;
+            }
+
+            .section-title {
+                font-size: 2.5rem;
+            }
+
+            .dossier-desktop {
+                display: none !important;
+            }
+
+            .dossier-mobile {
+                display: block !important;
+            }
+
+            .dossier-slide {
+                height: auto;
+                min-height: unset;
+            }
+
+            .dossier-slide img {
+                position: static;
+                height: auto;
+            }
+
+            .concert-list,
+            .music-container,
+            .products,
+            .product-detail {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .product-detail {
+                gap: 3rem;
+            }
+
+            section {
+                padding: 5rem 0;
+            }
+
+            .btn {
+                padding: 0.9rem 2rem;
+                font-size: 0.85rem;
+            }
+
+            .splide__slide img {
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading overlay -->
+    <div class="loading-overlay">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Canvas para partículas -->
+    <div id="particles-canvas"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="#inicio" class="logo">
+                <img src="images/LETRAS-DURO-GALVAN-(Negro)-(1).png" alt="Duro Galván">
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="#inicio">Inicio</a></li>
+                    <li><a href="#musica">Música</a></li>
+                    <li><a href="#tienda">Tienda</a></li>
+                    <li><a href="#conciertos">Conciertos</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section con Dossier -->
+    <section class="dossier-hero" id="inicio">
+        <div class="dossier-container">
+            <div class="dossier-slide">
+                <img class="dossier-desktop" src="images/Dossier-Duro-Galván-1_page-0001.jpg" alt="Dossier página 1">
+                <img class="dossier-mobile" src="dossier-vertical/Dossier Duro Galván Vertical (3)_page-0001.jpg" alt="Dossier página 1">
+            </div>
+            <div class="dossier-slide">
+                <img class="dossier-desktop" src="images/Dossier-Duro-Galván-1_page-0002.jpg" alt="Dossier página 2">
+                <img class="dossier-mobile" src="dossier-vertical/Dossier Duro Galván Vertical (3)_page-0002.jpg" alt="Dossier página 2">
+            </div>
+            <div class="dossier-slide">
+                <img class="dossier-desktop" src="images/Dossier-Duro-Galván-1_page-0003.jpg" alt="Dossier página 3">
+                <img class="dossier-mobile" src="dossier-vertical/Dossier Duro Galván Vertical (3)_page-0003.jpg" alt="Dossier página 3">
+            </div>
+            <div class="dossier-slide">
+                <img class="dossier-desktop" src="images/Dossier-Duro-Galván-1_page-0004.jpg" alt="Dossier página 4">
+                <img class="dossier-mobile" src="dossier-vertical/Dossier Duro Galván Vertical (3)_page-0004.jpg" alt="Dossier página 4">
+            </div>
+            <div class="dossier-slide">
+                <img class="dossier-desktop" src="images/Dossier-Duro-Galván-1_page-0005.jpg" alt="Dossier página 5">
+                <img class="dossier-mobile" src="dossier-vertical/Dossier Duro Galván Vertical (3)_page-0005.jpg" alt="Dossier página 5">
+            </div>
+            <div class="dossier-slide">
+                <img class="dossier-desktop" src="images/Dossier-Duro-Galván-1_page-0006.jpg" alt="Dossier página 6">
+                <img class="dossier-mobile" src="dossier-vertical/Dossier Duro Galván Vertical (3)_page-0006.jpg" alt="Dossier página 6">
+            </div>
+            <div class="dossier-slide">
+                <img class="dossier-desktop" src="images/Dossier-Duro-Galván-1_page-0007.jpg" alt="Dossier página 7">
+                <img class="dossier-mobile" src="dossier-vertical/Dossier Duro Galván Vertical (3)_page-0007.jpg" alt="Dossier página 7">
+            </div>
+            <div class="dossier-slide">
+                <img class="dossier-desktop" src="images/Dossier-Duro-Galván-1_page-0008.jpg" alt="Dossier página 8">
+                <img class="dossier-mobile" src="dossier-vertical/Dossier Duro Galván Vertical (3)_page-0008.jpg" alt="Dossier página 8">
+            </div>
+            <div class="dossier-slide">
+                <img class="dossier-desktop" src="images/Dossier-Duro-Galván-1_page-0009.jpg" alt="Dossier página 9">
+                <img class="dossier-mobile" src="dossier-vertical/Dossier Duro Galván Vertical (3)_page-0009.jpg" alt="Dossier página 9">
+            </div>
+            <div class="dossier-slide">
+                <img class="dossier-desktop" src="images/Dossier-Duro-Galván-1_page-0010.jpg" alt="Dossier página 10">
+                <img class="dossier-mobile" src="dossier-vertical/Dossier Duro Galván Vertical (3)_page-0010.jpg" alt="Dossier página 10">
+            </div>
+            <div class="dossier-slide">
+                <img class="dossier-desktop" src="images/Dossier-Duro-Galván-1_page-0011.jpg" alt="Dossier página 11">
+                <img class="dossier-mobile" src="dossier-vertical/Dossier Duro Galván Vertical (3)_page-0011.jpg" alt="Dossier página 11">
+            </div>
+            <div class="dossier-slide">
+                <img class="dossier-desktop" src="images/Dossier-Duro-Galván-1_page-0012.jpg" alt="Dossier página 12">
+                <img class="dossier-mobile" src="dossier-vertical/Dossier Duro Galván Vertical (3)_page-0012.jpg" alt="Dossier página 12">
+            </div>
+            <div class="dossier-slide">
+                <img class="dossier-desktop" src="images/Dossier-Duro-Galván-1_page-0013.jpg" alt="Dossier página 13">
+                <img class="dossier-mobile" src="dossier-vertical/Dossier Duro Galván Vertical (3)_page-0013.jpg" alt="Dossier página 13">
+            </div>
+        </div>
+        
+        <div class="scroll-down-hint">
+            <a href="#tienda" class="btn">Ver merchandising</a>
+        </div>
+    </section>
+
+    <!-- Próximos Conciertos -->
+    <section class="concerts" id="conciertos">
+        <div class="container">
+            <h2 class="section-title">Próximos Conciertos</h2>
+            <div class="concert-list">
+                <div class="concert-item">
+                    <div class="concert-date">19 NOVIEMBRE 2025</div>
+                    <div class="concert-location">The Godfather Rock Club</div>
+                    <p>No te pierdas nuestro próximo concierto en el barrio.</p>
+                    <a href="https://buytickets.at/durogalvn/1888685" class="btn" target="_blank" rel="noopener noreferrer" style="margin-top: 1rem;">Comprar entradas</a>
+                </div>
+                <div class="concert-item">
+                    <div class="concert-date">19 JUNIO 2026</div>
+                    <div class="concert-location">Sala ??? con ???</div>
+                    <p>Próximamente más información sobre este concierto.</p>
+                    <div class="btn" style="margin-top: 1rem; background: #ccc; cursor: not-allowed;">Entradas no disponibles</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Nuestra Música -->
+    <section id="musica">
+        <div class="container">
+            <h2 class="section-title">Nuestra Música</h2>
+            <div class="music-container">
+                <div class="music-widget">
+                    <h3>Escúchanos en Spotify</h3>
+                    <iframe src="https://open.spotify.com/embed/artist/2wuECTDTaNfOplWgzem2pQ?utm_source=generator" height="352" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                </div>
+                <div class="music-widget">
+                    <h3>Nuestro último vídeo</h3>
+                    <iframe width="100%" height="315" src="https://www.youtube.com/embed/a_PeEV-MVaQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tienda -->
+    <section class="shop" id="tienda">
+        <div class="container">
+            <h2 class="section-title">Merchandising Oficial</h2>
+            <p style="text-align: center; margin-bottom: 3rem; font-size: 1.1rem; color: var(--gray);">Reserva ahora tu camiseta oficial de Duro Galván. Stock limitado.</p>
+            
+            <div class="products">
+                <div class="product">
+                    <div class="product-image white-shirt">
+                        <img src="images/camiseta-blanca-1.jpeg" alt="Camiseta Blanca Duro Galván" loading="lazy">
+                    </div>
+                    <h2>Camiseta Blanca</h2>
+                    <h3>Precio: 15€</h3>
+                    <div class="stock-info" id="white-stock"></div>
+                    <button class="btn" style="margin-top: 1rem;" onclick="showProductPage('camiseta-blanca')">Ver detalles y reservar</button>
+                </div>
+                
+                <div class="product">
+                    <div class="product-image black-shirt">
+                        <img src="images/camiseta-negra-1.jpeg" alt="Camiseta Negra Duro Galván" loading="lazy">
+                    </div>
+                    <h2>Camiseta Negra</h2>
+                    <h3>Precio: 15€</h3>
+                    <div class="stock-info" id="black-stock"></div>
+                    <button class="btn" style="margin-top: 1rem;" onclick="showProductPage('camiseta-negra')">Ver detalles y reservar</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Página de Camiseta Blanca -->
+    <section id="camiseta-blanca" class="product-page" style="display: none;">
+        <div class="container">
+            <a href="#tienda" class="back-link">← Volver a la tienda</a>
+            
+            <div class="product-detail">
+                <div class="product-gallery">
+                    <div class="carousel-wrapper">
+                        <div class="splide" id="splide-white">
+                            <div class="splide__track">
+                                <ul class="splide__list">
+                                    <li class="splide__slide">
+                                        <img src="images/camiseta-blanca-1.jpeg" alt="Camiseta Blanca - Vista 1" loading="lazy">
+                                    </li>
+                                    <li class="splide__slide">
+                                        <img src="images/camiseta-blanca-2.jpeg" alt="Camiseta Blanca - Vista 2" loading="lazy">
+                                    </li>
+                                    <li class="splide__slide">
+                                        <img src="images/camiseta-blanca-3.jpeg" alt="Camiseta Blanca - Vista 3" loading="lazy">
+                                    </li>
+                                    <li class="splide__slide">
+                                        <img src="images/camiseta-blanca-4.jpeg" alt="Camiseta Blanca - Vista 4" loading="lazy">
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <button class="zoom-btn" id="zoom-btn-white" title="Ampliar imagen">🔍</button>
+                    </div>
+                </div>
+
+                <div class="zoom-modal" id="zoom-modal-white">
+                    <div class="zoom-modal-content">
+                        <button class="zoom-close">&times;</button>
+                        <img id="zoom-image-white" src="" alt="Imagen ampliada">
+                    </div>
+                </div>
+                
+                <div class="product-info">
+                    <h2>Camiseta Blanca</h2>
+                    <h3>Precio: 15€</h3>
+                    <p>Camiseta de algodón 100% con el logo de Duro Galván impreso en serigrafía de alta calidad. Disponible en varias tallas.</p>
+                    
+                    <div class="stock-info" id="white-stock-detail"></div>
+                    <div id="white-availability-warning" class="availability-warning"></div>
+                    
+                    <div style="margin-top: 2rem;">
+                        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfk26ChcLyfErGwnB6oU5Q4l0B063AExFuZcd4qQUn4ElRCUQ/viewform?embedded=true" width="100%" height="800" frameborder="0" marginheight="0" marginwidth="0">Cargando…</iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Página de Camiseta Negra -->
+    <section id="camiseta-negra" class="product-page" style="display: none;">
+        <div class="container">
+            <a href="#tienda" class="back-link">← Volver a la tienda</a>
+            
+            <div class="product-detail">
+                <div class="product-gallery">
+                    <div class="carousel-wrapper">
+                        <div class="splide" id="splide-black">
+                            <div class="splide__track">
+                                <ul class="splide__list">
+                                    <li class="splide__slide">
+                                        <img src="images/camiseta-negra-1.jpeg" alt="Camiseta Negra - Vista 1" loading="lazy">
+                                    </li>
+                                    <li class="splide__slide">
+                                        <img src="images/camiseta-negra-2.jpeg" alt="Camiseta Negra - Vista 2" loading="lazy">
+                                    </li>
+                                    <li class="splide__slide">
+                                        <img src="images/camiseta-negra-3.jpeg" alt="Camiseta Negra - Vista 3" loading="lazy">
+                                    </li>
+                                    <li class="splide__slide">
+                                        <img src="images/camiseta-negra-4.jpeg" alt="Camiseta Negra - Vista 4" loading="lazy">
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <button class="zoom-btn" id="zoom-btn-black" title="Ampliar imagen">🔍</button>
+                    </div>
+                </div>
+
+                <div class="zoom-modal" id="zoom-modal-black">
+                    <div class="zoom-modal-content">
+                        <button class="zoom-close">&times;</button>
+                        <img id="zoom-image-black" src="" alt="Imagen ampliada">
+                    </div>
+                </div>
+                
+                <div class="product-info">
+                    <h2>Camiseta Negra</h2>
+                    <h3>Precio: 15€</h3>
+                    <p>Camiseta de algodón 100% con el logo de Duro Galván impreso en serigrafía de alta calidad. Disponible en varias tallas.</p>
+                    
+                    <div class="stock-info" id="black-stock-detail"></div>
+                    <div id="black-availability-warning" class="availability-warning"></div>
+                    
+                    <div style="margin-top: 2rem;">
+                        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfk26ChcLyfErGwnB6oU5Q4l0B063AExFuZcd4qQUn4ElRCUQ/viewform?embedded=true" width="100%" height="800" frameborder="0" marginheight="0" marginwidth="0">Cargando…</iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contacto -->
+    <section id="contacto">
+        <div class="container">
+            <h2 class="section-title">Contacto</h2>
+            <div class="contact-info">
+                <p>¿Tienes alguna pregunta? ¡No dudes en contactarnos!</p>
+                <p>Email: <a href="mailto:durogalvanband@gmail.com">durogalvanband@gmail.com</a></p>
+                <div class="social-links">
+                    <a href="https://instagram.com/durogalvan" class="social-link" target="_blank" rel="noopener noreferrer">IG</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Script original mantenido -->
+    <script>
+        // ============ CÓDIGO ORIGINAL MANTENIDO ============
+        let stock = {
+            'Blanca': { S: 5, M: 30, L: 41, XL: 21, XXL: 3 },
+            'Negra': { S: 5, M: 30, L: 41, XL: 21, XXL: 3 }
+        };
+
+        const STOCK_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx4fbmrL9nbqJB6uZZHfQEKbb1CDMkSni92noF12c2RcTpW9yThKobb7owXp4GZsV74/exec?action=getStock';
+
+        function initializeStock() {
+            console.log('=== Initializing Stock ===');
+            syncStockFromServer();
+        }
+
+        function syncStockFromServer() {
+            console.log('=== Syncing Stock from Server ===');
+            console.log('Fetching from:', STOCK_SCRIPT_URL);
+            
+            fetch(STOCK_SCRIPT_URL)
+                .then(response => {
+                    console.log('Response status:', response.status);
+                    console.log('Response type:', response.type);
+                    return response.json();
+                })
+                .then(data => {
+                    console.log('Full API Response:', JSON.stringify(data));
+                    console.log('Data keys:', Object.keys(data));
+                    console.log('data.success:', data.success);
+                    console.log('data.stock:', data.stock);
+                    
+                    if (data.success && data.stock) {
+                        console.log('✓ Stock received successfully');
+                        stock = data.stock;
+                        console.log('Stock object updated to:', stock);
+                        updateStockDisplay();
+                        updateFormValidation();
+                        console.log('Display and validation updated');
+                    } else {
+                        console.warn('✗ API response not successful');
+                        console.warn('Success:', data.success, 'Stock:', data.stock);
+                        console.warn('Error:', data.error);
+                    }
+                })
+                .catch(error => {
+                    console.error('✗ Fetch error:', error);
+                    console.log('Using stock local...');
+                    updateStockDisplay();
+                    updateFormValidation();
+                });
+        }
+
+        function updateStockDisplay() {
+            const whiteStockElements = document.querySelectorAll('#white-stock, #white-stock-detail');
+            let whiteStockText = 'Disponible: ';
+            for (const size in stock['Blanca']) {
+                whiteStockText += `${size}: ${stock['Blanca'][size]} | `;
+            }
+            whiteStockElements.forEach(el => {
+                if (el) el.textContent = whiteStockText.slice(0, -3);
+            });
+
+            const blackStockElements = document.querySelectorAll('#black-stock, #black-stock-detail');
+            let blackStockText = 'Disponible: ';
+            for (const size in stock['Negra']) {
+                blackStockText += `${size}: ${stock['Negra'][size]} | `;
+            }
+            blackStockElements.forEach(el => {
+                if (el) el.textContent = blackStockText.slice(0, -3);
+            });
+        }
+
+        function updateFormValidation() {
+            updateSelectOptions('size-white', stock['Blanca']);
+            updateSelectOptions('size-black', stock['Negra']);
+            updateAvailabilityWarnings();
+        }
+
+        function updateAvailabilityWarnings() {
+            updateAvailabilityWarning('white', stock['Blanca']);
+            updateAvailabilityWarning('black', stock['Negra']);
+        }
+
+        function updateAvailabilityWarning(product, stockData) {
+            const warningElement = document.getElementById(`${product}-availability-warning`);
+            if (!warningElement) return;
+            
+            const soldOutSizes = [];
+            const availableSizes = [];
+            
+            for (const size in stockData) {
+                if (stockData[size] <= 0) {
+                    soldOutSizes.push(size);
+                } else {
+                    availableSizes.push(`${size} (${stockData[size]} ud.)`);
+                }
+            }
+            
+            warningElement.innerHTML = '';
+            
+            if (soldOutSizes.length > 0) {
+                const allSoldOut = soldOutSizes.length === Object.keys(stockData).length;
+                
+                if (allSoldOut) {
+                    warningElement.innerHTML = `
+                        <strong>⚠️ Camiseta agotada</strong><br>
+                        Lo sentimos, todas las tallas están agotadas.
+                    `;
+                    warningElement.classList.add('show', 'all-sold-out');
+                } else {
+                    warningElement.innerHTML = `
+                        <strong>⚠️ Tallas agotadas:</strong> ${soldOutSizes.join(', ')}<br>
+                        <strong>✓ Disponibles:</strong> ${availableSizes.join(', ')}
+                    `;
+                    warningElement.classList.add('show');
+                    warningElement.classList.remove('all-sold-out');
+                }
+            } else {
+                warningElement.classList.remove('show', 'all-sold-out');
+            }
+        }
+
+        function updateSelectOptions(selectId, stockData) {
+            const select = document.getElementById(selectId);
+            if (!select) return;
+            
+            const options = select.querySelectorAll('option');
+            options.forEach(option => {
+                if (option.value === '') return;
+                
+                const quantity = stockData[option.value];
+                if (quantity > 0) {
+                    option.textContent = option.value;
+                    option.disabled = false;
+                } else {
+                    option.textContent = `${option.value} (Agotado)`;
+                    option.disabled = true;
+                }
+            });
+        }
+
+        function setupPaymentHandler() {
+            // Google Forms maneja esto automáticamente
+        }
+
+        function setupFormSubmission() {
+            // Con el iframe embebido de Google Forms, no necesitamos manejar el envío
+        }
+
+        function isMobile() {
+            return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
+        }
+
+        function showProductPage(productId) {
+            const sectionId = productId;
+            
+            document.querySelectorAll('section').forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.style.display = 'block';
+                
+                if (sectionId === 'camiseta-blanca') {
+                    initializeSplide('splide-white', 'zoom-btn-white', 'zoom-modal-white', 'zoom-image-white');
+                } else if (sectionId === 'camiseta-negra') {
+                    initializeSplide('splide-black', 'zoom-btn-black', 'zoom-modal-black', 'zoom-image-black');
+                }
+                
+                setTimeout(() => {
+                    setupPaymentHandler();
+                }, 100);
+            }
+            
+            window.scrollTo(0, 0);
+        }
+
+        function showSection(sectionId) {
+            document.querySelectorAll('section').forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.style.display = 'block';
+                
+                if (sectionId === 'camiseta-blanca') {
+                    initializeSplide('splide-white', 'zoom-btn-white', 'zoom-modal-white', 'zoom-image-white');
+                } else if (sectionId === 'camiseta-negra') {
+                    initializeSplide('splide-black', 'zoom-btn-black', 'zoom-modal-black', 'zoom-image-black');
+                }
+                
+                setTimeout(() => {
+                    setupPaymentHandler();
+                }, 100);
+            }
+            
+            window.scrollTo(0, 0);
+        }
+
+        function showSectionBasedOnHash() {
+            const hash = window.location.hash.substring(1);
+            const sectionId = hash || 'inicio';
+            console.log('Showing section:', sectionId);
+            showSection(sectionId);
+        }
+
+        function setupNavigation() {
+            console.log('Setting up navigation');
+            
+            window.addEventListener('hashchange', () => {
+                console.log('Hash changed to:', window.location.hash);
+                showSectionBasedOnHash();
+            });
+            
+            document.querySelectorAll('.back-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    console.log('Back link clicked');
+                    window.location.hash = 'tienda';
+                    showSectionBasedOnHash();
+                });
+            });
+            
+            document.querySelectorAll('nav a[href^="#"]').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    console.log('Nav link clicked, going to:', targetId);
+                    window.location.hash = targetId;
+                    showSectionBasedOnHash();
+                });
+            });
+        }
+
+        function setupStockSync() {
+            setInterval(() => {
+                syncStockFromServer();
+            }, 30000);
+        }
+
+        // ============ NUEVO CÓDIGO PARA MEJORAS VISUALES ============
+        
+        // Inicializar Splide para carruseles
+        function initializeSplide(splideId, zoomBtnId, zoomModalId, zoomImageId) {
+            const splideElement = document.getElementById(splideId);
+            if (!splideElement) return;
+            
+            const splide = new Splide(`#${splideId}`, {
+                type: 'loop',
+                perPage: 1,
+                autoplay: true,
+                interval: 4000,
+                speed: 800,
+                pauseOnHover: true,
+                pauseOnFocus: true,
+                arrows: true,
+                pagination: true,
+            });
+            
+            splide.mount();
+            
+            // Zoom functionality
+            const zoomBtn = document.getElementById(zoomBtnId);
+            const zoomModal = document.getElementById(zoomModalId);
+            const zoomImage = document.getElementById(zoomImageId);
+            
+            if (zoomBtn && zoomModal && zoomImage) {
+                zoomBtn.addEventListener('click', () => {
+                    const currentSlide = splide.Components.Elements.slides[splide.index];
+                    const img = currentSlide.querySelector('img');
+                    if (img) {
+                        zoomImage.src = img.src;
+                        zoomModal.classList.add('show');
+                        document.body.style.overflow = 'hidden';
+                    }
+                });
+                
+                const zoomClose = zoomModal.querySelector('.zoom-close');
+                if (zoomClose) {
+                    zoomClose.addEventListener('click', () => {
+                        zoomModal.classList.remove('show');
+                        document.body.style.overflow = '';
+                    });
+                }
+                
+                zoomModal.addEventListener('click', (e) => {
+                    if (e.target === zoomModal) {
+                        zoomModal.classList.remove('show');
+                        document.body.style.overflow = '';
+                    }
+                });
+            }
+        }
+
+        // Animaciones con Anime.js
+        function initAnimations() {
+            // Animar elementos al scroll
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('animate');
+                        
+                        if (entry.target.classList.contains('section-title')) {
+                            anime({
+                                targets: entry.target,
+                                opacity: [0, 1],
+                                translateY: [30, 0],
+                                duration: 800,
+                                easing: 'easeOutCubic'
+                            });
+                        }
+                        
+                        if (entry.target.classList.contains('concert-item') || 
+                            entry.target.classList.contains('music-widget') || 
+                            entry.target.classList.contains('product')) {
+                            anime({
+                                targets: entry.target,
+                                opacity: [0, 1],
+                                translateY: [50, 0],
+                                duration: 800,
+                                easing: 'easeOutCubic',
+                                delay: anime.stagger(100)
+                            });
+                        }
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.section-title, .concert-item, .music-widget, .product').forEach(el => {
+                observer.observe(el);
+            });
+        }
+
+        // Partículas con p5.js
+        function setupParticles() {
+            new p5((sketch) => {
+                let particles = [];
+                const numParticles = 50;
+
+                sketch.setup = () => {
+                    const canvas = sketch.createCanvas(sketch.windowWidth, sketch.windowHeight);
+                    canvas.parent('particles-canvas');
+                    
+                    for (let i = 0; i < numParticles; i++) {
+                        particles.push(new Particle(sketch));
+                    }
+                };
+
+                sketch.draw = () => {
+                    sketch.clear();
+                    particles.forEach(p => {
+                        p.update();
+                        p.display();
+                    });
+                };
+
+                sketch.windowResized = () => {
+                    sketch.resizeCanvas(sketch.windowWidth, sketch.windowHeight);
+                };
+
+                class Particle {
+                    constructor(sketch) {
+                        this.sketch = sketch;
+                        this.x = sketch.random(sketch.width);
+                        this.y = sketch.random(sketch.height);
+                        this.vx = sketch.random(-0.5, 0.5);
+                        this.vy = sketch.random(-0.5, 0.5);
+                        this.alpha = sketch.random(50, 150);
+                        this.size = sketch.random(2, 5);
+                    }
+
+                    update() {
+                        this.x += this.vx;
+                        this.y += this.vy;
+
+                        if (this.x < 0 || this.x > this.sketch.width) this.vx *= -1;
+                        if (this.y < 0 || this.y > this.sketch.height) this.vy *= -1;
+                    }
+
+                    display() {
+                        this.sketch.noStroke();
+                        this.sketch.fill(128, 0, 32, this.alpha);
+                        this.sketch.circle(this.x, this.y, this.size);
+                    }
+                }
+            });
+        }
+
+        // Header scroll effect
+        function setupHeaderScroll() {
+            window.addEventListener('scroll', () => {
+                const header = document.querySelector('header');
+                if (window.scrollY > 100) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+        }
+
+        // Ocultar loading overlay
+        function hideLoadingOverlay() {
+            setTimeout(() => {
+                const overlay = document.querySelector('.loading-overlay');
+                overlay.classList.add('hidden');
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                }, 500);
+            }, 1000);
+        }
+
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', function() {
+            hideLoadingOverlay();
+            initializeStock();
+            setupFormSubmission();
+            setupPaymentHandler();
+            setupNavigation();
+            setupStockSync();
+            initAnimations();
+            setupParticles();
+            setupHeaderScroll();
+            
+            showSectionBasedOnHash();
+        });
+    </script>
+</body>
+</html>
