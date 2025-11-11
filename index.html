@@ -1,0 +1,1045 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duro Galván - Página Oficial</title>
+    <link rel="icon" type="image/png" href="images/32.png">
+    
+    <!-- Fuentes modernas -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Librerías externas -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/splide/4.1.4/css/splide.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/splide/4.1.4/js/splide.min.js"></script>
+    
+    <style>
+        :root {
+            --primary: #1a1a1a;
+            --secondary: #800020;
+            --accent: #c41e3a;
+            --light: #f8f8f8;
+            --white: #ffffff;
+            --gray: #6b6b6b;
+            --gradient: linear-gradient(135deg, #800020 0%, #c41e3a 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Roboto,
+                Oxygen-Sans,
+                Ubuntu,
+                Cantarell,
+                "Helvetica Neue",
+                Arial,
+                sans-serif; 
+            color: var(--primary);
+            background: var(--light);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Canvas de fondo con partículas */
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.4;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header mejorado */
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        header.scrolled {
+            box-shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.6rem 0;
+        }
+
+        .logo img {
+            height: 35px;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover img {
+            transform: scale(1.05);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        nav ul li a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            letter-spacing: 0.02em;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--gradient);
+            transition: width 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: var(--secondary);
+        }
+
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section modernizado */
+        .dossier-hero {
+            background: linear-gradient(to bottom, #f8f8f8 0%, #ffffff 100%);
+            padding: 0;
+            margin: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dossier-container {
+            width: 100%;
+            height: 100vh;
+            overflow-y: scroll;
+            overflow-x: hidden;
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .dossier-slide {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            scroll-snap-align: start;
+            position: relative;
+            opacity: 0;
+            animation: fadeInSlide 0.8s ease forwards;
+        }
+
+        @keyframes fadeInSlide {
+            to { opacity: 1; }
+        }
+
+        .dossier-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            filter: contrast(1.05) brightness(1.02);
+            transition: transform 0.5s ease;
+        }
+
+        .dossier-slide:hover img {
+            transform: scale(1.02);
+        }
+
+        .dossier-mobile {
+            display: none !important;
+        }
+
+        .scroll-down-hint {
+            position: fixed;
+            top: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1001;
+        }
+        
+        .scroll-down-hint .btn {
+            background: rgba(128, 0, 32, 0.3);
+            backdrop-filter: blur(10px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .scroll-down-hint .btn:hover {
+            background: var(--gradient);
+            backdrop-filter: none;
+        }
+
+        /* Botones modernos */
+        .btn {
+            display: inline-block;
+            padding: 1rem 1.5rem;
+            background: var(--gradient);
+            color: var(--white);
+            text-decoration: none;
+            border: none;
+            font-family: 'Inter', sans-serif;
+            font-weight: 600;
+            font-size: 0.55rem;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 50px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 30px rgba(128, 0, 32, 0.3);
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.5s;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(128, 0, 32, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(-1px);
+        }
+
+        /* Sections mejoradas con animaciones */
+        section {
+            padding: 8rem 0;
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+        }
+
+        section.dossier-hero {
+            min-height: 100vh;
+            padding: 0;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 3.5rem;
+            margin-bottom: 4rem;
+            position: relative;
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .section-title.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: var(--gradient);
+            margin: 1.5rem auto;
+            border-radius: 2px;
+        }
+
+        /* Animaciones de entrada */
+        .fade-in-up {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .fade-in-up.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .fade-in-left {
+            opacity: 0;
+            transform: translateX(-50px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .fade-in-left.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .fade-in-right {
+            opacity: 0;
+            transform: translateX(50px);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .fade-in-right.visible {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .scale-in {
+            opacity: 0;
+            transform: scale(0.9);
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .scale-in.visible {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        /* Conciertos modernizados */
+        .concert-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 3rem;
+        }
+
+        .concert-item {
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .concert-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 100%;
+            background: var(--gradient);
+            transform: scaleY(0);
+            transition: transform 0.4s ease;
+        }
+
+        .concert-item:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .concert-item:hover::before {
+            transform: scaleY(1);
+        }
+
+        .concert-date {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .concert-location {
+            font-weight: 600;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        /* Música con grid mejorado */
+        .music-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 3rem;
+        }
+
+        .music-widget {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s ease;
+        }
+
+        .music-widget:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .music-widget h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+
+        .music-widget iframe {
+            width: 100%;
+            border-radius: 12px;
+        }
+
+        /* Tienda moderna */
+        .products {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 4rem;
+        }
+
+        .product {
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(128, 0, 32, 0.1) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .product:hover::before {
+            opacity: 1;
+        }
+
+        .product:hover {
+            transform: translateY(-15px) scale(1.02);
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.2);
+        }
+
+        .product-image {
+            width: 100%;
+            height: 500px;
+            margin: 0 auto 2rem;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .product:hover .product-image img {
+            transform: scale(1.1) rotate(2deg);
+        }
+
+        .product h2 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .product h3 {
+            color: var(--secondary);
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .stock-info {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin: 1rem 0;
+            padding: 1rem;
+            background: rgba(128, 0, 32, 0.05);
+            border-radius: 10px;
+        }
+
+        /* Contacto */
+        .contact-info {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .contact-info p {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-info a {
+            color: var(--secondary);
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .contact-info a:hover {
+            color: var(--accent);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .social-link {
+            display: flex;
+            width: 60px;
+            height: 60px;
+            background: var(--gradient);
+            color: white;
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.2rem;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 30px rgba(128, 0, 32, 0.3);
+        }
+
+        .social-link:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 15px 40px rgba(128, 0, 32, 0.5);
+        }
+
+        /* Loading animation */
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--white);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease;
+        }
+
+        .loading-overlay.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .loader {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(128, 0, 32, 0.1);
+            border-top: 4px solid var(--secondary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Retrasos escalonados para animaciones */
+        .delay-1 { transition-delay: 0.1s; }
+        .delay-2 { transition-delay: 0.2s; }
+        .delay-3 { transition-delay: 0.3s; }
+        .delay-4 { transition-delay: 0.4s; }
+        .delay-5 { transition-delay: 0.5s; }
+        .delay-6 { transition-delay: 0.6s; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-container {
+                padding: 0.5rem 0;
+            }
+
+            .logo img {
+                height: 25px;
+            }
+
+            nav {
+                flex: 1;
+                margin-left: 1.5rem;
+                overflow-x: auto;
+                overflow-y: hidden;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+                -ms-overflow-style: none;
+            }
+        
+            nav::-webkit-scrollbar {
+                display: none;
+            }
+        
+            nav ul {
+                gap: 1.2rem;
+                padding: 0.3rem 0;
+                min-width: min-content;
+                white-space: nowrap;
+            }
+        
+            nav ul li a {
+                font-size: 0.85rem;
+                white-space: nowrap;
+            }
+
+            .section-title {
+                font-size: 2.5rem;
+            }
+
+            .dossier-desktop {
+                display: none !important;
+            }
+
+            .dossier-mobile {
+                display: block !important;
+            }
+
+            .dossier-slide {
+                height: auto;
+                min-height: unset;
+            }
+
+            .dossier-slide img {
+                position: static;
+                height: auto;
+            }
+
+            .concert-list,
+            .music-container,
+            .products {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            section {
+                padding: 5rem 0;
+            }
+
+            .btn {
+                padding: 0.9rem 1rem;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading overlay -->
+    <div class="loading-overlay">
+        <div class="loader"></div>
+    </div>
+
+    <!-- Canvas para partículas -->
+    <div id="particles-canvas"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <a href="#inicio" class="logo">
+                <img src="images/LETRAS-DURO-GALVAN-(Negro)-(1).png" alt="Duro Galván">
+            </a>
+            <nav>
+                <ul>
+                    <li><a href="#inicio">Inicio</a></li>
+                    <li><a href="#musica">Música</a></li>
+                    <li><a href="#tienda">Tienda</a></li>
+                    <li><a href="#conciertos">Conciertos</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section con Dossier -->
+    <section class="dossier-hero" id="inicio">
+        <div class="dossier-container">
+            <div class="dossier-slide">
+                <img class="dossier-desktop" src="images/Dossier-Duro-Galván-1_page-0001.jpg" alt="Dossier página 1">
+                <img class="dossier-mobile" src="dossier-vertical/Dossier Duro Galván Vertical (3)_page-0001.jpg" alt="Dossier página 1">
+            </div>
+            <div class="dossier-slide">
+                <img class="dossier-desktop" src="images/Dossier-Duro-Galván-1_page-0002.jpg" alt="Dossier página 2">
+                <img class="dossier-mobile" src="dossier-vertical/Dossier Duro Galván Vertical (3)_page-0002.jpg" alt="Dossier página 2">
+            </div>
+            <div class="dossier-slide">
+                <img class="dossier-desktop" src="images/Dossier-Duro-Galván-1_page-0003.jpg" alt="Dossier página 3">
+                <img class="dossier-mobile" src="dossier-vertical/Dossier Duro Galván Vertical (3)_page-0003.jpg" alt="Dossier página 3">
+            </div>
+            <div class="dossier-slide">
+                <img class="dossier-desktop" src="images/Dossier-Duro-Galván-1_page-0004.jpg" alt="Dossier página 4">
+                <img class="dossier-mobile" src="dossier-vertical/Dossier Duro Galván Vertical (3)_page-0004.jpg" alt="Dossier página 4">
+            </div>
+            <div class="dossier-slide">
+                <img class="dossier-desktop" src="images/Dossier-Duro-Galván-1_page-0005.jpg" alt="Dossier página 5">
+                <img class="dossier-mobile" src="dossier-vertical/Dossier Duro Galván Vertical (3)_page-0005.jpg" alt="Dossier página 5">
+            </div>
+            <div class="dossier-slide">
+                <img class="dossier-desktop" src="images/Dossier-Duro-Galván-1_page-0006.jpg" alt="Dossier página 6">
+                <img class="dossier-mobile" src="dossier-vertical/Dossier Duro Galván Vertical (3)_page-0006.jpg" alt="Dossier página 6">
+            </div>
+            <div class="dossier-slide">
+                <img class="dossier-desktop" src="images/Dossier-Duro-Galván-1_page-0007.jpg" alt="Dossier página 7">
+                <img class="dossier-mobile" src="dossier-vertical/Dossier Duro Galván Vertical (3)_page-0007.jpg" alt="Dossier página 7">
+            </div>
+            <div class="dossier-slide">
+                <img class="dossier-desktop" src="images/Dossier-Duro-Galván-1_page-0008.jpg" alt="Dossier página 8">
+                <img class="dossier-mobile" src="dossier-vertical/Dossier Duro Galván Vertical (3)_page-0008.jpg" alt="Dossier página 8">
+            </div>
+            <div class="dossier-slide">
+                <img class="dossier-desktop" src="images/Dossier-Duro-Galván-1_page-0009.jpg" alt="Dossier página 9">
+                <img class="dossier-mobile" src="dossier-vertical/Dossier Duro Galván Vertical (3)_page-0009.jpg" alt="Dossier página 9">
+            </div>
+            <div class="dossier-slide">
+                <img class="dossier-desktop" src="images/Dossier-Duro-Galván-1_page-0010.jpg" alt="Dossier página 10">
+                <img class="dossier-mobile" src="dossier-vertical/Dossier Duro Galván Vertical (3)_page-0010.jpg" alt="Dossier página 10">
+            </div>
+            <div class="dossier-slide">
+                <img class="dossier-desktop" src="images/Dossier-Duro-Galván-1_page-0011.jpg" alt="Dossier página 11">
+                <img class="dossier-mobile" src="dossier-vertical/Dossier Duro Galván Vertical (3)_page-0011.jpg" alt="Dossier página 11">
+            </div>
+            <div class="dossier-slide">
+                <img class="dossier-desktop" src="images/Dossier-Duro-Galván-1_page-0012.jpg" alt="Dossier página 12">
+                <img class="dossier-mobile" src="dossier-vertical/Dossier Duro Galván Vertical (3)_page-0012.jpg" alt="Dossier página 12">
+            </div>
+            <div class="dossier-slide">
+                <img class="dossier-desktop" src="images/Dossier-Duro-Galván-1_page-0013.jpg" alt="Dossier página 13">
+                <img class="dossier-mobile" src="dossier-vertical/Dossier Duro Galván Vertical (3)_page-0013.jpg" alt="Dossier página 13">
+            </div>
+        </div>
+        
+        <div class="scroll-down-hint">
+            <a href="#musica" class="btn">Seguir explorando</a>
+        </div>
+    </section>
+
+    <!-- Nuestra Música -->
+    <section id="musica">
+        <div class="container">
+            <h2 class="section-title">Nuestra Música</h2>
+            <div class="music-container">
+                <div class="music-widget fade-in-left delay-1">
+                    <h3>Escúchanos en Spotify</h3>
+                    <iframe src="https://open.spotify.com/embed/artist/2wuECTDTaNfOplWgzem2pQ?utm_source=generator" height="352" frameborder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
+                </div>
+                <div class="music-widget fade-in-up delay-2">
+                    <h3>Nuestro último vídeo</h3>
+                    <iframe width="100%" height="315" src="https://www.youtube.com/embed/a_PeEV-MVaQ" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+                <div class="music-widget fade-in-right delay-3">
+                    <h3>Vídeos anteriores</h3>
+                    <iframe width="100%" height="315" src="https://www.youtube.com/embed/f_C5xEpYyDA" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tienda -->
+    <section class="shop" id="tienda">
+        <div class="container">
+            <h2 class="section-title">Merchandising Oficial</h2>
+            <p class="fade-in-up" style="text-align: center; margin-bottom: 3rem; font-size: 1.1rem; color: var(--gray);">Reserva ahora tu camiseta oficial de Duro Galván. Stock limitado.</p>
+            
+            <div class="products">
+                <div class="product scale-in delay-1">
+                    <div class="product-image white-shirt">
+                        <img src="images/camiseta-blanca-1.jpeg" alt="Camiseta Blanca Duro Galván" loading="lazy">
+                    </div>
+                    <h2>Camiseta Blanca</h2>
+                    <h3>Precio: 15€</h3>
+                    <div class="stock-info" id="white-stock"></div>
+                    <a href="#tienda-blanca" class="btn" style="margin-top: 1rem;">Ver detalles y reservar</a>
+                </div>
+                
+                <div class="product scale-in delay-2">
+                    <div class="product-image black-shirt">
+                        <img src="images/camiseta-negra-1.jpeg" alt="Camiseta Negra Duro Galván" loading="lazy">
+                    </div>
+                    <h2>Camiseta Negra</h2>
+                    <h3>Precio: 15€</h3>
+                    <div class="stock-info" id="black-stock"></div>
+                    <a href="#tienda-negra" class="btn" style="margin-top: 1rem;">Ver detalles y reservar</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Próximos Conciertos -->
+    <section class="concerts" id="conciertos">
+        <div class="container">
+            <h2 class="section-title">Próximos Conciertos</h2>
+            <div class="concert-list">
+                <div class="concert-item fade-in-left delay-1">
+                    <div class="concert-date">19 NOVIEMBRE 2025</div>
+                    <div class="concert-location">The Godfather Rock Club</div>
+                    <p>No te pierdas nuestro próximo concierto en el barrio.</p>
+                    <a href="https://buytickets.at/durogalvn/1888685" class="btn" target="_blank" rel="noopener noreferrer" style="margin-top: 1rem;">Comprar entradas</a>
+                </div>
+                <div class="concert-item fade-in-right delay-2">
+                    <div class="concert-date">19 JUNIO 2026</div>
+                    <div class="concert-location">Sala ??? con ???</div>
+                    <p>Próximamente más información sobre este concierto.</p>
+                    <div class="btn" style="margin-top: 1rem; background: #ccc; cursor: not-allowed;">Entradas no disponibles</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contacto -->
+    <section id="contacto">
+        <div class="container">
+            <h2 class="section-title">Contacto</h2>
+            <div class="contact-info fade-in-up">
+                <p>¿Tienes alguna pregunta? ¡No dudes en contactarnos!</p>
+                <p>Email: <a href="mailto:durogalvanband@gmail.com">durogalvanband@gmail.com</a></p>
+                <div class="social-links">
+                    <a href="https://instagram.com/durogalvan" class="social-link scale-in delay-1" target="_blank" rel="noopener noreferrer">IG</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // ============ GESTIÓN DE STOCK ============
+        let stock = {
+            'Blanca': { S: 5, M: 30, L: 41, XL: 21, XXL: 3 },
+            'Negra': { S: 5, M: 30, L: 41, XL: 21, XXL: 3 }
+        };
+
+        const STOCK_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbx4fbmrL9nbqJB6uZZHfQEKbb1CDMkSni92noF12c2RcTpW9yThKobb7owXp4GZsV74/exec?action=getStock';
+
+        function initializeStock() {
+            syncStockFromServer();
+        }
+
+        function syncStockFromServer() {
+            fetch(STOCK_SCRIPT_URL)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success && data.stock) {
+                        stock = data.stock;
+                        updateStockDisplay();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching stock:', error);
+                    updateStockDisplay();
+                });
+        }
+
+        function updateStockDisplay() {
+            const whiteStockElements = document.querySelectorAll('#white-stock');
+            let whiteStockText = 'Disponible: ';
+            for (const size in stock['Blanca']) {
+                whiteStockText += `${size}: ${stock['Blanca'][size]} | `;
+            }
+            whiteStockElements.forEach(el => {
+                if (el) el.textContent = whiteStockText.slice(0, -3);
+            });
+
+            const blackStockElements = document.querySelectorAll('#black-stock');
+            let blackStockText = 'Disponible: ';
+            for (const size in stock['Negra']) {
+                blackStockText += `${size}: ${stock['Negra'][size]} | `;
+            }
+            blackStockElements.forEach(el => {
+                if (el) el.textContent = blackStockText.slice(0, -3);
+            });
+        }
+
+        function setupStockSync() {
+            setInterval(() => {
+                syncStockFromServer();
+            }, 30000);
+        }
+
+        // ============ ANIMACIONES AL SCROLL ============
+        function setupScrollAnimations() {
+            const observerOptions = {
+                threshold: 0.15,
+                rootMargin: '0px 0px -100px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, observerOptions);
+
+            // Observar todos los elementos con clases de animación
+            const animatedElements = document.querySelectorAll(
+                '.section-title, .fade-in-up, .fade-in-left, .fade-in-right, .scale-in'
+            );
+            
+            animatedElements.forEach(el => observer.observe(el));
+        }
+
+        // ============ NAVEGACIÓN SUAVE ============
+        function setupSmoothNavigation() {
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    const targetElement = document.getElementById(targetId);
+                    
+                    if (targetElement) {
+                        targetElement.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+        }
+
+        // ============ PARTÍCULAS CON P5.JS ============
+        function setupParticles() {
+            new p5((sketch) => {
+                let particles = [];
+                const numParticles = 50;
+
+                sketch.setup = () => {
+                    const canvas = sketch.createCanvas(sketch.windowWidth, sketch.windowHeight);
+                    canvas.parent('particles-canvas');
+                    
+                    for (let i = 0; i < numParticles; i++) {
+                        particles.push(new Particle(sketch));
+                    }
+                };
+
+                sketch.draw = () => {
+                    sketch.clear();
+                    particles.forEach(p => {
+                        p.update();
+                        p.display();
+                    });
+                };
+
+                sketch.windowResized = () => {
+                    sketch.resizeCanvas(sketch.windowWidth, sketch.windowHeight);
+                };
+
+                class Particle {
+                    constructor(sketch) {
+                        this.sketch = sketch;
+                        this.x = sketch.random(sketch.width);
+                        this.y = sketch.random(sketch.height);
+                        this.vx = sketch.random(-0.5, 0.5);
+                        this.vy = sketch.random(-0.5, 0.5);
+                        this.alpha = sketch.random(50, 150);
+                        this.size = sketch.random(2, 5);
+                    }
+
+                    update() {
+                        this.x += this.vx;
+                        this.y += this.vy;
+
+                        if (this.x < 0 || this.x > this.sketch.width) this.vx *= -1;
+                        if (this.y < 0 || this.y > this.sketch.height) this.vy *= -1;
+                    }
+
+                    display() {
+                        this.sketch.noStroke();
+                        this.sketch.fill(128, 0, 32, this.alpha);
+                        this.sketch.circle(this.x, this.y, this.size);
+                    }
+                }
+            });
+        }
+
+        // ============ HEADER SCROLL EFFECT ============
+        function setupHeaderScroll() {
+            window.addEventListener('scroll', () => {
+                const header = document.querySelector('header');
+                if (window.scrollY > 100) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+            });
+        }
+
+        // ============ OCULTAR LOADING OVERLAY ============
+        function hideLoadingOverlay() {
+            setTimeout(() => {
+                const overlay = document.querySelector('.loading-overlay');
+                overlay.classList.add('hidden');
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                }, 500);
+            }, 1000);
+        }
+
+        // ============ INICIALIZACIÓN ============
+        document.addEventListener('DOMContentLoaded', function() {
+            hideLoadingOverlay();
+            initializeStock();
+            setupStockSync();
+            setupScrollAnimations();
+            setupSmoothNavigation();
+            setupParticles();
+            setupHeaderScroll();
+        });
+    </script>
+</body>
+</html>
