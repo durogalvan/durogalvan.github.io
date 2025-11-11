@@ -102,11 +102,11 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 1rem 0;
+            padding: 0.6rem 0;
         }
 
         .logo img {
-            height: 40px;
+            height: 35px;
             transition: transform 0.3s ease;
         }
 
@@ -117,7 +117,7 @@
         nav ul {
             display: flex;
             list-style: none;
-            gap: 2.5rem;
+            gap: 1.5rem;
             align-items: center;
         }
 
@@ -125,7 +125,7 @@
             color: var(--primary);
             text-decoration: none;
             font-weight: 500;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             letter-spacing: 0.02em;
             position: relative;
             transition: color 0.3s ease;
@@ -207,6 +207,17 @@
             left: 50%;
             transform: translateX(-50%);
             z-index: 1001;
+        }
+        
+        .scroll-down-hint .btn {
+            background: rgba(128, 0, 32, 0.3); /* Semitransparente por defecto */
+            backdrop-filter: blur(10px); /* Efecto de desenfoque para mejor legibilidad */
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .scroll-down-hint .btn:hover {
+            background: var(--gradient); /* Opaco al pasar el cursor */
+            backdrop-filter: none;
         }
 
         /* Botones modernos */
@@ -722,19 +733,35 @@
         /* Responsive */
         @media (max-width: 768px) {
             .header-container {
-                padding: 0.8rem 0;
-            }
-
-            .logo img {
-                height: 30px;
-            }
-
-            nav ul {
-                gap: 1rem;
-                overflow-x: auto;
                 padding: 0.5rem 0;
             }
 
+            .logo img {
+                height: 25px;
+            }
+
+            nav {
+                flex: 1;
+                margin-left: 1.5rem; /* Separación entre logo y navegación */
+                overflow-x: auto;
+                overflow-y: hidden;
+                -webkit-overflow-scrolling: touch;
+                /* Ocultar scrollbar en móvil para diseño más limpio */
+                scrollbar-width: none; /* Firefox */
+                -ms-overflow-style: none; /* IE/Edge */
+            }
+        
+            nav::-webkit-scrollbar {
+                display: none; /* Chrome/Safari/Opera */
+            }
+        
+            nav ul {
+                gap: 1.2rem; /* Espaciado ajustado para móvil */
+                padding: 0.3rem 0;
+                min-width: min-content; /* Permite que el contenido determine el ancho */
+                white-space: nowrap;
+            }
+        
             nav ul li a {
                 font-size: 0.85rem;
                 white-space: nowrap;
