@@ -1,920 +1,515 @@
 :root {
-    --white: #ffffff;
-    --black: #000000;
-    --dark-red: #800020;
-    --light-gray: #f5f5f5;
-    --ivory: #fffff0;
-}
-
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-html {
-    scroll-behavior: smooth;
-}
-
-body {
-    font-family: 
-        -apple-system,           /* iOS y macOS (San Francisco) */
-        BlinkMacSystemFont,      /* macOS Chrome */
-        "Segoe UI",              /* Windows */
-        Roboto,                  /* Android y Chrome OS */
-        Oxygen-Sans,             /* Linux KDE */
-        Ubuntu,                  /* Linux Ubuntu */
-        Cantarell,               /* Linux GNOME */
-        "Helvetica Neue",        /* macOS antiguos */
-        Arial,                   /* Fallback genérico */
-        sans-serif; 
-    color: var(--black);
-    background-color: var(--ivory);
-    line-height: 1.6;
-}
-
-h1, h2, h3, h4, h5, h6 {
-    font-family: 'Bebas Neue', sans-serif;
-    letter-spacing: 1px;
-    margin-bottom: 1rem;
-}
-
-h1 {
-    font-size: 3rem;
-}
-
-h2 {
-    font-size: 2.5rem;
-}
-
-.container {
-    width: 90%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 15px;
-}
-
-/* Header */
-header {
-    background-color: var(--ivory);
-    color: var(--black);
-    padding: 0.5rem 0;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    z-index: 1000;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-}
-
-.header-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 2rem;
-}
-
-.logo {
-    font-size: 1.5rem;
-    flex-shrink: 0;
-}
-    
-.logo img {
-    height: 35px;
-}
-
-.logo span {
-    font-family: 'Grand Paradiso', serif;
-    color: var(--dark-red);
-}
-
-nav {
-    flex: 1;
-    display: flex;
-    justify-content: flex-end;
-}
-
-nav ul {
-    display: flex;
-    list-style: none;
-    gap: 2rem;
-    align-items: center;
-    margin: 0;
-}
-
-nav ul li {
-    margin: 0;
-}
-
-nav ul li a {
-    color: var(--black);
-    text-decoration: none;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.2rem;
-    transition: color 0.3s;
-    white-space: nowrap;
-}
-
-nav ul li a:hover {
-    color: var(--dark-red);
-}
-
-/* Hero Section con Dossier */
-.dossier-hero {
-    background-color: var(--ivory);
-    padding: 0;
-    margin: 0;
-    margin-top: 0;
-    position: relative;
-    overflow: hidden;
-}
-
-.dossier-container {
-    width: 100%;
-    height: 100vh;
-    overflow-y: scroll;
-    overflow-x: hidden;
-    scroll-snap-type: y mandatory;
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-    scroll-padding: 0;
-    line-height: 0; /* Forzar line-height 0 aquí también */
-}
-
-.dossier-slide {
-    width: 100%;
-    height: 100vh;
-    min-height: 100vh;
-    max-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    scroll-snap-align: start;
-    scroll-snap-stop: always;
-    background-color: var(--ivory);
-    padding: 0;
-    margin: 0;
-    line-height: 0;
-    position: relative;
-    font-size: 0; /* Esto elimina el espacio entre elementos inline */
-}
-
-.dossier-slide img {
-    width: 100%;
-    height: 100%;
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain;
-    display: block;
-    margin: 0;
-    padding: 0;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    vertical-align: top; /* Importante para imágenes */
-}
-
-/* Mostrar solo imágenes desktop por defecto */
-.dossier-mobile {
-    display: none !important;
-}
-
-.dossier-desktop {
-    display: block !important;
-}
-
-.scroll-down-hint {
-    position: fixed;
-    top: 80px;
-    left: 50%;
-    transform: translateX(-50%) scale(0.7);
-    z-index: 1001;
-    text-align: center;
-}
-
-.scroll-down-hint .btn {
-    animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-    0%, 100% {
-        transform: scale(1);
-        opacity: 1;
-    }
-    50% {
-        transform: scale(1.05);
-        opacity: 0.9;
-    }
-}
-
-.btn {
-    display: inline-block;
-    background-color: var(--dark-red);
-    color: var(--white);
-    padding: 0.8rem 1.5rem;
-    text-decoration: none;
-    border: none;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.2rem;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.btn:hover {
-    background-color: #600018;
-}
-
-.btn-secondary {
-    background-color: transparent;
-    border: 2px solid var(--dark-red);
-    color: var(--dark-red);
-}
-
-.btn-secondary:hover {
-    background-color: var(--dark-red);
-    color: var(--white);
-}
-
-/* Sections */
-section {
-    padding: 5rem 0;
-}
-
-.section-title {
-    text-align: center;
-    margin-bottom: 3rem;
-    position: relative;
-}
-
-.section-title:after {
-    content: '';
-    display: block;
-    width: 100px;
-    height: 3px;
-    background-color: var(--dark-red);
-    margin: 10px auto;
-}
-
-/* Conciertos */
-.concerts {
-    background-color: var(--ivory);
-}
-
-.concert-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 2rem;
-}
-
-.concert-item {
-    background-color: var(--white);
-    padding: 1.5rem;
-    border-radius: 5px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-    text-align: center;
-}
-
-.concert-date {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.5rem;
-    color: var(--dark-red);
-    margin-bottom: 0.5rem;
-}
-
-.concert-location {
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-}
-
-/* Música */
-.music-container {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 2rem;
-}
-
-.music-widget {
-    background-color: var(--ivory);
-    padding: 1.5rem;
-    border-radius: 5px;
-    text-align: center;
-}
-
-.music-widget iframe {
-    width: 100%;
-    max-width: 100%;
-    border-radius: 5px;
-}
-
-/* Tienda */
-.shop {
-    background-color: var(--ivory);
-}
-
-.products {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3rem;
-    margin-bottom: 3rem;
-}
-
-.product {
-    text-align: center;
-    background-color: var(--ivory);
-    padding: 2rem;
-    border-radius: 5px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-    transition: transform 0.3s;
-}
-
-.product:hover {
-    transform: translateY(-5px);
-}
-
-.product-image {
-    width: 100%;
-    max-width: 300px;
-    height: 300px;
-    margin: 0 auto 1rem;
-    border: 1px solid #ddd;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-}
-
-.product-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.white-shirt {
-    background-color: var(--ivory);
-}
-
-.black-shirt {
-    background-color: var(--ivory);
-}
-
-.sizes {
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-    margin: 1rem 0;
-    flex-wrap: wrap;
-}
-
-.size {
-    width: 40px;
-    height: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid var(--black);
-    cursor: pointer;
-    transition: all 0.3s;
-    border-radius: 4px;
-    font-size: 0.85rem;
-}
-
-.size.selected {
-    background-color: var(--dark-red);
-    color: var(--ivory);
-    border-color: var(--dark-red);
-}
-
-.size.sold-out {
-    background-color: #ccc;
-    color: #999;
-    cursor: not-allowed;
-    opacity: 0.6;
-}
-
-.stock-info {
-    margin-top: 1rem;
-    font-size: 0.9rem;
-    color: #666;
-}
-
-/* Availability Warning */
-.availability-warning {
-    margin: 1rem 0;
-    padding: 1rem;
-    border-radius: 4px;
-    display: none;
-}
-
-.availability-warning.show {
-    display: block;
-    background-color: #fff3cd;
-    border: 1px solid #ffc107;
-    color: #856404;
-}
-
-.availability-warning.show.all-sold-out {
-    background-color: #f8d7da;
-    border: 1px solid #f5c6cb;
-    color: #721c24;
-}
-
-/* Formulario de reserva */
-.reservation-form {
-    background-color: var(--ivory);
-    padding: 2rem;
-    border-radius: 5px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-    max-width: 600px;
-    margin: 0 auto;
-}
-
-.form-group {
-    margin-bottom: 1.5rem;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: bold;
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea {
-    width: 100%;
-    padding: 0.8rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    font-family: 'Grand Paradiso', serif;
-    font-size: 1rem;
-}
-
-.form-group select option:disabled {
-    color: #999;
-}
-
-.payment-method {
-    display: flex;
-    gap: 1rem;
-    margin-top: 0.5rem;
-}
-
-.payment-option {
-    flex: 1;
-    text-align: center;
-    padding: 1rem;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: all 0.3s;
-}
-
-.payment-option:hover {
-    border-color: var(--dark-red);
-}
-
-.payment-option.selected {
-    border-color: var(--dark-red);
-    background-color: rgba(128, 0, 32, 0.05);
-}
-
-.iban-info {
-    background-color: var(--ivory);
-    padding: 1rem;
-    border-radius: 4px;
-    margin-top: 1rem;
-    display: none;
-    border-left: 4px solid var(--dark-red);
-}
-
-.iban-info.show {
-    display: block;
-}
-
-.iban-info p {
-    margin: 0.5rem 0;
-}
-
-/* Contacto */
-.contact-info {
-    text-align: center;
-    margin-bottom: 2rem;
-}
-
-.contact-info a {
-    color: var(--dark-red);
-    text-decoration: none;
-}
-
-.contact-info a:hover {
-    text-decoration: underline;
-}
-
-.social-links {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 1rem;
-}
-
-.social-link {
-    display: inline-flex;
-    width: 40px;
-    height: 40px;
-    background-color: var(--ivory);
-    color: var(--dark-red);
-    border-radius: 50%;
-    align-items: center;
-    justify-content: center;
-    text-decoration: none;
-    transition: background-color 0.3s;
-}
-
-.social-link:hover {
-    background-color: var(--dark-red);
-}
-
-/* Footer */
-footer {
-    /* background-color: var(--ivory);
-    color: var(--black);
-    text-align: center;
-    padding: 2rem 0; */
-    display: none;
-}
-
-/* Páginas de producto */
-.product-page {
-    padding: 5rem 0;
-    background-color: var(--ivory);
-}
-
-.product-detail {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 4rem;
-    margin-top: 2rem;
-}
-
-.product-info {
-    display: flex;
-    flex-direction: column;
-}
-
-.back-link {
-    display: inline-block;
-    margin-bottom: 2rem;
-    color: var(--dark-red);
-    text-decoration: none;
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.2rem;
-    transition: color 0.3s;
-}
-
-.back-link:hover {
-    color: #600018;
-}
-
-/* Carrusel de imágenes */
-.carousel-wrapper {
-    position: relative;
-}
-
-.carousel-container {
-    position: relative;
-    overflow: hidden;
-    border-radius: 5px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-    background-color: var(--ivory);
-}
-
-.carousel {
-    display: flex;
-    transition: transform 0.5s ease;
-}
-
-.carousel-slide {
-    min-width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    cursor: pointer;
-}
-
-.carousel-slide img {
-    width: 100%;
-    height: auto;
-    display: block;
-    max-width: 100%;
-}
-
-/* Zoom overlay para desktop */
-.zoom-overlay {
-    display: none;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-repeat: no-repeat;
-    background-size: 250%;
-    pointer-events: none;
-    z-index: 5;
-    border-radius: 5px;
-}
-
-.carousel-btn {
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    background-color: rgba(0,0,0,0.5);
-    color: white;
-    border: none;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 1.2rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.3s;
-    z-index: 10;
-}
-
-.carousel-btn:hover {
-    background-color: rgba(0,0,0,0.8);
-}
-
-.carousel-prev {
-    left: 15px;
-}
-
-.carousel-next {
-    right: 15px;
-}
-
-.carousel-dots {
-    display: flex;
-    justify-content: center;
-    margin-top: 1rem;
-    gap: 10px;
-}
-
-.carousel-dot {
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
-    background-color: #ddd;
-    border: none;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.carousel-dot.active {
-    background-color: var(--dark-red);
-}
-
-.zoom-btn {
-    position: absolute;
-    bottom: 15px;
-    right: 15px;
-    background-color: rgba(128, 0, 32, 0.9);
-    color: white;
-    border: none;
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
-    cursor: pointer;
-    font-size: 1.5rem;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.3s;
-    z-index: 10;
-}
-
-.zoom-btn:hover {
-    background-color: #600018;
-}
-
-/* Modal Zoom */
-.zoom-modal {
-    display: none !important;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.95);
-    z-index: 3000;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    overflow: auto;
-}
-
-.zoom-modal.show {
-    display: flex !important;
-}
-
-.zoom-modal-content {
-    position: relative;
-    width: 95%;
-    max-width: 1200px;
-    height: auto;
-    max-height: 90vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.zoom-modal-content img {
-    width: auto;
-    height: auto;
-    max-width: 100%;
-    max-height: 90vh;
-    object-fit: contain;
-    cursor: zoom-in;
-}
-
-.zoom-close {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    background-color: rgba(255, 255, 255, 0.2);
-    border: none;
-    color: white;
-    font-size: 3rem;
-    width: 60px;
-    height: 60px;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    transition: background-color 0.3s;
-    z-index: 3001;
-    padding: 0;
-    line-height: 1;
-}
-
-.zoom-close:hover {
-    background-color: rgba(255, 255, 255, 0.4);
-}
-
-body#index-home header {
-    position: relative;
-    box-shadow: none;
-}
-
-/* Responsive */
+  --bg: #10100e;
+  --surface: #171714;
+  --paper: #e9e5d9;
+  --text: #e9e5d9;
+  --muted: #8f8d85;
+  --accent: #d7ff3f;
+  --line: rgba(233,229,217,.22);
+  --max: 1440px;
+  --pad: clamp(20px, 4vw, 64px);
+  --display: "Space Grotesk", sans-serif;
+  --body: "Inter", sans-serif;
+  --mono: "DM Mono", monospace;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; background: var(--bg); }
+body { background: var(--bg); color: var(--text); font-family: var(--body); overflow-x: hidden; }
+body.menu-open { overflow: hidden; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; color: inherit; }
+img { display: block; max-width: 100%; }
+
+.page-loader {
+  position: fixed; inset: 0; background: var(--bg); z-index: 9999;
+  display: grid; place-items: center; transition: opacity .8s ease, visibility .8s ease;
+}
+.page-loader.is-done { opacity: 0; visibility: hidden; pointer-events: none; }
+.loader-name { font: 700 clamp(2rem,6vw,6rem)/.85 var(--display); letter-spacing: -.08em; }
+
+.site-header {
+  position: fixed; z-index: 1000; top: 0; left: 0; width: 100%;
+  height: 74px; padding: 0 var(--pad); display: flex; align-items: center;
+  justify-content: space-between; mix-blend-mode: difference; color: #fff;
+}
+.brand { font: 700 1rem/1 var(--display); letter-spacing: -.04em; }
+.desktop-nav { display: flex; gap: 28px; font: 500 .7rem/1 var(--mono); }
+.desktop-nav a, .menu-socials a { transition: opacity .25s ease; }
+.desktop-nav a:hover, .menu-socials a:hover { opacity: .5; }
+.menu-toggle { width: 42px; height: 30px; border: 0; background: transparent; display: none; cursor: pointer; }
+.menu-toggle span { display: block; width: 100%; height: 1px; background: currentColor; margin: 7px 0; transition: transform .4s ease; }
+.menu-toggle.is-open span:first-child { transform: translateY(4px) rotate(45deg); }
+.menu-toggle.is-open span:last-child { transform: translateY(-4px) rotate(-45deg); }
+
+.fullscreen-menu { position: fixed; inset: 0; background: var(--accent); color: #111; z-index: 900; transform: translateY(-100%); transition: transform .7s cubic-bezier(.77,0,.18,1); }
+.fullscreen-menu.is-open { transform: translateY(0); }
+.menu-inner { height: 100%; padding: 120px var(--pad) 50px; display: flex; flex-direction: column; justify-content: center; }
+.menu-inner > a { font: 700 clamp(3rem,10vw,9rem)/.83 var(--display); letter-spacing: -.08em; }
+.menu-socials { display: flex; gap: 24px; margin-top: 70px; font: 500 .7rem/1 var(--mono); }
+
+.hero { min-height: 100svh; position: relative; overflow: hidden; display: grid; place-items: center; background: var(--paper); color: #111; }
+.hero-content { width: min(var(--max), 100%); padding: 120px var(--pad) 90px; position: relative; z-index: 2; }
+.eyebrow { font: 500 .68rem/1.2 var(--mono); letter-spacing: .08em; text-transform: uppercase; }
+.hero-title { font: 700 clamp(5rem, 18vw, 18rem)/.72 var(--display); letter-spacing: -.11em; margin: 7vh 0 8vh; display: flex; flex-direction: column; }
+.hero-title span:last-child { align-self: flex-end; margin-right: -3vw; }
+.hero-bottom { display: flex; justify-content: space-between; align-items: center; font: 500 .68rem/1 var(--mono); text-transform: uppercase; }
+.arrow-link { font: 500 .7rem/1 var(--mono); display: inline-flex; gap: 18px; align-items: center; }
+.arrow-link span { font-size: 1.1rem; transition: transform .3s ease; }
+.arrow-link:hover span { transform: translateY(5px); }
+.hero-bg { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.hero-word { position: absolute; font: 700 30vw/.7 var(--display); color: rgba(0,0,0,.035); letter-spacing: -.12em; white-space: nowrap; }
+.hero-word-a { top: 5%; left: -5%; }
+.hero-word-b { bottom: -4%; right: -5%; }
+.hero-marquee { position: absolute; bottom: 0; left: 0; width: 100%; overflow: hidden; white-space: nowrap; background: var(--accent); color: #111; font: 600 .72rem/38px var(--mono); }
+.hero-marquee div { display: inline-block; animation: marquee 22s linear infinite; }
+@keyframes marquee { to { transform: translateX(-50%); } }
+
+.manifesto, .concert-section, .music-section, .shop-section, .dossier-section, .contact-section { padding: clamp(100px, 14vw, 220px) var(--pad); }
+.manifesto { background: var(--bg); }
+.section-grid { max-width: var(--max); margin: auto; display: grid; grid-template-columns: 22% 1fr; gap: 40px; }
+.manifesto-copy { max-width: 1000px; }
+.giant-copy { font: 600 clamp(3rem, 8vw, 9rem)/.86 var(--display); letter-spacing: -.09em; }
+.giant-copy em, h2 i { font-style: normal; color: var(--accent); }
+.body-copy { max-width: 440px; margin: 70px 0 0 auto; color: var(--muted); font-size: .95rem; line-height: 1.7; }
+
+.dossier-section { background: var(--paper); color: #111; }
+.section-heading { max-width: var(--max); margin: 0 auto 70px; }
+.section-heading h2, .concert-details h2, .contact-inner h2 { font: 700 clamp(4rem, 12vw, 12rem)/.75 var(--display); letter-spacing: -.1em; margin-top: 30px; }
+.section-intro { max-width: 500px; margin-top: 30px; color: var(--muted); }
+.dossier-frame { max-width: var(--max); margin: auto; overflow: hidden; cursor: grab; }
+.dossier-track { display: flex; gap: 18px; width: max-content; }
+.dossier-track figure { width: min(55vw, 600px); background: #ddd; }
+.dossier-track img { width: 100%; height: auto; }
+.scroll-caption { max-width: var(--max); margin: 18px auto 0; display: flex; justify-content: space-between; font: 500 .62rem/1 var(--mono); }
+
+.concert-section { background: var(--accent); color: #111; }
+.concert-date-big { display: flex; gap: clamp(10px,3vw,45px); font: 700 clamp(5rem, 16vw, 16rem)/.75 var(--display); letter-spacing: -.11em; }
+.concert-details { margin-top: 80px; max-width: 800px; }
+.concert-details h2 { margin: 25px 0; }
+.concert-details p:not(.eyebrow) { font: 500 1.1rem/1.3 var(--mono); }
+.outline-link { display: inline-block; margin-top: 35px; border-bottom: 1px solid #111; padding-bottom: 8px; font: 500 .7rem/1 var(--mono); }
+.muted-note { color: rgba(17,17,17,.55) !important; margin-top: 28px; font-size: .8rem !important; }
+
+.music-section { background: var(--bg); }
+.music-feature { max-width: var(--max); margin: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 7vw; align-items: center; }
+.music-info h3 { font: 700 clamp(4rem, 10vw, 10rem)/.72 var(--display); letter-spacing: -.1em; margin: 25px 0 40px; }
+.music-info > p:not(.eyebrow) { max-width: 550px; color: var(--muted); line-height: 1.7; margin-bottom: 35px; }
+.spotify-wrap { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 25px 0; }
+.spotify-wrap iframe { width: 100%; border: 0; }
+.video-grid { max-width: var(--max); margin: 130px auto 0; display: grid; grid-template-columns: 1.4fr 1fr; gap: 50px; }
+.video-card { min-width: 0; }
+.video-label, .product-meta { display: flex; justify-content: space-between; font: 500 .62rem/1 var(--mono); padding-bottom: 15px; border-bottom: 1px solid var(--line); }
+.video-ratio { aspect-ratio: 16/9; margin-top: 15px; background: #000; overflow: hidden; }
+.video-ratio iframe { width: 100%; height: 100%; border: 0; }
+.video-card h3 { font: 600 clamp(1.8rem, 4vw, 4rem)/.9 var(--display); letter-spacing: -.06em; margin-top: 18px; }
+.video-card p { color: var(--muted); font: .7rem/1 var(--mono); margin-top: 10px; }
+
+.shop-section { background: var(--paper); color: #111; }
+.products { max-width: var(--max); margin: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 50px; }
+.product-card { cursor: pointer; }
+.product-image { aspect-ratio: 4/5; background: #dedbd1; overflow: hidden; }
+.product-image.dark-product { background: #1c1c1a; }
+.product-image img { width: 100%; height: 100%; object-fit: contain; transition: transform .8s cubic-bezier(.2,.7,.2,1); }
+.product-card:hover .product-image img { transform: scale(1.06); }
+.product-meta { border-bottom: 0; border-top: 1px solid rgba(17,17,17,.2); margin-top: 15px; padding-top: 15px; }
+.product-card h3 { font: 600 clamp(2rem, 4vw, 4rem)/.85 var(--display); letter-spacing: -.07em; margin: 15px 0; }
+.text-button, .back-button { border: 0; background: none; cursor: pointer; font: 500 .68rem/1 var(--mono); padding: 0; }
+.text-button:hover { color: #777; }
+
+.product-page { padding: 140px var(--pad); background: var(--paper); color: #111; }
+.product-detail { max-width: var(--max); margin: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 7vw; }
+.back-button { margin-bottom: 30px; grid-column: 1 / -1; text-align: left; }
+.product-gallery { grid-column: 1; }
+.product-gallery img { width: 100%; max-height: 75vh; object-fit: contain; background: #ddd; }
+.product-info h2 { font: 700 clamp(4rem, 8vw, 8rem)/.75 var(--display); letter-spacing: -.1em; margin: 20px 0 35px; }
+.product-info > p:not(.eyebrow):not(.price) { max-width: 500px; color: #555; line-height: 1.7; }
+.price { font: 500 1.2rem/1 var(--mono); margin: 30px 0; }
+.stock-info { font: .65rem/1.5 var(--mono); border-top: 1px solid rgba(17,17,17,.2); padding: 15px 0; margin-bottom: 20px; }
+
+.contact-section { background: var(--accent); color: #111; min-height: 80vh; display: grid; place-items: center; }
+.contact-inner { width: 100%; max-width: var(--max); }
+.contact-email { display: inline-block; margin-top: 60px; font: 500 clamp(1.4rem, 4vw, 4rem)/1 var(--display); border-bottom: 2px solid #111; }
+.contact-links { display: flex; gap: 30px; margin-top: 50px; font: 500 .7rem/1 var(--mono); }
+footer { display: flex; justify-content: space-between; padding: 20px var(--pad); font: .6rem/1 var(--mono); color: var(--muted); border-top: 1px solid var(--line); }
+
+.reveal { opacity: 0; transform: translateY(30px); transition: opacity .9s ease, transform .9s cubic-bezier(.2,.7,.2,1); }
+.reveal.visible { opacity: 1; transform: none; }
+.reveal-text { opacity: 0; transform: translateY(50px); transition: opacity 1s ease, transform 1s cubic-bezier(.2,.7,.2,1); }
+.reveal-text.visible { opacity: 1; transform: none; }
+
+@media (max-width: 800px) {
+  .desktop-nav { display: none; }
+  .menu-toggle { display: block; }
+  .hero-content { padding-top: 100px; }
+  .hero-title { font-size: clamp(4.5rem, 21vw, 9rem); margin: 10vh 0; }
+  .hero-title span:last-child { align-self: flex-start; margin-left: 5vw; }
+  .section-grid, .music-feature, .video-grid, .products, .product-detail { grid-template-columns: 1fr; }
+  .section-grid { gap: 45px; }
+  .giant-copy { font-size: clamp(3rem, 14vw, 7rem); }
+  .body-copy { margin-left: 0; }
+  .dossier-track figure { width: 78vw; }
+  .concert-date-big { font-size: clamp(4rem, 22vw, 8rem); }
+  .music-info h3 { font-size: clamp(4.5rem, 19vw, 8rem); }
+  .video-grid { gap: 70px; }
+  .product-gallery { grid-column: 1; }
+  .product-info h2 { font-size: clamp(4rem, 18vw, 8rem); }
+  .contact-email { font-size: clamp(1.2rem, 6vw, 3rem); }
+  .contact-links { flex-wrap: wrap; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
+}
+
+
+/* ============================================================
+   DURO GALVÁN — FINAL TEST OVERRIDES
+   Identidad original:
+   --white #fff / --black #000 / --dark-red #800020
+   --light-gray #f5f5f5 / --ivory #fffff0
+   ============================================================ */
+
+@font-face {
+  font-family: "Grand Paradiso";
+  src: url("fonts/GrandParadiso-Regular.woff2") format("woff2");
+  font-display: swap;
+}
+
+:root {
+  --white: #ffffff;
+  --black: #000000;
+  --dark-red: #800020;
+  --light-gray: #f5f5f5;
+  --ivory: #fffff0;
+
+  --bg: #000000;
+  --surface: #f5f5f5;
+  --paper: #fffff0;
+  --text: #000000;
+  --muted: #666666;
+  --accent: #800020;
+  --line: rgba(0,0,0,.18);
+
+  --display: "Bebas Neue", sans-serif;
+  --body: "Inter", sans-serif;
+  --mono: "DM Mono", monospace;
+}
+
+/* Tipografía principal de identidad */
+.hero-title span:first-child {
+  font-family: "Bebas Neue", sans-serif !important;
+  font-weight: 400 !important;
+  letter-spacing: .01em !important;
+}
+.hero-title span:last-child {
+  font-family: "Grand Paradiso", Georgia, serif !important;
+  font-weight: 400 !important;
+  letter-spacing: .01em !important;
+  color: var(--black) !important;
+}
+.hero-word-a {
+  font-family: "Bebas Neue", sans-serif !important;
+  font-weight: 400 !important;
+}
+.hero-word-b {
+  font-family: "Grand Paradiso", Georgia, serif !important;
+  font-weight: 400 !important;
+}
+h1, h2, h3, .brand, .desktop-nav, .menu-inner > a,
+.concert-date-big, .product-info h2, .back-button {
+  font-family: "Bebas Neue", sans-serif !important;
+  font-weight: 400 !important;
+}
+
+/* La segunda palabra de los grandes titulares conserva el carácter manuscrito */
+.section-heading h2 i,
+.concert-details h2 i,
+.contact-inner h2 i,
+.product-info h2 i {
+  font-family: "Grand Paradiso", Georgia, serif !important;
+  font-style: normal !important;
+  font-weight: 400 !important;
+}
+
+/* Paleta: no usar el verde/lima de la primera propuesta */
+body,
+html { background: var(--ivory) !important; color: var(--black) !important; }
+.site-header {
+  mix-blend-mode: normal !important;
+  color: var(--black) !important;
+  background: rgba(255,255,240,.90) !important;
+  border-bottom: 1px solid rgba(0,0,0,.10);
+  backdrop-filter: blur(12px);
+}
+.brand, .desktop-nav a { color: var(--black) !important; }
+.hero { background: var(--ivory) !important; color: var(--black) !important; }
+.manifesto { background: var(--black) !important; color: var(--white) !important; }
+.dossier-section, .shop-section, .product-page {
+  background: var(--ivory) !important;
+  color: var(--black) !important;
+}
+.concert-section, .contact-section {
+  background: var(--dark-red) !important;
+  color: var(--white) !important;
+}
+.music-section {
+  background: var(--light-gray) !important;
+  color: var(--black) !important;
+}
+.fullscreen-menu {
+  background: var(--dark-red) !important;
+  color: var(--white) !important;
+}
+.giant-copy em, h2 i { color: var(--dark-red) !important; }
+.manifesto .giant-copy em, .manifesto h2 i { color: #ffffff !important; }
+
+.btn, .social-link, .splide__arrow {
+  background: var(--dark-red) !important;
+  color: var(--white) !important;
+}
+.btn:hover { background: #000 !important; }
+.eyebrow { color: inherit; }
+
+/* Dossier */
+.dossier-frame {
+  overflow-x: auto !important;
+  overflow-y: hidden !important;
+  cursor: grab !important;
+  scrollbar-width: thin;
+  scrollbar-color: var(--dark-red) transparent;
+}
+.dossier-frame.dragging { cursor: grabbing !important; }
+.dossier-track figure {
+  cursor: zoom-in !important;
+  transition: transform .45s cubic-bezier(.2,.7,.2,1);
+}
+.dossier-track figure:hover { transform: translateY(-7px); }
+.dossier-track img {
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.dossier-section .scroll-caption span:last-child::after { content: ""; }
+
+/* Visor dossier */
+.dossier-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,.97);
+  cursor: default;
+}
+.dossier-lightbox.is-open { display: flex; }
+.dossier-lightbox img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  user-select: none;
+  -webkit-user-drag: none;
+}
+.dossier-lightbox .dossier-zone {
+  position: absolute;
+  inset-block: 0;
+  width: 28%;
+  z-index: 2;
+  cursor: pointer;
+}
+.dossier-lightbox .dossier-zone.left { left: 0; }
+.dossier-lightbox .dossier-zone.right { right: 0; }
+.dossier-lightbox .dossier-zone::after {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(255,255,255,.0);
+  font: 4rem/1 Arial, sans-serif;
+  transition: color .2s ease;
+}
+.dossier-lightbox .dossier-zone.left::after { content: "‹"; left: 30px; }
+.dossier-lightbox .dossier-zone.right::after { content: "›"; right: 30px; }
+.dossier-lightbox .dossier-zone:hover::after { color: rgba(255,255,255,.75); }
+.dossier-lightbox .dossier-close {
+  position: absolute;
+  top: 18px;
+  right: 24px;
+  z-index: 5;
+  border: 0;
+  background: transparent;
+  color: white;
+  font: 3rem/1 Arial, sans-serif;
+  cursor: pointer;
+}
+.dossier-lightbox .dossier-counter {
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  color: rgba(255,255,255,.75);
+  font: 1rem/1 "Bebas Neue", sans-serif;
+  letter-spacing: .14em;
+}
+
+/* Conciertos: Malavida siempre visible */
+.concert-details h2,
+.concert-details h2 i,
+.concert-details p,
+.concert-details .outline-link {
+  color: var(--white) !important;
+}
+.concert-details h2 i {
+  color: var(--white) !important;
+  text-decoration: underline;
+  text-decoration-color: rgba(255,255,255,.5);
+  text-underline-offset: .12em;
+}
+.concert-details .muted-note {
+  color: rgba(255,255,255,.68) !important;
+}
+
+/* Vídeo protagonista */
+.video-main .video-ratio iframe,
+.video-card iframe {
+  display: block;
+  width: 100%;
+  border: 0;
+}
+.video-main h3 {
+  color: var(--black);
+  font-family: "Bebas Neue", sans-serif !important;
+}
+.music-section .video-main {
+  background: var(--white);
+}
+
+/* Navegación */
+.desktop-nav a {
+  position: relative;
+}
+.desktop-nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 100%;
+  bottom: -6px;
+  height: 1px;
+  background: var(--dark-red);
+  transition: right .25s ease;
+}
+.desktop-nav a:hover::after,
+.desktop-nav a.is-active::after {
+  right: 0;
+}
+.desktop-nav a.is-active { color: var(--dark-red) !important; }
+
+/* Productos / tienda */
+.product-card { background: var(--white) !important; }
+.product-card .product-name,
+.product-info h2 { font-family: "Bebas Neue", sans-serif !important; }
+.stock-info { color: var(--black) !important; }
+
+/* Mobile */
 @media (max-width: 768px) {
-    .header-container {
-        flex-direction: row;
-        gap: 0rem;
-        justify-content: space-between;
-        align-items: center;
-    }
-    
-    .logo {
-        font-size: 1.5rem;
-    }
-    
-    .logo img {
-        height: 20px;
-    }
-    
-    nav {
-        flex: 1;
-        min-width: 0;
-    }
-    
-    nav ul {
-        flex-direction: row;
-        gap: 0.5rem;
-        overflow-x: auto;
-        padding: 0.5rem 0;
-        -webkit-overflow-scrolling: touch;
-        scroll-behavior: smooth;
-    }
-    
-    nav ul li {
-        margin-left: 0;
-        white-space: nowrap;
-        flex-shrink: 0;
-    }
-    
-    nav ul li a {
-        font-size: 1rem;
-        padding: 0.5rem;
-    }
-    
-    /* Optimización móvil para dossier */
-    .dossier-hero {
-        padding-top: 60px; /* Añadir padding para compensar el header fijo */
-    }
-    
-    .dossier-container {
-        scroll-padding: 0;
-        scroll-snap-type: none; /* Desactivar scroll snap en móvil */
-        height: auto; /* Permitir altura automática */
-        max-height: calc(100vh - 60px); /* Restar altura del header */
-    }
-    
-    .dossier-slide {
-        height: auto; /* Altura automática basada en la imagen */
-        min-height: unset;
-        max-height: unset;
-        scroll-snap-align: none; /* Sin snap */
-        scroll-snap-stop: normal;
-        padding: 0;
-        margin: 0;
-        line-height: 0;
-        font-size: 0;
-    }
-    
-    .dossier-slide img {
-        position: static; /* Cambiar de absolute a static */
-        transform: none;
-        object-fit: contain;
-        width: 100%;
-        height: auto; /* Altura automática */
-        max-height: none;
-        margin: 0;
-        padding: 0;
-        display: block;
-        vertical-align: top;
-    }
-    
-    /* Mostrar imágenes móvil en dispositivos pequeños */
+  .hero-title span:first-child { font-size: clamp(5rem, 24vw, 9rem); }
+  .hero-title span:last-child { font-size: clamp(4.5rem, 22vw, 8rem); }
+  .dossier-lightbox .dossier-zone { width: 35%; }
+  .dossier-lightbox .dossier-zone::after { color: rgba(255,255,255,.45); }
+}
 
-    .dossier-desktop {
-        display: none !important;
-    }
-    
-    .dossier-mobile {
-        display: block !important;
-    }
-    
-    .scroll-down-hint {
-        top: 70px; /* Ajustar posición del botón */
-    }
-    
-    .music-container,
-    .products,
-    .product-detail {
-        grid-template-columns: 1fr;
-    }
-    
-    .payment-method {
-        flex-direction: column;
-    }
-    
-    .carousel-btn {
-        width: 35px;
-        height: 35px;
-        font-size: 1rem;
-    }
-    
-    .sizes {
-        justify-content: center;
-    }
-    
-    .size {
-        width: 45px;
-        height: 45px;
-    }
-    
-    .zoom-btn {
-        width: 40px;
-        height: 40px;
-        font-size: 1.2rem;
-        bottom: 10px;
-        right: 10px;
-    }
-    
-    .zoom-modal-content {
-        width: 100%;
-        max-width: 100%;
-        overflow: auto;
-        touch-action: pan-x pan-y pinch-zoom;
-    }
-    
-    .zoom-modal-content img {
-        max-width: none;
-        max-height: none;
-        width: 100%;
-        height: auto;
-        cursor: default;
-    }
-    
-    .zoom-close {
-        width: 50px;
-        height: 50px;
-        font-size: 2.5rem;
-        top: 10px;
-        right: 10px;
-    }
+
+/* ============================================================
+   DURO GALVÁN — V5
+   Ajustes de portada, logo y espaciado tipográfico
+   ============================================================ */
+
+/* PORTADA: identidad tipográfica del grupo */
+.hero-title span:first-child,
+.hero-word-a {
+  font-family: "Bebas Neue", sans-serif !important;
+  font-weight: 400 !important;
+  letter-spacing: .015em !important;
+}
+
+.hero-title span:last-child,
+.hero-word-b {
+  font-family: "Grand Paradiso", Georgia, serif !important;
+  font-weight: 400 !important;
+  font-style: normal !important;
+  letter-spacing: .035em !important;
+}
+
+/* Logo oficial del grupo en la portada */
+.hero-logo {
+  display: block;
+  width: clamp(130px, 13vw, 220px);
+  height: auto;
+  margin: 0 0 28px auto;
+  object-fit: contain;
+}
+
+/* El logo oficial es negro, adecuado para el fondo marfil de la portada */
+.hero-content .hero-logo {
+  filter: none;
+}
+
+/* La portada conserva su composición compacta */
+.hero-title {
+  letter-spacing: normal !important;
+}
+
+/* PÁGINAS INTERIORES:
+   más aire entre caracteres en Bebas Neue y Grand Paradiso */
+.dossier-section .section-heading h2,
+.concert-details h2,
+.music-info h3,
+.video-card h3,
+.shop-section .section-heading h2,
+.product-card h3,
+.product-info h2,
+.contact-inner h2,
+.fullscreen-menu .menu-inner > a {
+  letter-spacing: .025em !important;
+}
+
+.dossier-section .section-heading h2 i,
+.concert-details h2 i,
+.shop-section .section-heading h2 i,
+.product-info h2 i {
+  letter-spacing: .045em !important;
+}
+
+/* Elementos secundarios en Bebas: también ligeramente más abiertos */
+.concert-date-big,
+.video-card h3,
+.product-card h3 {
+  letter-spacing: .015em !important;
+}
+
+/* El menú móvil también debe respirar */
+.fullscreen-menu .menu-inner > a {
+  letter-spacing: .02em !important;
+}
+
+/* En móvil, evitar que el logo robe demasiado espacio */
+@media (max-width: 800px) {
+  .hero-logo {
+    width: clamp(105px, 30vw, 155px);
+    margin: 0 0 22px 0;
+  }
+
+  .hero-title span:last-child {
+    margin-left: 0 !important;
+  }
+
+  .dossier-section .section-heading h2,
+  .concert-details h2,
+  .music-info h3,
+  .shop-section .section-heading h2,
+  .product-info h2,
+  .contact-inner h2 {
+    letter-spacing: .02em !important;
+  }
+}
